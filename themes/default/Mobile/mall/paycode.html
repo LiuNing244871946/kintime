@@ -1,0 +1,95 @@
+<include  file='public:header'/>    
+<body>
+    <?php if(!$is_app){?>
+    <header>
+		<a href="<{:AppLink('mall/index')}>"><i class="icon-goback"></i></a>
+		<div class="title">支付订单</div>
+		<i class="icon-menu"></i>
+	</header>
+    <?php }?>
+
+    
+    <div id="seat" class="page-center-box">
+    	<form action="<{:U('mall/paycode2',array('log_id'=>$logs['log_id']))}>" method="post">
+		<div id="scroll" class="pay">
+			<div class="order-content">
+                <ul class="list">
+                	<if condition="!empty($useraddr)">
+                        <li><div class="left">请选择收货地址</div><div class="right"><a href="<{:AppLink('mcenter/addrs/create')}>" id="add_addr" style="color:#ff0000;">新增收货地址</a></div><div class="clear"></div></li>
+                        <foreach name="useraddr" item="item">
+                        <li>
+                            <div style="float:left;"><input style="width: 24px; float: left;" type="radio"  name="addr_id" id="addr_id" value="<{$item['addr_id']}>" <eq name="item.is_default" value="1">checked="checked"</eq> />
+                            <{$item.name}>,<{$item.mobile}>,<{$item.addr}></div>
+                            <div style="float:right;">
+                            	<eq name="item.is_default" value="0"><a href="<{:AppLink('mobile/addr/update_addr',array('addr_id'=>$item['addr_id']))}>" style="color:#f56c08;">设为默认</a></eq>
+                                <a href="<{:U('mcenter/addrs/edit',array('addr_id'=>$item['addr_id']))}>" style="color:#2fbdaa;" class="edit_addr">修改地址</a>
+                            </div>
+							<div class="clear"></div>       
+                        </li>
+                        </foreach>
+                        <else/>
+                        <li>您还没有设置收货地址！这就去<a style="color: #ff3333;" href="<{:AppLink('mcenter/addrs/create')}>">新增收货地址</a></li>
+                    </if>
+            	</ul>
+            </div>
+            <div>
+                <foreach name="weidians" item="item">
+                    <{$item['weidian_name']}>
+                    <input type="radio"  name="wuliu[<{$item['mer_id']}>]" value="1" >中老物流 
+                    <input type="radio"  name="wuliu[<{$item['mer_id']}>]" value="0" >省内物流 <br/><{$var.name}>
+                        <foreach name="item['goods']" item="item1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<{$item1['title']}><br/>
+
+                        </foreach>
+                </foreach>
+            </div>
+
+
+
+            <div class="wap-form">
+            	<?php if($is_android){ ?>
+  
+                    <ul>
+                        <li>支付方式</li>
+                        <foreach name="payment" item="var">
+                            <li class="pay-li i-<{$var.payment_id}>">
+                                <label>  <input type="radio"  name="code" value="<{$var.code}>" > <{$var.name}></label>
+                            </li>
+                        </foreach>
+                        <li class="integral pay-li i-8">  <label> <input name="code" value="wait" type="radio">货到付款</label></li>
+
+
+                    </ul>
+
+                    <?php }else{?>
+                    <script>
+                        $(function () {
+                            $(".seat-check input").click(function () {
+                                $(".seat-check").find("label").removeClass("on");
+                                $(this).parent("label").addClass("on");
+                            });
+                        });
+                    </script>
+                    <ul>
+                        <li>支付方式</li>
+
+                        <foreach name="payment" item="var">
+                            <li class="pay-li i-<{$var.payment_id}>">
+                                <{$var.name}><p>推荐已安装<{$var.name}><{$var.id}>客户端的用户使用</p><div class="seat-check"><label><input type="radio" class="ui-radio" name="code" value="<{$var.code}>" ></label></div>
+                            </li>
+                        </foreach>
+                        <li class="integral pay-li i-8">货到付款<p>如果您没有网银，可以到店付</p><div class="seat-check"><label><input name="code" value="wait" type="radio"></label></div></li>
+
+
+                    </ul>
+                    <?php  }?>
+			</div>
+			<div class="sure-pay-but">
+            	<div class="sure-pay right"><input type="submit" class="aniu" value="确认支付" style="border:none;background:none;font-size:0.16rem;width:100%;color:#FFFFFF;"></div>
+            </div>
+		</div>
+        </form>
+	</div>
+    
+    
+<include  file='public:footer'/>

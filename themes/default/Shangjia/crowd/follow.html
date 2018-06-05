@@ -1,0 +1,38 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">商家管理</a> > <a href="" set-lan="html:n-purchase">抢购</a> > <a set-lan="html:n-setCrowd">设置众筹</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-publishCrowdinfo">发布众筹需要添加可购买的众筹类型，该众筹：<{$detail.title}></div>
+            <div class="right tuan_topfb_r"></div>
+        </div>
+    </div> 
+    <div class="tabnr_change  show">
+    	  <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td width="50" set-lan="html:n-id">ID</td>
+            <td width="500" set-lan="html:n-userName">用户名</td>
+            <td width="500" set-lan="html:n-type">类型</td>
+            <td width="100" set-lan="html:n-time">时间</td>
+        </tr>
+        <foreach name="meals" item="var">
+        <tr>
+            <tr>
+                <td ><{$var.ask_id}></td>
+                <td><{$users[$var['uid']]['nickname']}></td>
+                <td><if condition="$var[type] EQ 'zan'"><span set-lan="html:n-praiseCrowd">用户赞了该众筹</span><else/><span set-lan="html:n-crowdFocused">该众筹被关注</span></if></td>
+                <td><{$var.dateline|date='Y-m-d H:i:s',###}></td>
+                
+            </tr>
+        </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+<include  file='public:footer'/>

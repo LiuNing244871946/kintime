@@ -1,0 +1,145 @@
+<include file="public:header"/>
+<script src = "__TMPL__statics/js/elecart.js?v=20150822" ></script>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('ele/shop',array('shop_id'=>$shop_id))}>"><i class="icon-goback"></i></a>
+        <div class="title" set-lan="html:m-shopping-cart">购物车</div>
+        <i class="icon-menu"></i>
+    </header>
+    <?php }?>
+    <php>$tt = ($detail['since_money'])-$total['money'];
+    </php>
+    
+    <form method="post" id="bao_buy_form">
+    <php>$total_money = 0;</php>
+    <div class="page-center-box">
+        <div id="scroll">
+            <!-- 列表 -->
+            <div class="list-have-pic list-have-pic-btn">
+                <foreach name="cartgoods" item="item">
+                
+
+                <div class="list-box list-box-integral">
+                    <div class="list-img">
+                        <img src="__ROOT__/attachs/<{$item.photo}>" />
+                    </div>
+                    <div class="list-content">
+                        <p class="h15"><a target="_blank" href="<{:AppLink('ele/detail',array('goods_id'=>$item['goods_id']))}>"><{$item.product_name}></a></p>
+                        <p class="c_h"><span class="mr20"><span set-lan="html:m-unit-price">单价</span>：₭<{$item['price']}></span> <span set-lan="html:m-total">合计</span>：<span class="price">₭<{$item['price'] *  $item['cart_num']}></span></p>
+                        <div class="num-input changeNum2" rel="<{$item.product_id}>">
+                            <div class="btn jq_jian" rel="<{$item['price']}>" onClick="dec(this,<{$item['product_id']}>)">-</div>
+                            <div class="input">
+                                <input value="<{$item['cart_num']}>" name="num[<{$item['product_id']}>]" id="jq_num" class="ordernum" type="text" readonly="true"/>
+                            </div>
+                            <div class="btn active jq_jia" rel="<{$item['price']}>" onClick="inc(this,<{$item['product_id']}>)">+</div>
+                        </div>
+                        <div class="icon-del" onClick="removeby(<{$item['product_id']}>)"></div>
+                    </div>
+                </div>
+                
+                <php>
+                    $total_money+= $item['price'] *  $item['cart_num'];
+                </php>
+                
+                </foreach>
+       
+            </div>
+        </div>
+    </div>
+    <footer class="footer-cart">
+        <div class="cart">
+            <div class="cart-num"><{$total['num']}></div>
+        </div>
+        <div class="price" id="jq_total">₭<span class='totalprice'><{$total_money}>(配送费₭<{$delivery_money}>)</span> <php>$cha = $tt;</php><span id="jq_last" class="jq_last"><gt name="cha" value="0"><span set-lan="html:m-still-bad">还差</span> ₭<span class='cha'><{$cha}></span><span set-lan="html:m-all-categories">起送</gt></gt></span></div>
+        <div class="btn"><a href="javascript:void(0);" onClick="jiesuan();" style="color:#FFFFFF;" set-lan="html:m-clearing">结 算</a></div>
+    </footer>
+</form>
+<script type="text/javascript">
+    var uid = "<{$MEMBER['user_id']}>"; 
+            function jiesuan(){
+                if(uid == "undefined"||uid =="" ||uid==0){
+                     <?php if(!$is_app){
+                         echo  'location.href="'.U("passport/login").'"';
+                     } else if ($is_android){?>
+                    window.jsObj.goLogin();
+                    <?php }else{?>
+                     goload();
+                    <?php }?>
+                }else{
+                    
+                    $.post("<{:U('ele/order',array('t'=>$nowtime))}>",$("#bao_buy_form").serialize(),function(data){
+                        if(data.status =="success"){
+                            <?php if(IS_APP){ ?>
+                              getNewWebView(data.url);
+                            <?php }else{?>
+                         
+                            location.href=data.url;
+                            
+                            <?php }?>
+                        }else{
+                            layer.msg(data.msg);
+                        }                        
+                    },'json');
+                    
+                    
+                }
+            }
+    
+    
+    
+var since_money = "<{$detail['since_money']}>";
+function dec(o,product_id){
+    var shop_id = "<{$shop_id}>", price = $(o).attr('rel'), cha = 0;
+    window.ele.dec(shop_id,product_id);
+    var count = window.ele.itemcount(product_id);
+    if (count===0) {
+        $(o).parents().find('.list-box').hide();
+    }
+    var price = count*price;
+    var totalprice = window.ele.totalprice("<{$shop_id}>");
+        cha=(since_money-totalprice)/100;
+        cha=cha<=0?0:cha;
+    $(o).parent().prev().find('.price').text(price);
+    $(o).parent().find("input[type='text']").val(count);
+    $('.totalprice').text(totalprice);
+    $('.cart-num').text(window.ele.count("<{$shop_id}>"));
+    
+	var ppp = since_money/100-totalprice;
+	if(ppp > 0){
+		$('.cha').text(ppp);
+	}else{
+		$('.jq_last').text('');
+	}
+	
+}
+function inc(o,product_id){
+ var shop_id = "<{$shop_id}>", price = $(o).attr('rel');
+    window.ele.inc(shop_id,product_id);
+    var count = window.ele.itemcount(product_id);
+    var price = count*price;
+    var totalprice = window.ele.totalprice("<{$shop_id}>");
+        cha=since_money-totalprice;
+        cha=cha<=0?0:cha;
+    $(o).parent().prev().find('.price').text(price);
+    $(o).parent().find("input[type='text']").val(count);
+    $('.totalprice').text(totalprice);
+    $('.cart-num').text(window.ele.count("<{$shop_id}>"));
+	
+	var ppp = since_money/100-totalprice;
+	if(ppp > 0){
+		$('.cha').text(ppp);
+	}else{
+		$('.jq_last').text('');
+	}
+    
+ }
+function removeby(pid){
+   if(window.ele.removeby(pid)){
+       layer.msg("删除商品成功");
+        window.location.reload();
+    }else{
+        alert('删除商品失败！');
+    }
+}
+</script>

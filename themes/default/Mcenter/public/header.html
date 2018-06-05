@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head lang="zh-CN">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title><php>if($mobile_title)echo $mobile_title;else echo $CONFIG['site']['sitename']</php></title>
+        <link rel="stylesheet" href="/themes/default/Mobile/statics/css/css_1.css?v=20151118"/>
+        <link rel="stylesheet" href="/themes/default/Mobile/statics/css/css_2.css?v=20151118"/>
+        <link rel="stylesheet" href="/themes/default/Mobile/statics/css/css_wxj.css?v=20151118"/>
+        <link rel="stylesheet" href="/themes/default/Mobile/statics/css/wap.css?v=20151118"/>
+        <link rel="stylesheet" href="/themes/default/Mobile/statics/css/reset.css?v=20151118"/>
+        <link rel="stylesheet" href="/themes/default/Mobile/statics/css/style.css?v=20151118"/>
+        <script> var BAO_PUBLIC = '__PUBLIC__';
+            var BAO_ROOT = '__ROOT__';</script>
+        
+        <script src = "/themes/default/Mobile/statics/js/jquery-1.7.1.min.js?v=20151118" ></script>
+        <script src="/themes/default/Mobile/statics/js/baocms.js?v=20151118"></script> 
+      
+        <script src="/themes/default/Mobile/statics/js/jquery.event.drag-1.5.min.js?v=20151118"></script>
+        <script src="/themes/default/Mobile/statics/js/jquery.touchSlider.js?v=20151118"></script>
+        <script src="/themes/default/Mobile/statics/js/zepto.js?v=20151118"></script>
+        <script src="/themes/default/Mobile/statics/js/layer/layer.js?v=20151118"></script>
+        <script src="__PUBLIC__/js/web.js?v=20150718"></script>
+        <script>
+            function bd_encrypt(gg_lat, gg_lon) 
+            {
+                dingwei('<{:U("mobile/index/dingwei",array("t"=>$nowtime,"lat"=>"llaatt","lng"=>"llnngg"))}>', gg_lat, gg_lon);
+            }
+            navigator.geolocation.getCurrentPosition(function (position) {
+                bd_encrypt(position.coords.latitude, position.coords.longitude);
+            });
+        </script>
+         <?php if($is_app){?>
+            <style>
+                .page-center-box{top: 0rem !important;}
+                .content_right{margin-top: 0rem !important;}
+                #search-bar{top:0rem !important;}
+                .serch-bar-mask{top:0.4rem !important; height: 100%; padding-bottom: 0;}
+                #app_nav{top:0rem !important;}
+                #loading{bottom: 0.1rem !important; height: 0.4rem !important;}
+                #shangjia_tab{top: 0rem !important;}
+                .app_page{top:0.3rem !important;}
+                .app_shangjia{top:0.4rem !important;}
+                footer{ bottom: 0.15rem;}
+            </style>
+        <?php }?>
+        
+        <?php if($is_app&&!$is_android){?>
+            <style>
+                footer{ bottom: 0.15rem;}
+                .lbs-tag .info-box{bottom: 0.12rem !important;}
+                .yiyuan_buynum_mask .cont{bottom: 0.12rem !important;}
+            </style>
+        <?php }?>
+        
+        <?php if ($is_android){?>
+        <script type="text/javascript" language="javascript"> 
+            function  getNewWebView(url1,url2){
+               
+               window.jsObj.HtmlcallJava(url1,url2);
+            }
+            
+            function getContents(content){
+                window.jsObj.getContent(content);
+            }
+        </script>
+        <script>
+            $(document).ready(function(){
+                getContents("<{$mobile_description}>");
+            })
+        </script>
+        <?php }?>
+        
+        
+</head>

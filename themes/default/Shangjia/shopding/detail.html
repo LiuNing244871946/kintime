@@ -1,0 +1,95 @@
+<include  file='public:header'/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:q-Businessmanagement">美食电子菜单</a> > <a href="" set-lan="html:q-Reservation">订单列表</a> > <a set-lan="html:q-orderdetails">订单详情</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l">
+                <if condition="$detail['order_status'] eq -1"><font style="color:red;" set-lan="html:q-canceled">已取消</font><elseif condition="$detail['order_status'] eq 2"/><font style="color:green;" set-lan="html:q-Alreadyconsumed">已消费</font><elseif condition="$detail['order_status'] eq 1"/><span set-lan="html:q-Alreadypaid">已付款</span><else/><span set-lan="html:q-Tobetreated">待付款</span></if>
+                <if condition="$detail['ding_type'] eq 1">
+                    <font style="color:green;" set-lan="html:q-Alreadyconsumed">(预约订座)</font>
+                    <else />
+                    <font style="color:green;" set-lan="html:q-Alreadyconsumed">(在店点餐)</font>
+                </if>
+            </div>
+             <if condition="$detail['order_status'] eq 1"><a class="btn right" mini="confirm" href="<{:U('shopding/complete',array('order_id'=>$detail['order_id']))}>" set-lan="html:q-Completetheorder">完成订单</a></if>
+            <if condition="$detail['order_status'] neq -1"><a class="btn right" mini="confirm" href="<{:U('shopding/cancel',array('order_id'=>$detail['order_id']))}>" set-lan="html:q-Cancellationoforder">取消订单</a></if>
+            <if condition="$detail['order_status'] eq -1"><if condition="$detail['closed'] eq 0"><a class="btn right" mini="confirm" href="<{:U('shopding/delete',array('order_id'=>$detail['order_id']))}>" set-lan="html:q-Deleteorder">删除订单</a></if></if>
+        </div>
+    </div>
+    <div class="hotel_orddtl_box">
+    	<div class="title" set-lan="html:q-Predeterminedinformation">预订信息</div>
+        <div class="hotel_orddtl_infor">
+        	<ul>
+        	    <li class="list" set-lan="html:q-Ordernumber">订单号：<span class="fontcl2"><{$detail.order_id}></span></li>
+                <li class="list" set-lan="html:q-Doyouorder">是否点菜：<span class="fontcl2"><if condition="$detail['menu_amount'] eq 0">未点<else/>已点</if></span></li>
+                <if condition="$detail['ding_type'] eq 1">
+                    <li class="list">订座数量：<span class="fontcl2"><{$detail.ding_num}></span></li>
+                    <li class="list">预订时间：<span class="fontcl2"><{$detail.ding_date}>&nbsp;<{$detail.ding_time}></span></li>
+                    <li class="list">预订人数：<span class="fontcl2"><{$detail.ding_num}></span></li>
+                <else />
+                    <li class="list">预订桌号：<span class="fontcl2"><{$detail.table_num}></span></li>
+                </if>
+                <li class="list">点菜数量：<span class="fontcl2"><{$detail['menu_amount']}></span></li>
+                <li class="list"><span set-lan="html:q-Total">总价</span>：<span class="fontcl2"><{$detail['amount']}>₭</span></li>
+    	    </ul>
+        </div>
+        <if condition="$detail['ding_type'] eq 1">
+            <div class="hotel_orddtl_infor">
+                <ul>
+                        <li class="list">预订姓名：<span class="fontcl2"><{$detail.name}>&nbsp;<if condition="$detail['sex'] eq 1">先生<else/>女士</if></span></li>
+                    <li class="list">手机号码：<span class="fontcl2"><{$detail.mobile}></span></li>
+                </ul>
+            </div>
+        </if>
+        
+        <div class="hotel_orddtl_infor">
+        	<ul>
+                <li class="list"><span set-lan="html:q-Supplementaryinstructions">补充说明</span>：<span class="blackcl9"><{$detail.note|default='无'}></span></li>
+    	    </ul>
+        </div>
+        <div class="hotel_orddtl_infor">
+        	<ul>
+                    <li class="list"><span set-lan="html:q-Paymentmethod">支付方式</span>：<span class="fontcl2"><{$type['name']}></span></li>
+    	    </ul>
+        </div>
+    </div>
+    
+    <div class="hotel_orddtl_box">
+    	<div class="title mb20" set-lan="html:q-Menudetails">菜单详情</div>
+        <div class="hotel_orddtl_tabl mb20">
+        	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr class="title">
+                    <th class="first" set-lan="html:q-varietyofdishes">菜品</th>
+                    <th set-lan="html:q-Originalprice">单价</th>
+                    <th set-lan="html:q-Number">数量</th>
+                    <th set-lan="html:q-Sold">已售</th>
+                    <th class="last" set-lan="html:q-Total">总价</th>
+                </tr>
+                <foreach name="list" item="item">
+                    <tr>
+                        <td>
+                            <div class="tuw">
+                                <div style="float: left;"><img src="__ROOT__/attachs/<{$menus[$item['menu_id']]['photo']}>" width="125" height="100">
+                                </div>
+                                <div style="float: left;">
+                                    <{$item.menu_name}><br/><{$item.lao_menu_name}><br/><{$item.eng_menu_name}>
+                                </div>
+                            </div>
+                         </td>
+                         <td>₭<{$menus[$item['menu_id']]['ding_price']}></td>
+                         <td><{$item.num}></td>
+                         <td><{$menus[$item['menu_id']]['sold_num']}><span set-lan="html:q-share">份</span></td>
+                         <td><p class="price"><span class="fontcl2"><span set-lan="html:q-qian">₭</span><big><{$item['price']}></big></span></p></td>
+                     </tr>
+                </foreach>
+                
+            </table>
+        </div>
+    </div>
+</div>
+<include  file='public:footer'/>

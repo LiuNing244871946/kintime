@@ -1,0 +1,151 @@
+<include file="public:header"/>
+<script>
+    $(function () {
+        $("#search-bar li").each(function (e) {
+            $(this).click(function () {
+                if ($(this).hasClass("on")) {
+                    $(this).parent().find("li").removeClass("on");
+                    $(this).removeClass("on");
+                    $(".serch-bar-mask").hide();
+                }
+                else {
+                    $(this).parent().find("li").removeClass("on");
+                    $(this).addClass("on");
+                    $(".serch-bar-mask").show();
+                }
+                $(".serch-bar-mask .serch-bar-mask-list").each(function (i) {
+                    if (e == i) {
+                        $(this).parent().find(".serch-bar-mask-list").hide();
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                    $(this).find("li").click(function () {
+                        $(this).parent().find("li").removeClass("on");
+                        $(this).addClass("on");
+                    });
+                });
+            });
+        });
+    });
+</script>
+<body>
+<?php if(!$is_app){?>
+<header>
+    <a href="<{:AppLink('index/index')}>"><i class="icon-goback"></i></a>
+    <div class="title">订座列表</div>
+    <i class="icon-menu" id="ico_1"></i>
+</header>
+<?php }?>
+
+<div class="page-center-box">
+    <div id="scroll">
+    	<!--banner-->
+        <div class="banner mb10" style="max-height:none;">
+            <div class="flexslider" style="max-height:1.06rem;">
+                <ul class="slides">
+                    <li><a href="#"><img src="__TMPL__statics/img/seat/banner.png" width="100%" draggable="false"></a></li>
+                    <li><a href="#"><img src="__TMPL__statics/img/seat/banner.png" width="100%" draggable="false"></a></li>
+                </ul>  
+            </div>
+        </div> 
+		<!--banner结束-->
+        <!-- 筛选TAB -->
+        <div class="searchBox">
+            <!-- <input type="text"> -->
+        </div>
+        <div class="search-bar border_t" style="position:relative;">
+            <div id="search-bar">
+                <ul>
+                    <li><span>分类</span><i></i></li>
+                    <li><span>地区</span><i></i></li>
+                    <li><span>商圈</span><i></i></li>
+                    <li><span style="text-align:left;">排序</span><i></i></li>
+                </ul>
+            </div>
+            <div class="serch-bar-mask" style="display:none;">
+                <div class="serch-bar-mask-list">
+                    <ul>
+                        <li class="<if condition='empty($type_id)'>on</if> "><a href="<{:LinkTo('ding/index',$linkArr,array('type_id'=>0))}>" >全部</a></li>
+                        <volist name="dingtypes" id="var">
+                            <li <if condition="$type_id eq $i">class="on"</if> ><a title="<{$var}>" href="<{:LinkTo('ding/index',$linkArr,array('type_id'=>$i))}>"><{$var}></a></li>
+                        </volist>
+                    </ul>
+                </div>
+                <div class="serch-bar-mask-list">
+                    <ul>
+                        <li <if condition="empty($area_id)">class="on"</if> ><a href="<{:LinkTo('ding/index',$linkArr,array('area_id'=>0))}>">全部</a></li>
+                        <volist name="areas" id="item">
+                        <eq name="item.city_id" value="$city_id">
+                            <li <if condition="$item['area_id'] eq $area_id">class="on"</if> ><a href="<{:LinkTo('ding/index',$linkArr,array('area_id'=>$item['area_id']))}>"><{$item.area_name}></a></li>
+                        </eq>
+                        </volist>
+                    </ul>
+                </div>
+                <if condition="!empty($area_id)">
+                    <div class="serch-bar-mask-list">
+                        <ul>
+                            <li <if condition="empty($business_id)">class="on"</if> ><a href="<{:LinkTo('ding/index',$linkArr,array('business_id'=>0))}>">全部</a></li>
+                            <volist name="bizs" id="item">
+                                <eq name="item.area_id" value="$area_id">
+                                <li <if condition="$item['business_id'] eq $business_id">class="on"</if> ><a href="<{:LinkTo('ding/index',$linkArr,array('business_id'=>$item['business_id']))}>"><{$item.business_name}></a></li>
+                                </eq>
+                            </volist>
+                        </ul>
+                    </div>
+                <else/>
+                    <div class="serch-bar-mask-list">
+                            &nbsp;
+                    </div>
+                </if>
+                <div class="serch-bar-mask-list">
+                    <ul>
+                        <li <if condition="$order eq 'm'">class="on"</if>><a class="nearbuy_sxkLiA" href="<{:LinkTo('ding/index',$linkArr,array('order'=>'m'))}>">默认排序</a></li>
+                        <li <if condition="$order eq 'd'">class="on"</if>><a class="nearbuy_sxkLiA" href="<{:LinkTo('ding/index',$linkArr,array('order'=>'d'))}>">距离最近</a></li>
+                        <li <if condition="$order eq 's'">class="on"</if>><a class="nearbuy_sxkLiA" href="<{:LinkTo('ding/index',$linkArr,array('order'=>'s'))}>">销量最高<em class="em_up"></em></a></li>
+                        <li <if condition="$order eq 'p'">class="on"</if>><a class="nearbuy_sxkLiA" href="<{:LinkTo('ding/index',$linkArr,array('order'=>'p'))}>">价格最低<em></em></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 筛选TAB结束-->
+        <!-- 列表 -->
+        <div class="seat_list_box">
+            <ul></ul>
+        </div>
+        <script>
+            $(document).ready(function () {
+                loaddata('<{$nextpage}>', $(".seat_list_box ul"), true);
+            });
+        </script>
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function () {
+    $(function () {
+        if ($('#search-bar').length > 0)
+        {
+            $('.page-center-box').css('top', '0.5rem');
+            $('#search-bar').css("position","relative").css("top","auto");
+            $('.serch-bar-mask').css("position","absolute").css("top","0.4rem").css("background","none").css("height","2rem");
+        }
+    });
+});
+</script>
+<script src="__TMPL__statics/js/jquery.flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(document).ready(function () {
+        /*轮播幻灯图开始*/
+        $('.flexslider').flexslider({
+            directionNav: true,
+            pauseOnAction: false,
+            /*slideshow: false,*/
+            /*touch:true,*/
+        });
+        /*轮播幻灯图结束*/
+    });
+</script>
+<include file="public:footer"/>

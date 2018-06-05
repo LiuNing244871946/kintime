@@ -1,0 +1,50 @@
+<div class="loading-div"></div>
+<foreach name="list" item="order">
+<div class="list-have-pic shop-list">
+	<!-- 循环 -->
+            <div class="list-box">
+                <div class="shop-order">
+                    <p class="left">订单：<{$order.order_id}> <span>￥<{:round($order['total_price']/100,2)}></span></p>
+                    <p class="right"><{$order.create_time|date='m-d',###}><a class="order_detail" href="<{:AppLink('goods/detail',array('order_id'=>$order['order_id']))}>">详情</a></p>
+                </div>
+            </div>
+            
+            <foreach name="goods" item="good">
+            <if condition="$good['order_id'] eq $order['order_id']">
+            <div class="list-box">
+                <a href="">
+                    <div class="list-img">
+                        <img src="__ROOT__/attachs/<{$good['photo']}>" />
+                    </div>
+                    <div class="list-content activ-list-content" id="order-title">
+                        <p class="activ-title overflow_clear"><{$good['title']}> <{$good.spec_name}></p>
+                        <p class="spread-for">数量：<{$good.num}> 单价：￥<{:round($good['price']/100,2)}></p>
+                        <div class="spread-looker">总计：<span>￥<{:round($good['total_price']/100,2)}></span></div>
+                    </div>
+                </a>
+            </div>
+            
+            </if>
+           </foreach>
+
+            <div class="list-box">
+                <div class="activ-list-content shop-button">
+                
+                        <switch name="order.status">
+                            <case value="0">                                
+                                <a href="<{:AppLink('goods/orderdel',array('order_id'=>$order['order_id']))}>"><span class="shop-del">取消订单</span></a>
+                                <a href="<{:AppLink('mobile/mall/pay',array('order_id'=>$order['order_id']))}>" target="_blank"><span class="shop-pay">去付款</span></a>
+                            </case>
+                            <case value="1"><span class="pay-wait">已付款</span></case>
+                            <case value="2"><span class="pay-wait">等待配送</span></case>
+                            <case value="3"><a href="<{:AppLink('goods/queren',array('order_id'=>$order['order_id']))}>"><span class="shop-del">确认收货</span></a></case>
+                            <case value="4"><span class="pay-wait">配送中</span></case>
+                            <case value="8"><span class="shop-pay">已完成</span></case>
+                        </switch>
+
+                </div>
+            </div>
+
+    <!-- 循环 -->
+</div>
+</foreach>

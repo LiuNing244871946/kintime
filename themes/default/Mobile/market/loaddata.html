@@ -1,0 +1,92 @@
+		<!--<foreach  name="list" item="var">
+
+			<div class="list-box">
+					<a href="<{:AppLink('market/detail',array('market_id'=>$var['market_id']))}>"><div class="list-img">
+						<img  src="__ROOT__/attachs/<{$var.photo}>">
+					</div>
+					<div class="list-content">
+						<p class="overflow_clear"><{:bao_msubstr($var['market_name'],0,6)}></p>
+						<p class="c_h">
+						标签：
+						<php>
+                    		$tags = $var['tags'];
+                    		$tagsarray = array();
+                    		if(!empty($tags)){
+                    			$tagsarray = explode(',',$tags);
+                    		}
+                		</php>
+                		<if condition="$tagsarray eq null">
+                			<a href="javascript:void(0);">暂无标签</a> 
+                		<else/>
+                			<volist name='tagsarray' id='item' key='index'>
+                        		<a  href='<{:AppLink("market/index",array("keyword"=>$item))}>'><span class="city_stores_bq"><{$item}></span></a>
+                    		</volist>
+                    	</if>
+						</p>
+						<p class="c_h"><{$var.addr}>&nbsp;&nbsp;<{$var.d}></p>
+					</div></a>
+				</div>
+		</foreach>-->
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <foreach  name="list" item="var">
+                <div class="swiper-slide" style="background-image:url(__ROOT__/attachs/<{$var.photo}>);">
+                    	<a href="<{:AppLink('market/districtindex',array('market_id'=>$var['market_id']))}>">
+                        <div class="addr_box">
+                            <h2><{:bao_msubstr($var['market_name'],0,6)}></h2>
+                            <div class="distc">
+                                <i class="coordin_ico"></i>
+                                <p><{$var.d}></p>
+                            </div>
+                        </div>
+                        </a>
+                        <a href="<{:AppLink('market/districtindex',array('market_id'=>$var['market_id']))}>">
+                        <div class="addrXx_box">
+                            <h2><{$var['market_name']}></h2>
+                            <p class="bq">
+                            <php>
+                                $tags = $var['tags'];
+                                $tagsarray = array();
+                                if(!empty($tags)){
+                                    $tagsarray = explode(',',$tags);
+                                }
+                            </php>
+                            <if condition="$tagsarray eq null">
+                                <a href="javascript:void(0);">暂无标签</a> 
+                            <else/>
+                            	<php>$aa=0;</php>
+                                <volist name='tagsarray' id='item' key='index'>
+                                	<php>$aa++;</php>
+                                    <a href="javascript:void(0);"><span class="cl_<{$aa}>"><{$item}></span></a>
+                                </volist>
+                            </if>
+                            </p>
+                            <div class="distc">
+                                <i class="coordin_ico"></i>
+                                <p><{$var.d}></p>
+                            </div>
+                        </div>
+                        </a>
+                    
+                </div>
+                </foreach>
+
+                <div class="swiper-slide last">
+                    <p>更多商场正在努力建设中...</p>
+                </div>
+            </div>
+        </div>
+        
+        
+        <script src = "__TMPL__statics/js/idangerous.swiper.min.js?v=20151028" ></script>
+		<script>
+        var mySwiper = new Swiper('.swiper-container',{
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        mode:'vertical',
+        onClick:function(swiper){
+                alert(swiper.activeIndex);
+            }
+        })
+        </script>
+			

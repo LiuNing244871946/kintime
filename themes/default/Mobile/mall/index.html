@@ -1,0 +1,70 @@
+<include  file='public:header'/>    
+<body>
+<?php if(!$is_app){?>
+<header>
+    <a href="<{:AppLink('/mobile/index/index')}>"><i class="icon-goback"></i></a>
+    <div class="title">购物</div>
+    <i class="icon-menu"></i>
+</header>
+<?php }?>
+<div class="page-center-box">
+    
+    <div class="mall_crowd mb10 border_t">
+        <h3 class="mall_titleOne">新品上架 <a href="<{:U('mall/items')}>" class="more fr black6">更多&gt;&gt;</a></h3>
+        <div class="mall_crowd_list_box mt10">
+            <ul>
+            	<volist name='new' id='item'>
+                    
+                    <li class="mall_crowd_list mall_newGds_list">
+                        <div class="box">
+                            <div class="pub_img"><span class="bq">新品</span><a href="<{:U('mall/detail',array('goods_id'=>$item['goods_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"></a></div>
+                            <h3 class="overflow_clear"><a href="<{:U('mall/detail',array('goods_id'=>$item['goods_id']))}>"><{:bao_msubstr($item['title'],0,12,false)}></a></h3>
+                            <div class="btn_box"><p class="fl price fontcl2">₭<{:round($item['mall_price'],2)}></p><a href="<{:U('mall/detail',array('goods_id'=>$item['goods_id']))}>" class="btn fr">立即购买</a></div>
+                        </div>
+                    </li>
+                </volist>
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+    
+    <div class="mall_crowd mb10 border_t">
+        <h3 class="mall_titleOne">热门推荐 <a href="<{:U('mall/items')}>" class="more fr black6">更多&gt;&gt;</a></h3>
+        <div class="mall_crowd_list_box mt10">
+            <ul>
+            	<volist name='tuijian' id='item'>
+                     <li class="mall_crowd_list mall_newGds_list">
+                        <div class="box">
+                            <div class="pub_img"><span class="bq bq2">推荐</span><a href="<{:U('mall/detail',array('goods_id'=>$item['goods_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"></a></div>
+                            <h3 class="overflow_clear"><a href="<{:U('mall/detail',array('goods_id'=>$item['goods_id']))}>"><{:bao_msubstr($item['title'],0,12,false)}></a></h3>
+                            <div class="btn_box"><p class="price fontcl2">₭<{$item['mall_price']}></p></div>
+                        </div>
+                    </li>
+                </volist>
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+    
+    <div class="mall_crowd mb10 border_t">
+        <h3 class="mall_titleOne">热门商品 <a href="<{:U('mall/items')}>" class="more fr black6">更多&gt;&gt;</a></h3>
+        <div class="mall_like_box border_t mt10">
+            <ul>
+            	<volist name='like' id='item'>
+                     
+                     <li class="mall_like_list">
+                        <div class="pub_img fl"><a href="<{:U('mall/detail',array('goods_id'=>$item['goods_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"></a></div>
+                        <div class="pub_wz">
+                            <h3 class="overflow_clear"><a href="<{:U('mall/detail',array('goods_id'=>$item['goods_id']))}>"><{:bao_msubstr($item['title'],0,12,false)}></a></h3>
+                            <p class="fontcl2 price">₭<{$item['mall_price']}><span class="fr black6">已售：<{$item['sold_num']}></span></p>
+                            <p style="font-size: .14rem;overflow: hidden;color: #2FBDAA;"><{$item['attr']}></p>
+                        </div>
+                        <div class="clear"></div>
+                    </li>
+                </volist>
+            </ul>
+        </div>            
+    </div>
+    <!--内容结束-->
+</div>
+<include  file='public:footer'/>

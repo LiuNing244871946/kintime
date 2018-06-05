@@ -1,0 +1,61 @@
+<include  file='public:header'/>
+<script src="__TMPL__statics/js/jquery.flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="__TMPL__statics/js/TouchSlide.js" type="text/javascript" charset="utf-8"></script>
+<body id="micro_shop">
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('community/detail',array('community_id'=>$detail['community_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title">物业通知 
+        </div>
+    </header>
+    <?php }?>
+    <div id="seat" class="page-center-box">
+        <div id="scroll">
+            <div class="banner">
+                <div class="flexslider"> 
+                    <ul class="slides">  
+                        <if condition="!empty($ads)">
+                            <foreach name="ads" item="item">
+                                <li><a href="<{$item.link_url}>"><img src="__ROOT__/attachs/<{$item.photo}>" width="100%" height="" /></a></li>  
+                            </foreach>
+                        <else/>
+                            <calldata mdl="Ad" where=" closed=0 AND site_id=40 AND city_id IN ({$city_ids}) AND bg_date ELT '{$today}' AND end_date EGT '{$today}' " limit="0,5" cache="43200" order="orderby asc">
+                                <li><a href="<{$item.link_url}>"><img src="__ROOT__/attachs/<{$item.photo}>" width="100%" height="" /></a></li>  
+                            </calldata>
+                        </if>
+                    </ul>  
+                </div>
+                <div class="commu-icon">
+                    <ul>    		
+                        <script>
+                            $(document).ready(function () {
+                                loaddata('<{$next}>', $(".commu-icon ul"), true);
+                            });
+                        </script>
+                    </ul>
+                </div> 
+            </div>
+
+        </div>
+        <script>
+            $(document).ready(function () {
+                /*轮播幻灯图开始*/
+                $('.flexslider').flexslider({
+                    directionNav: true,
+                    pauseOnAction: false,
+                    /*slideshow: false,*/
+                    /*touch:true,*/
+                });
+                /*轮播幻灯图结束*/
+
+                /*首页效果图切换效果开始*/
+                TouchSlide({
+                    slideCell: "#sqShopCate",
+                    effect: "leftLoop",
+                });
+                /*首页效果图切换效果结束*/
+            });
+        </script>        
+
+<include file="public:footer"/>
+

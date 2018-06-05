@@ -1,0 +1,46 @@
+<include file="public:header"/>
+<script>
+    $(function () {
+        if ($('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            $('#shangjia_tab li').width(100 / $('#shangjia_tab li').length + '%');
+            $('.page-center-box').css('top', '0.9rem');
+        }//头部切换tab结束
+    });
+</script>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title"><{$detail.shop_name}></div>
+        <!-- <i id="commentA"><a href="<{:AppLink('mcenter/dianping/index',array('shop_id'=>$detail['shop_id']))}>">点评<em class="commentIco"></em></a></i> -->
+    </header>
+    <?php }?>
+    <ul id="shangjia_tab">
+        <li><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>">首页</a></li>
+        <li><a href="<{:U('shop/tuan',array('shop_id'=>$detail['shop_id']))}>">优惠</a></li>
+        <li><a href="<{:U('ele/shop',array('shop_id'=>$detail['shop_id']))}>">外卖</a></li>
+        <li><a href="<{:U('ding/detail',array('shop_id'=>$detail['shop_id']))}>">订座</a></li>
+        <li><a class="on" href="<{:U('shop/dianping',array('shop_id'=>$detail['shop_id']))}>">评价</a></li>
+    </ul>
+    <div id="shangjia_detail" class="page-center-box">
+        <div id="scroll">           
+            <div class="sjComment mt10" style="border: none;">
+                <ul>
+
+                </ul>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    loaddata('<{:U("shop/dianpingloading",array("shop_id"=>$detail["shop_id"],"p"=>"0000"))}>', $(".sjComment ul"), true);
+                });
+            </script>
+        </div>
+
+    </div>
+    <div id="loading">
+    <div class="bao_loading">正在加载中....</div>
+</div>
+<div class="blank">&nbsp;</div>
+</body>
+</html>

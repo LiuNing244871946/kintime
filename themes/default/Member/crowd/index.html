@@ -1,0 +1,41 @@
+<include file="public:header"/>
+<div class="content_right">
+<div class="tgdd">
+    <div class="tgdd_nr">
+        <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td width="50">ID</td>
+            <td width="500">众筹</td>
+            <td width="500">价格</td>
+            <td width="100">姓名</td>
+            <td width="100">电话</td>
+            <td width="100">地址</td>
+            <td width="100">购买时间</td>
+            <td width="200">操作</td>
+        </tr>
+        <foreach name="meals" item="var">
+        <tr>
+            <tr>
+                <td ><{$var.list_id}></td>
+                <td><{$goodss[$var['goods_id']]['title']}></td>
+                <td><{$var['price']/100}>元</td>
+                <td><{$var.name|default=''}></td>
+                <td><{$var.mobile|default=''}></td>
+                <td><{$var.addr|default=''}></td>
+                <td><{$var.dateline|date='Y-m-d H:i:s',###}></td>
+                <td>
+                	<if condition="$var[is_zhong] EQ '1'">
+                    已中奖
+                    </if>
+                </td>
+            </tr>
+        </tr>
+        </foreach>
+    </table>
+    </div>
+    </div>
+</div>
+</div>
+</div></div>
+<include file="public:footer"/>
+

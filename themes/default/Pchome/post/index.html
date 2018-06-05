@@ -1,0 +1,129 @@
+<include  file='public:header'/>  
+<include  file='public:top'/>
+<include  file='public:nav'/>
+<div style="background:#f1f1f1;">
+    <style>
+        .jfsy_flexslider .flex-direction-nav{top:156px;}
+        .jfsy_flexslider .flex-control-nav{top:326px; text-align: center;}
+    </style>
+    <div class="tBar pagewd">
+        <div class="jfsy_banner" style="height: 346px;">
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('.jfsy_flexslider').flexslider({
+                        directionNav: true,
+                        pauseOnAction: false,
+                    });
+
+                });//首页轮播js
+            </script>
+            <div class="jfsy_flexslider">
+                <ul class="slides">
+                    <calldata mdl="Ad" where=" bg_date ELT '{$today}' AND end_date EGT '{$today}' AND  city_id IN ({$city_ids})  AND closed=0 AND site_id=41" limit="0,3" cache="21600" order="orderby asc">
+                        <li class="sy_hotgzLi flex-active-slide" style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 1; display: block; z-index: 2;"><a href="<{$item.link_url}>" title="<{$item.title}>" target="_blank"><img width="1200" height="346" src="__ROOT__/attachs/<{$item.photo}>" draggable="false"></a></li>
+                    </calldata>
+
+
+                </ul>
+                <ol class="flex-control-nav flex-control-paging"></ol>
+
+            </div>
+        </div>
+        <div>
+            <div class="left tBar_l">
+                <div class="tBarLink_box mb10">
+                    <ul class="left tBarLink">
+                        <li><a href="<{:U('post/index',array('community_id'=>$community_id))}>" <if condition="empty($order)">class="on"</if> >全部</a></li>
+                        <li><a <if condition="$order eq 'new'">class="on"</if> href="<{:U('post/index',array('community_id'=>$community_id,'order'=>'new'))}>">新帖</a></li>
+                        <li><a <if condition="$order eq 'hot'">class="on"</if> href="<{:U('post/index',array('community_id'=>$community_id,'order'=>'hot'))}>">热帖</a></li>
+                    </ul>
+                    <a href="#fabu" class="right btn">发帖</a>
+                </div>
+                <div class="tBarList_nr">
+                    <ul class="mb10">
+                        <foreach name="list" item="item">
+                            <li class="tBarList">
+                                <div class="left tBarList_l"><{$item.reply_num}>条回复</div>
+                                <div class="left tBarList_r">
+                                    <p class="bt"><a href="<{:U('post/detail',array('post_id'=>$item['post_id']))}>"><{$item.title}></a> <span class="right"><{$item.create_time|date='Y-m-d H:i',###}></span></p>
+                                    <p><{:bao_msubstr($item['details'],0,120,true)}></p>
+                                    <div class="imgList">
+                                        <foreach name="pics" item="pic">
+                                            <eq name="pic.post_id" value="$item['post_id']">
+                                            <img src="__ROOT__/attachs/<{$pic.pic|default='default.jpg'}>">
+                                            </eq>
+                                        </foreach>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </li>
+                        </foreach>
+                        <div class="x"><{$page}></div>
+                    </ul>
+                    <div class="tBarFabu" id="fabu">
+                        <js file='__PUBLIC__/js/uploadify/jquery.uploadify.min.js'/>
+                        <link rel="stylesheet" href="__PUBLIC__/js/uploadify/uploadify.css">
+                        <h3>发表新贴</h3>
+                        <form method="post" action="<{:U('post/fabu',array('community_id'=>$community_id))}>" target="baocms_frm">
+                            <input type="text" name="title"  value="" placeholder="请填写标题" />
+                            <textarea name="details" placeholder="请输入内容"></textarea>
+                            <div class="uploadImg">
+                                <div class="btn_box"><label class="btn"><input id="thumb_file" name="logo_file" type="file" multiple="true" value="" /></label></div>
+                                <div class="imgList imgLists">
+                                    <foreach  name="photos" item="item">
+                                        <span style="width: 160px; display:block; height:160px; float: left; margin-left: 5px; margin-top: 10px;"> 
+                                            <img width="160" height="120" src="__ROOT__/attachs/<{$item}>">  
+                                            <input type="hidden" name="photos[]" value="<{$item}>" />  
+                                            <a href="javascript:void(0);">取消</a>  
+                                        </span>
+                                    </foreach>
+                                </div>
+                                <script>
+                                    $("#thumb_file").uploadify({
+                                        'swf': '__PUBLIC__/js/uploadify/uploadify.swf?t=<{$nowtime}>',
+                                        'uploader': '<{:U("app/upload/uploadify",array("model"=>"post"))}>',
+                                        'cancelImg': '__PUBLIC__/js/uploadify/uploadify-cancel.png',
+                                        'buttonText': '上传图片',
+                                        'fileTypeExts': '*.gif;*.jpg;*.png',
+                                        'queueSizeLimit': 5,
+                                        'onUploadSuccess': function (file, data, response) {
+                                            var str = '<span style="width: 160px; height: 160px; float: left; margin-left: 5px; margin-top: 10px;">  <img width="160" height="120" src="__ROOT__/attachs/' + data + '"><input type="hidden" name="photos[]" value="' + data + '" />    <a href="javascript:void(0);">取消</a>  </span>';
+                                            $(".imgLists").append(str);
+                                        }
+                                    });
+
+                                    $(document).on("click", ".imgLists a", function () {
+                                        $(this).parent().remove();
+                                    });
+                                </script>
+
+                            </div>
+                            <div class="sub_btn"><input type="submit" class="btn" value="发表新帖" /></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right tBar_r">
+
+                <div class="tBarAnnout">
+                     <h3><em></em>最新热帖</h3>
+                        <calldata mdl="Post" where="audit = 1 AND closed=0 AND city_id=$city_id " cache="600" order="orderby asc,create_time desc" limit="0,10">
+
+                            <li>
+                                <div class="syPub_list">
+                                    <h3><a target="_blank" title="<{$item['title']}>" href="<{:U('post/detail',array('post_id'=>$item['post_id']))}>" class="nr"><{:msubstr($item['title'],0,15)}></a></h3>
+                                   
+                                    <hr style="border:none 0px; border-bottom: 1px solid #e0e0e0; margin-top:6px;" />
+                                </div>
+                            </li>
+                        </calldata>
+                
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<!--main end-->
+<include  file='public:footer'/>  

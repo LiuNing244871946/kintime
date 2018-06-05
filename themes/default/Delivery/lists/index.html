@@ -1,0 +1,142 @@
+<include  file='public:header'/>
+<style type="text/css">
+.wl_order_list_box{padding: .1rem;}
+.wl_order_list{width: 100%;border-radius: .1rem;box-shadow: 0 .03rem .1rem 0 rgba(0,0,0,0.1);}
+</style> 
+<body style=" background-color:#fafafa;">
+    <?php if($is_app&&!$is_android){?><div style="height: 0.2rem; width: 100%; background: #2FBDAA; position: fixed; top: 0rem;"></div><?php }?> 
+    <header>
+        <a href="<{:U('delivery/index/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">订单列表-
+            <eq name="ss" value="0">抢单中</eq>
+            <eq name="ss" value="2">配送中</eq>
+            <eq name="ss" value="3">已完成</eq>
+        </div>
+        <i class="icon-menu"></i>
+    </header>
+    <section>
+        <ul class="wl_order_list_box">
+            <php>$a=1;</php>
+            <volist name="rdv" id="r">
+                <li class="wl_order_list">
+                    <div class="wl_order_bt">
+                        <div class="fl wl_order_bt_number" style="width: auto;display: flex;display: -webkit-flex;">订单ID:<{$r.type_order_id}>
+                            <eq name="r.type" value="0"><span class="c_1" style="height: .3rem;">商</span></eq><eq name="r.type" value="1"><span class="c_2" style="height: .3rem;">外</span></eq><eq name="r.type" value="2"><span class="c_3" style="height: .3rem;">送</span></eq>
+                            <span style="display: flex;display: -webkit-flex;flex-direction: column;line-height:.2rem;">
+                                <span style="color:#2fbdaa;padding: 0;margin: 0;line-height:.2rem;">距离商家<{$r.d}></span>
+                                <span style="color:#2fbdaa;padding: 0;margin: 0;line-height:.2rem;">距离用户<{$r.ud}></span>
+                            </span>
+                            
+                        </div>
+
+                        <php>
+                            if($r['type'] == 0 || $r['type'] == 2){ //商品
+                            $o = D('Order');
+                            $res = $o -> where('order_id ='.$r['type_order_id']) -> find();
+                            $t = 0;
+                            $o2 = D('OrderGoods');
+                            $res2 = $o2 -> where('order_id ='.$res['order_id']) ->  select();
+                            $o3 = D('Goods');
+                            foreach($res2 as $key => $val){
+                            $v = $o3->where('goods_id ='.$val['goods_id'])->getField('title');
+                            $res2[$key]['t'] = $v ;
+                            }
+                            }elseif($r['type'] == 1){ //外卖
+                            $o = D('EleOrder');
+                            $res = $o -> where('order_id ='.$r['type_order_id']) -> find();
+                            $t = 1;
+                            $o2 = D('EleOrderProduct');
+                            $res2 = $o2 -> where('order_id ='.$res['order_id']) ->select();
+                            $o3 = D('EleProduct');
+                            foreach($res2 as $key => $val){
+                            $v = $o3->where('product_id ='.$val['product_id'])->getField('product_name');
+                            $res2[$key]['t'] = $v;  
+                            }
+                            }
+                        </php>
+
+
+                        <eq name="r.status" value="1"><div class="fl wl_order_bt_state">抢单中</div></eq>
+                        <eq name="r.status" value="2"><div class="fl wl_order_bt_state">配送中</div></eq>
+                        <eq name="r.status" value="3"><div class="fl wl_order_bt_state">已完成</div></eq>
+
+
+                    </div>
+
+
+                    <div class="wl_order_nr">
+
+                        <ul>
+                            <volist name="res2" id="res2">
+                                <li>
+                                    <div class="fl wl_order_nr_left"><p><{$res2.t}></p></div>
+                                    <div class="fr wl_order_nr_right">
+                                        <p class="price">₭<php>echo round(($res2['total_price']/$res2['num']),2);</php></p>
+                                        <span class="num">x<{$res2.num}></span>
+                                    </div>
+                                </li>
+                            </volist>
+                        </ul>
+                    </div>
+                    <div class="wl_order_total"><span>配送费:₭<{:round($res['delivery_price'],2)}></span></div>
+                    <div class="wl_order_total"><span>个人可获得:₭<{:round($r['yongjin'],2)}></span></div>
+                    <div class="wl_order_total"><{$res.create_time|date='Y-m-d H:i:s',###}><span>总计：₭<{:round($res['need_pay'],2)}></span></div>
+                    <div class="wl_order_addre">
+                        <p><span>商家：</span><{$r.shop_name}>  <{$r.shop_mobile}></p>
+                        <p><span>地址：</span><a href="<{:AppLink('delivery/map/index',array('lat'=>$r['lat'],'lng'=>$r['lng']))}>" style="color: #2fbdaa;"><{$r.shop_addr}></a></p>
+                    </div>
+                    <div class="wl_order_addre bg_c1">
+                        <p><span>收件人：</span><{$r.user_name}>  <{$r.user_mobile}></p>
+                        <p><span>地址：</span><a href="<{:AppLink('delivery/map/index',array('lat'=>$r['user_lat'],'lng'=>$r['user_lng']))}>" style="color: #2fbdaa;"><{$r.user_addr}></a></p>
+                    </div>
+                    <div class="wl_order_btn_box">
+                        <eq name="r.status" value="1"><a class="wl_order_btn qiang_btn" href="javascript:void(0);" val="<{$r.order_id}>">抢单</a></eq>
+                        <eq name="r.status" value="2"><a class="wl_order_btn ok_btn" href="javascript:void(0);" val="<{$r.order_id}>">完成</a></eq>
+                    </div>
+                </li>
+                <php>$a++;</php>
+            </volist>
+
+            <script type="text/javascript" language="javascript">
+
+                $(document).ready(function () {
+                    $('.qiang_btn').click(function () {
+                        var id = $(this).attr('val');
+                        $.post('<{:U("lists/handle")}>', {order_id: id}, function (result) {
+                            if (result.status == 'success') {
+                                layer.msg(result.message, {icon: 6});
+                                setTimeout(function () {
+                                    location.reload(true);
+                                }, 3000);
+                            } else {
+                                layer.msg(result.message);
+                            }
+                        }, 'json');
+                    })
+
+                    $('.ok_btn').click(function () {
+                        var id = $(this).attr('val');
+                        $.post('<{:U("set_ok")}>', {order_id: id}, function (result) {
+                            if (result.status == 'success') {
+                                layer.msg(result.message, {icon: 6});
+                                setTimeout(function () {
+                                    location.reload(true);
+                                }, 3000);
+                            } else {
+                                layer.msg(result.message);
+                            }
+                        }, 'json');
+                    })
+                })
+
+            </script>
+
+
+
+        </ul>
+    </section>
+
+
+
+
+<include  file='public:footer'/> 

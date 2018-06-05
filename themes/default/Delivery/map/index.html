@@ -1,0 +1,84 @@
+<include  file='public:header'/>
+<script async defer src="https://maps.google.cn/maps/api/js?v=3.20&region=cn&language=zh-CN&key=AIzaSyAj1gNUTDZJLvPeePsU5ltjfX-hJU1N_8c&callback=initMap"></script> 
+<body style="background: #F3F4F5">
+<?php if(!$is_app){?>
+	<header>
+		<a href="javascript:self.location=document.referrer"><i class="icon-goback"></i></a>
+		<div class="title">地图导航</div>
+		<i class="icon-menu"></i>
+	</header>
+<?php }?>
+	<div id="map" style="position: absolute;top: .5rem;bottom: 0;width: 100%;"></div>
+	<script type="text/javascript">
+		function initMap(){
+			var lat = parseFloat("<{$detail.lat}>");
+			var lng = parseFloat("<{$detail.lng}>");
+			var d_lat = parseFloat("<{$detail.d_lat}>");
+			var d_lng = parseFloat("<{$detail.d_lng}>");
+			var map = new google.maps.Map(document.getElementById('map'),{
+				zoom:18,
+				center:{lat:d_lat,lng:d_lng},
+				gestureHandling:'greedy'
+			});
+			// 商家/用户位置
+			var pos = {lat:lat,lng:lng};
+			var marker_S = new google.maps.Marker({
+				position:pos,
+				map:map,
+				animation:google.maps.Animation.DROP
+			});
+			marker_S.addListener('click',msClick);
+			
+			// 骑手定位
+			var infoWindow_D = new google.maps.InfoWindow({});
+			var pos_D = {
+				lat:d_lat,
+				lng:d_lng
+			};;
+			var marker_D = new google.maps.Marker({
+				position:pos_D,
+				map:map,
+				animation:google.maps.Animation.DROP
+			});
+			infoWindow_D.setContent("我");
+			marker_D.addListener('click',mdClick);
+
+			// 起点终点路线生成
+			var directionsService = new google.maps.DirectionsService;
+			var directionsDisplay = new google.maps.DirectionsRenderer;
+			directionsDisplay.setMap(map);
+			directionsService.route({
+				origin:pos_D,
+				destination:pos,
+				travelMode:'DRIVING'
+			},function(response,status){
+				if (status === 'OK') {
+					directionsDisplay.setDirections(response);
+				}else{
+					layer.msg('路线规划失败,失败原因：'+status);
+					console.log(status);
+				}
+			})
+
+
+			// 起点终点点击事件
+			function msClick(){
+				if (marker_S.getAnimation()!==null) {
+					marker_S.setAnimation(null);
+				}else{
+					marker_S.setAnimation(google.maps.Animation.BOUNCE);
+				};
+			}
+			function mdClick(){
+				if (this.getAnimation()!==null) {
+					infoWindow_D.close(map,this);
+					this.setAnimation(null);
+				}else{
+					infoWindow_D.open(map,this);
+					this.setAnimation(google.maps.Animation.BOUNCE);
+				};
+			}
+		}
+	</script>
+
+<include  file='public:footer'/>

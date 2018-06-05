@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head lang="zh-CN">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title><{$CONFIG.site.sitename}></title>
+
+        <link rel="stylesheet" href="/themes/default/Mobile/statics/css/reset.css?v=20151118"/>
+
+        <link rel="stylesheet" href="__TMPL__statics/css/wl_style.css?v=20160229"/>
+        <script> var BAO_PUBLIC = '__PUBLIC__';
+            var BAO_ROOT = '__ROOT__';</script>
+        
+        <script src = "/themes/default/Mobile/statics/js/jquery-1.7.1.min.js?v=20151118" ></script>
+        <script src="/themes/default/Mobile/statics/js/baocms.js?v=20151118"></script> 
+      
+        <script src="/themes/default/Mobile/statics/js/jquery.event.drag-1.5.min.js?v=20151118"></script>
+        <script src="/themes/default/Mobile/statics/js/jquery.touchSlider.js?v=20151118"></script>
+        <script src="/themes/default/Mobile/statics/js/zepto.js?v=20151118"></script>
+        <script src="/themes/default/Mobile/statics/js/layer/layer.js?v=20151118"></script>
+        <script src="__PUBLIC__/js/web.js?v=20150718"></script>
+        <script>
+            function bd_encrypt(gg_lat, gg_lon)   
+            {
+                dingwei('<{:U("delivery/index/dingwei",array("t"=>$nowtime,"lat"=>"llaatt","lng"=>"llnngg"))}>', gg_lat, gg_lon);
+            }
+            navigator.geolocation.getCurrentPosition(function (position) {
+                bd_encrypt(position.coords.latitude, position.coords.longitude);
+            });
+        </script>
+        <?php if($is_app&&!$is_android){?>
+            <style>
+                header{top:0.2rem !important;}
+                section{margin-top: 0.7rem !important;}
+            </style>
+        <?php }?>
+</head>

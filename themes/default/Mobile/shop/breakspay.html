@@ -1,0 +1,67 @@
+<include  file='public:header'/>    
+<body>
+    <iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('shop/breaks',array('shop_id'=>$shop['shop_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title">买单订单</div>
+        <i class="icon-menu"></i>
+    </header>
+    <?php }?>
+    <div id="seat" class="page-center-box">
+        <form  method="post"  action="<{:U('shop/breakspay2',array('order_id'=>$order['order_id']))}>">
+            <div id="scroll" class="pay">
+                <div class="order-content">
+                    <ul class="list">
+                        <li>
+                            <span class="left">消费金额</span>
+                            <span class="right"><{$order.amount}>元</span>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <span class="left">不参与优惠金额</span>
+                            <span class="right"><{$order.exception}>元</span>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <span class="left">总需金额</span>
+                            <span class="right"><span class="rush-price"><{$order.need_pay}></span>元</span>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <span class="left">优惠金额</span>
+                            <php>$yh_money = $order['amount']-$order['need_pay'];</php>
+                            <span class="right"><span class="rush-price"><{$yh_money}></span>元</span>
+                            <div class="clear"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="wap-form">
+                    <script>
+                        $(function () {
+                            $(".seat-check input").click(function () {
+                                $(".seat-check").find("label").removeClass("on");
+                                $(this).parent("label").addClass("on");
+                            });
+                        });
+                    </script>
+                    <ul>
+                        <li><div class="left">支付方式</div></li>
+                        <foreach name="payment" item="var">
+                            <li class="pay-li i-<{$var.payment_id}>">
+                                <{$var.name}><p>推荐已安装<{$var.name}><{$var.id}>客户端的用户使用</p><div class="seat-check"><label><input type="radio" class="ui-radio" name="code" value="<{$var.code}>" ></label></div>
+                            </li>
+                        </foreach>
+
+                        <li class="integral pay-li i-8">货到付款<p>如果您没有网银，可以到店付</p><div class="seat-check"><label><input type="radio" value="wait" name="code" class="ui-radio"></label></div></li>
+
+                    </ul>
+                </div>
+                <div class="sure-pay-but">
+                    <div class="sure-pay right"><input type="submit" class="aniu fsub" value="确认支付" style="border:none;background:none;font-size:0.16rem;width:100%;color:#FFFFFF;"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>   

@@ -1,0 +1,70 @@
+<include  file='public:header'/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">商家管理</a> > <a href="" set-lan="html:n-purchase">抢购</a> > <a set-lan="html:n-orderMannagement">订单管理</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('tuan/order')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l">
+            <span set-lan="html:n-startTime">开始时间：</span><input type="text" class="radius3 tuan_topser"  name="bg_date" value="<{$bg_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+            <span set-lan="html:n-endTime">结束时间：</span><input type="text" class="radius3 tuan_topser"  name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+            <span set-lan="html:n-orderNumber">订单编号：</span><input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <span set-lan="html:n-state">状态：</span><select name="st" class="manageSelect w80">
+                        <option value="999" set-lan="html:n-pleaseChoose">请选择</option>
+                        <option <eq name="st" value="1">selected="selected"</eq>  value="1"><span set-lan="html:n-completed">已完成</span></option>
+                        <option <eq name="st" value="0">selected="selected"</eq>  value="0"><span set-lan="html:n-waitPay">等待付款</span></option>
+                    </select>
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索" set-lan="value:n-search" />
+            </div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/index')}>" set-lan="html:n-purchasing">正在抢购</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/history')}>" set-lan="html:n-postPurchased">往期抢购</a></li>
+            <li class="tuanfabu_tabli on"><a href="<{:U('tuan/order')}>" set-lan="html:n-orderMannagement">订单管理</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/used')}>" set-lan="html:n-purchaseMannagement">抢购券管理</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-id">ID</td>
+            <td set-lan="html:n-purchaseImg">抢购图片</td>
+            <td set-lan="html:n-purchaseProduct">抢购产品</td>
+            <td set-lan="html:n-number">数量</td>
+            <td set-lan="html:n-orderPrice">订单金额</td>
+            <td set-lan="html:n-createTime">创建时间</td>
+            <td set-lan="html:n-createIp">创建IP</td>
+            <td set-lan="html:n-state">状态</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.order_id}></td>
+                <td style="height: 80px;"><img width="120" src="__ROOT__/attachs/<{$tuan[$var['tuan_id']]['photo']}>" style="margin: 0px auto;" /></td>
+                <td><{$tuan[$var['tuan_id']]['title']}></td>
+                <td><{$var.num}></td>
+                <td><{:round($var['total_price']/100,2)}></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                <td><{$var.create_ip}></td>
+                <td><if condition="$var['status'] eq 0">
+                         <span set-lan="html:n-waitPay">等待付款</span>            
+                    <elseif condition="$var['status'] eq -1"/>                     
+                         <span set-lan="html:n-cashDelivery">货到付款</span>                                       
+				    <elseif condition="$var['status'] eq 1"/>
+				         <span set-lan="html:n-completed">已完成</span>
+				   </if>
+				   </td>
+            </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+
+<include  file='public:footer'/>

@@ -1,0 +1,50 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">系统</li>
+        <li class="li2">牌价管理</li>
+        <li class="li2 li3">牌价信息</li>
+    </ul>
+</div>
+<div class="main-jsgl">
+    <p class="attention"><span>注意：</span>货币牌价信息，默认超级管理员角色不能删除！</p>
+    <div class="jsglNr">
+        
+        <form target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <!-- <td class="w50">ID</td> -->
+                        <td>币种</td>
+                        <td>牌价</td>
+                        <!-- <td>手机</td>
+                        <td>创建时间</td>
+                        <td>创建IP</td>
+                        <td>最后登录时间</td>
+                        <td>最后登录IP</td> --> 
+                        <td>操作</td>  
+                    </tr>
+                    <foreach name="qp" item="var">
+                        <tr>
+                            <td><{$var.type}></td>
+                            <td><{$var.lv}></td>
+                            <!-- <td><{$var.role_name}></td>
+                            <td><{$var.mobile}></td>
+                            <td><{$var.create_time|date="Y-m-d H:i:s",###}></td>
+                            <td><{$var.create_ip}>(<{$var.create_ip_area}>)</td>
+                            <td><{$var.last_time|date="Y-m-d H:i:s",###}></td>
+                            <td><{$var.last_ip}>(<{$var.last_ip_area}>)</td> -->
+                            <td>
+                                <{:BA('quoteprice/edit',array("id"=>$var["id"]),'编辑','load','remberBtn',500,450)}>
+                            </td>
+                        </tr>
+                    </foreach>
+
+                </table>
+                <{$page}>
+            </div>
+        </form>
+
+    </div>
+</div>
+<include  file='public:footer'/>       

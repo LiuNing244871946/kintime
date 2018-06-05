@@ -1,0 +1,24 @@
+<include  file='public:header'/>   
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('community/detail',array('community_id'=>$detail['community_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title"><{$detail.name}> 
+        </div>
+    </header>
+    <?php }?>
+    <div id="shangjia" class="page-center-box">
+        <div id="scroll">
+           <div class="hotList mb10">
+                <ul class="list">
+                    
+                </ul>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    loaddata('<{$nextpage}>', $(".list"), true);
+                });
+            </script>
+        </div>
+    </div>
+<include  file='public:footer'/>   

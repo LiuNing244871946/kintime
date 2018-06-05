@@ -1,0 +1,110 @@
+<include  file='public:header'/>   
+
+<body id="my_attention">
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('/mcenter/index')}>"><i class="icon-goback"></i></a>
+        <div class="title"><{$from['nickname']}></div>
+    </header>
+<?php }?>
+
+    <div id="seat" class="page-center-box">
+        <div id="scroll" style="box-sizing:border-box;padding-top:0.1rem;padding-bottom: 0;">
+            <foreach name="list" item="item">
+                    <if condition="$item['send'] eq 1">
+                        <div class="speak_box" style="padding: .1rem 0;">
+                            <div class="dish_face fl">
+                                <img src="__ROOT__/attachs/<{$from['face']|default='default.png'}>" class="fl" style="width: 48px;height: 48px;"/>
+                            </div>
+                            <div class="dish_speak fl">
+                                <p style="color: #999;font-size: 12px;"><{$from['nickname']}>(<{$item.create_time|date='Y-m-d H:i',###}>)</p>
+                                <div class="fl">
+                                    <{$item.content}>
+                                    <span class="posl" style="top: 6px;"></span>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    <else/>
+                        <div class="speak_box" style="padding: .1rem 0;"> 
+                            <div class="dish_face fr">
+                                <img src="__ROOT__/attachs/<{$user['face']|default='default.png'}>" class="fr"  style="width: 48px;height: 48px;"/>
+                            </div> 
+                            <div class="dish_speak fr">
+                                <p style="color: #999;font-size: 12px;text-align: right;">(<{$item.create_time|date='Y-m-d H:i',###}>)</p>
+                                <div class="dish_speak_background fr">
+                                    <{$item.content}>
+                                    <span class="posr" style="top: 6px;"></span>
+                                </div> 
+                            </div>  
+                            <div class="clear"></div>
+                        </div>
+                    </if>
+            </foreach>
+        </div>
+
+    </div>
+    <footer class="footer-switch footer-cart">
+        <div class="fl right" style="width: 100%;">
+            <script>
+                $(function () {
+                    var scrolly = $('#scroll').height() - $('#seat').height();
+                    $("#seat").animate({scrollTop: scrolly},200);
+                    var t = 6000;
+                    setInterval(function () {
+                        var url = "<{:U('msg/reply')}>";
+                        var uid = "<{$uid}>";
+                        $.post(url, {uid: uid, t: t}, function (result) {
+                            if (result.status == 'success') {
+                                var str = '';
+                                if(result.res){
+                                    $.each(result.res, function (n, value) {
+                                        str += '<div class="speak_box" style="padding: .1rem 0;">';
+                                        str += '<div class="dish_face fl"><img src="__ROOT__/attachs/<{$from["face"]|default="default.png"}>" class="fl" style="width: 48px;height: 48px;"/></div>';
+                                        str += '<div class="dish_speak fl">';
+                                        str += '<p style="color: #999;font-size: 12px;"><{$from["nickname"]}>('+value.create_time+')</p>';
+                                        str += '<div class="fl">'+value.content+'<span class="posl" style="top: 6px;"></span></div>';
+                                        str += '</div><div class="clear"></div></div>';
+                                    });
+                                    $("#scroll").append(str);
+                                }
+                            }
+                            var scrolly = $('#scroll').height() - $('#seat').height();
+                            $("#seat").animate({scrollTop: scrolly},200);
+                        }, 'json');
+                    }, t)
+                    var is_app = "<{$is_app}>";
+                    $("#jq_send").click(function () {
+                        var url = "<{:U('msg/send')}>";
+                        var uid = "<{$uid}>";
+                        var content = $("#word").val();
+                        $.post(url, {uid: uid, content: content}, function (data) {
+                            if (data.status == 'success') {
+                                layer.msg(data.msg);
+                                setTimeout(function () {
+                                    if (!is_app) {
+                                        window.location.reload(true);
+                                    }else{
+                                        getNewWebView("<{:U('post/index')}>","<{:U('post/index')}>");
+                                    }
+                                }, 1000)
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                        }, 'json');
+                    });
+                });
+            </script>
+            <div class="input-box" style="border-left: 0;">
+
+                <input name="word" id="word" type="text" class="text black3" style="text-align: left;" />
+                <input type="button" id="jq_send" class="submit" value="发送" />
+
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </footer>
+
+</body>
+</html>

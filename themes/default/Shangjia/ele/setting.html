@@ -1,0 +1,89 @@
+<include file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-others">其他</a> > <a href="" set-lan="html:n-takeoutSetting">外卖设置</a> > <a set-lan="html:n-takeoutPrinterstate">外卖打印机状态</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-printerLimit">打印机参数配置，只有正确完整的设置好打印机参数才可以正常打印</div>
+        </div>
+    </div> 
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('ele/index')}>" set-lan="html:n-takeoutState">外卖营业状态</a></li>
+            <li class="tuanfabu_tabli tabli_change on"><a href="<{:U('ele/setting')}>" set-lan="html:n-setPrinter">设置打印机</a></li>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('eleorder/index')}>" set-lan="html:n-sureOrder">确认订单</a></li>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('eleorder/wait')}>" set-lan="html:n-sentOrder">配送订单</a></li>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('eleorder/over')}>" set-lan="html:n-completedOrder">已完成订单</a></li>
+        </ul>
+    </div>
+    <div class="tabnr_change show">
+        <form  method="post" target="baocms_frm"  action="<{:U('ele/setting')}>">
+    	<table class="tuanfabu_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-printer">打印机</td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <label style="margin-right: 20px;">
+                            <input type="radio" <eq name="detail.type" value="1"> checked="checked" </eq>  name="data[type]" value="1"/>易联云打印
+                        </label>
+                        <label>
+                            <input type="radio" <eq name="detail.type" value="0"> checked="checked" </eq>  name="data[type]" value="0"/>本地打印
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-APIkeyt">API 密钥</td>
+                <td>
+                    <div class="tuanfabu_nr"><input type="text" style="width: 400px;" class="tuanfabu_int tuanfabu_intw2" name="data[apiKey]" value="<{$detail.apiKey}>" /></div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-terminalKeyt">终端密钥</td>
+                <td>
+                    <div class="tuanfabu_nr"><input type="text" class="tuanfabu_int tuanfabu_intw2" name="data[mKey]" value="<{$detail.mKey}>" /></div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-userId">用户ID</td>
+                <td>
+                    <div class="tuanfabu_nr"><input type="text" class="tuanfabu_int tuanfabu_intw2" name="data[partner]" value="<{$detail.partner}>" /></div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-terminalNum">终端号</td>
+                <td>
+                    <div class="tuanfabu_nr"><input type="text" class="tuanfabu_int tuanfabu_intw2" name="data[machine_code]" value="<{$detail.machine_code}>" /></div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-isAutoPrinter">是否自动打印</td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <label style="margin-right: 20px;">
+                            <input type="radio" <eq name="detail.auto_print" value="1"> checked="checked" </eq>  name="data[auto_print]" value="1"/>是
+                        </label>
+                        <label>
+                            <input type="radio" <eq name="detail.auto_print" value="0"> checked="checked" </eq>  name="data[auto_print]" value="0"/>否
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-autoPrinterPages">自动打印页数</td>
+                <td>
+                    <div class="tuanfabu_nr"><input type="text" class="tuanfabu_int tuanfabu_intw2" name="data[num]" value="<{$detail.num}>" /></div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" class="radius3 sjgl_an tuan_topbt" value="立刻保存"  set-lan="value:n-saveNow" /></td>
+            </tr>
+        </table>
+        </form>
+    </div> 
+</div>
+<include file='public:footer'/>

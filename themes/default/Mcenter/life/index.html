@@ -1,0 +1,39 @@
+<include  file='public:header'/>   
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="/mcenter/member/"><i class="icon-goback"></i></a>
+        <div class="title">我的生活信息</div>
+        <i class=" icon-more"></i>
+    </header>
+    <?php }?>
+    <!-- 筛选TAB -->
+
+    <div class="page-center-box">
+        <div id="scroll">
+            <foreach name="list" item="item">
+                <div class="list-have-pic shop-list">
+                    <!-- 循环 -->
+                    <div class="list-box">
+                        <div class="shop-order">
+                            <p class="left">信息ID：<{$item.life_id}> <span></span></p>
+                            <p class="right"><{$item.create_time|date='m-d',###}><a class="order_detail" href="<{:U('mcenter/life/del',array('life_id'=>$item['life_id']))}>">删除</a></p>
+                        </div>
+                        <div  class="shop-order">
+                            <a href="<{:AppLink('mobile/life/detail',array('life_id'=>$item['life_id']))}>"> <{$item.title}></a>
+                        </div>
+                  
+                    </div>
+
+                    
+
+                    <!-- 循环 -->
+                </div>
+            </foreach>
+            
+             <div class="jobNr_span"> <{$page}></div>
+        </div>
+
+
+    </div>
+<include  file='public:footer'/>

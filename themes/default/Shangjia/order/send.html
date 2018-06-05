@@ -1,0 +1,74 @@
+<include  file='public:header'/>
+
+
+<div class="tlist">
+            <foreach name="list" item="order">
+
+            <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; vertical-align:middle; background-color:#FFF; margin-top: 10px;"  >
+
+            <tr class="no"  style="border-top:  1px #000  double;">
+                <td set-lan="html:n-order">订单</td>
+                <td set-lan="html:n-price">价格</td>
+                <td set-lan="html:n-timeBuying">购买时间</td>
+                <td set-lan="html:n-sentAddress">配送地址</td>
+                <td set-lan="html:n-isCashDelivery">是否货到付款</td>
+            </tr>
+            <tr class="no" style="border-bottom:  1px #000 double;">
+                <td> <{$order.order_id}></td>
+                <td><{:round($order['total_price']/100,2)}>元</td>
+                
+                  <td><{$order.create_time|date='Y-m-d H:i:s',###}></td>
+                  <td>
+                    <{$areas[$addrs[$order['addr_id']]['area_id']]['area_name']}>、
+                    <{$business[$addrs[$order['addr_id']]['business_id']]['business_name']}>、
+
+                    <{$addrs[$order['addr_id']]['addr']}>
+                    <br/>
+                    <{$addrs[$order['addr_id']]['name']}>
+                    <{$addrs[$order['addr_id']]['mobile']}>
+
+                </td>
+                <td>
+            <eq name="order.is_daofu" value="1"><font style="color: red;" set-lan="html:n-cashDelivery">货到付款</font><else /><span set-lan="html:n-paid">已支付</span></eq>
+                </td>
+            </tr>
+
+            </table>
+            <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin-top:10px; vertical-align:middle; background-color:#FFF;"  >
+            
+            <tr class="no">
+                <td set-lan="html:n-productImg">商品图片</td>
+                <td set-lan="html:n-goodsName">商品名称</td>
+                <td set-lan="html:n-number">数量</td>
+                <td set-lan="html:n-unitPrice">单价</td>
+                <td set-lan="html:n-isOutofstock">是否缺货</td>
+            </tr>    
+         
+                <foreach name="goods" item="good">
+                    <if condition="$good['order_id'] eq $order['order_id']">    
+                        <tr class="no">
+                            <td><img width="80" src="__ROOT__/attachs/<{$products[$good['goods_id']]['photo']}>" /></td>
+                            <td><{$products[$good['goods_id']]['title']}></td>
+                            
+                            <td><{$good.num}></td>
+                            <td><{:round($good['price']/100,2)}>元</td>
+                            <td style="width: 200px;">
+                                
+                            </td>
+                        </tr>
+                    </if>
+                </foreach>
+           
+     
+             </table>
+
+
+      
+
+    </table>
+      </foreach>
+    <input type="button"  onclick="window.print();" value=" 打 印 " set-lan="value:n-print"/>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<include  file='public:header'/>
+
+<div class="mainBt">
+    <ul>
+        <li class="li1">商家</li>
+        <li class="li2">酒店管理</li>
+        <li class="li2 li3">酒店品牌</li>
+    </ul>
+</div>
+<div class="main-cate">
+    <p class="attention"><span>注意：如酒店没有品牌则创建品牌名称为“无”,删除之后将清空数据库里相应的数据</span></p>
+    <div class="jsglNr">
+        <div class="selectNr" style="border-top: 1px solid #dbdbdb;">
+            <div class="left">
+                <{:BA('hotelbrand/create','','添加品牌','load','',600,450)}>
+            </div>
+        </div>
+
+        <div class="tableBox">
+            <form  target="baocms_frm" method="post">
+                <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF; text-align:center;">
+                    <tr bgcolor="#ffaa7b" height="48px;" style="color:#FFF; font-size:16px; line-height:48px;">
+                        <td>品牌名称(品牌ID)</td>
+                        <td>排序</td>
+                        <td>操作</td>
+                    </tr>
+
+                    <foreach name="list" item="var">
+                        <tr bgcolor="#f1f1f1" height="48px" style="font-size:14px; color:#545454; text-align:left; line-height:48px;">
+                            <td style="padding-left:20px;">
+                                <{$var.title}>(<{$var.type}>)<br/>
+                                <{$var.eng_title}>(<{$var.type}>)<br/>
+                                <{$var.lao_title}>(<{$var.type}>)
+                            </td>
+                            <td style="padding-left:70px;text-align: center;"><{$var.orderby}></td>
+                            <td style="text-align:center;"> 
+                                <{:BA('hotelbrand/edit',array("type"=>$var["type"]),'编辑','load','remberBtn',400,480)}>
+                                <{:BA('hotelbrand/delete',array("type"=>$var["type"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+                    </foreach>     
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<include  file='public:footer'/>
+
+
+
+
+
+
+

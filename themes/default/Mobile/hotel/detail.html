@@ -1,0 +1,138 @@
+<include file="public:header"/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<body>
+ <?php if(!$is_app){?>
+<header>
+    <a href="<{:AppLink('hotel/index')}>"><i class="icon-goback"></i></a>
+    <div class="title">
+    	<if condition="$lang eq 1 "><{$detail.hotel_name}><elseif condition="$lang eq 2" /><{$detail.lao_hotel_name}><elseif condition="$lang eq 3" /><{$detail.eng_hotel_name}></if>
+    </div>
+</header>
+ <?php }?>
+<div class="page-center-box">
+    <div class="hotel_detl">
+        <div class="banner">
+            <div class="flexslider"> 
+                <ul class="slides">
+                    <foreach name="pics" item="item">
+                        <li><a href="javascript:void(0);"><img src="__ROOT__/attachs/<{$item.photo}>"  width="100%"/></a></li>
+                    </foreach> 
+                </ul>  
+            </div>
+        </div> 
+        <div class="hotel_evlt">
+            <php>$s = round($detail['score']/$detail['comments'],1);$sc = $s*20;</php>
+        	<p class="left maincl"><span class="spxq_qgpstarBg mr20"><span class="spxq_qgpstar" style="width:<{$sc}>%;"></span></span><{$s}><span set-lan="html:q-minutes">分</span></p>
+            <p class="black9 right">
+                <a href="<{:U('hotel/dianping',array('hotel_id'=>$detail['hotel_id']))}>"><{$detail.comments}><span set-lan="html:q-evaluate">人评价</span><em class="linkIco"></em></a>
+            </p>
+        </div>
+        <div class="mall-our">	                
+                    <a class="mall-fen" href="<{:U('hotel/gps',array('hotel_id'=>$detail['hotel_id']))}>"><em class="ico ico_1"></em>到这去</a></span>  
+                    <a class="mall-fen" href="<{:U('hotel/favorites/',array('hotel_id'=>$detail['hotel_id']))}>" ><em <if condition="$detail['zhu'] eq 0"> class="ico ico_2"<else/>class="ico ico_3"</if>></em>关注商家</a>                
+        </div>
+        <div class="hotel_addr">
+        	<em class="addrIco"></em>
+        	<div class="pub_wz">
+            	<p><span set-lan="html:q-address">地址</span>：<if condition="$lang eq 1 "><{$detail.addr}><elseif condition="$lang eq 2" /><{$detail.lao_addr}><elseif condition="$lang eq 3" /><{$detail.eng_addr}></if></p>
+                <p class="black9"><span set-lan="html:q-distance">距离</span>：<span class="fontcl2"><{$detail.d}></span></p>
+            </div>
+        </div>
+        <div class="hotel_plan">
+        	<p><span class="mr20" set-lan="html:q-afterSeven">酒店入住：<{$detail.in_time}>以后</span set-lan="html:q-beforeThirteen">离店时间：<{$detail.out_time}>以前</p>
+        </div>
+        <a href="<{:U('hotel/info',array('hotel_id'=>$detail['hotel_id']))}>" class="hotel_more mb10" set-lan="html:q-MoreHotelIntroduction">更多酒店介绍&gt;&gt;</a>
+        <div class="hotel_time">
+           <div class="left"><span >入住<span>-<span class="maincl"><input type="text" set-lan="val:q-Pleasechoosethetime" placeholder="请选择时间" value="<{$into_time}>" readonly="readonly" id="ft" class="time_select" onfocus="WdatePicker({onpicked:function(op){test();SetCookie('into_time',$('#ft').val());},dateFmt: 'yyyy-MM-dd',minDate:'%y-%M-{%d}'});" /></span><span set-lan="html:q-Departure">离店</span>-<span class="maincl"><input type="text" set-lan="val:q-Pleasechoosethetime" placeholder="请选择时间" value="<{$out_time}>" readonly="readonly" id="tt" class="time_select" onfocus="WdatePicker({onpicked:function(op){test();SetCookie('out_time',$('#tt').val());changeTime();},dateFmt: 'yyyy-MM-dd',minDate:$('#ft').val()});" /></span></div>
+            <div class="right maincl"><span set-lan="html:q-common">共</span><span id="night_num"></span><span set-lan="html:q-night">晚</span><em class="linkIco"></em></div>
+        </div>
+        <div class="hotel_tit border_b"><span set-lan="html:q-Reservableroom">房间类型</span><span class="black9" set-lan="html:q-room">（<{$room_count}>种）</span></div>
+        <div class="hotel_ding mb10">
+            <ul>
+                <foreach name="room_list" item="item">
+                    <li class="hotel_list">
+                        <div class="pub_img left"><img src="__ROOT__/attachs/<{$item.photo}>"></div>
+                        <div class="pub_wz">
+                            <h3 class="overflow_clear"><if condition="$lang eq 1 "><{$item.title}><elseif condition="$lang eq 2" /><{$item.lao_title}><elseif condition="$lang eq 3" /><{$item.eng_title}></if>/<if condition="$item.is_zc eq 1"><span set-lan="html:q-Providebreakfast">提供早餐</span><else/><span set-lan="html:q-nobreakfast">无早餐</span></if></h3>
+                            <p class="black9"><span set-lan="html:q-qian">₭</span><big class="fontcl2"><b><{$item.price}></b></big></p>
+                            <p class="black9 remain-rooms<?php echo $item['room_id']?>"><span set-lan="html:q-left">还剩</span><{$item.sku}><span set-lan="html:q-room">间</span></p>
+                        </div>
+                        <a href="javascript:void(0);" rel="<{:U('hotel/order',array('room_id'=>$item['room_id']))}>" class="btn query_order" set-lan="html:q-ding">订</a>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+        function get_night(stime,ltime){
+            var  aDate,  oDate1,  oDate2,  iDays  
+            oDate1  =  new  Date(stime.replace(/-/g, "/"));
+            oDate2  =  new  Date(ltime.replace(/-/g, "/"));
+            iDays  =  parseInt(Math.abs(oDate1.getTime()  -  oDate2.getTime())  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数 
+            return  iDays  
+        }
+    
+        function test() {
+            var price = "<{$detail.price}>";
+            var stime = $("#ft").val();
+            var ltime = $("#tt").val();
+            if(ltime&&stime){
+                if(ltime <= stime){
+                    layer.msg('选择时间不正确');
+                }
+                var night_num =  get_night(stime,ltime);
+                $("#night_num").html(night_num);
+            }
+            
+        }
+        $(document).ready(function(){
+            var stime = $("#ft").val();
+            var ltime = $("#tt").val();
+            if(ltime&&stime){
+                var night_num =  get_night(stime,ltime) ||0;
+                $("#night_num").html(night_num);
+            }
+            $(".query_order").click(function(){
+                var ft = $("#ft").val();
+                var tt = $("#tt").val();
+                var url = $(this).attr('rel');
+                SetCookie('into_time',ft);
+                SetCookie('out_time',tt);
+                setTimeout(function () {
+                      window.location.href = url;
+                }, 1000);
+            })
+            
+        })
+        function SetCookie(name, value)//两个参数，一个是cookie的名子，一个是值
+            {
+                var Days = 30; //此 cookie 将被保存 30天
+                var exp = new Date();    //new Date("December 31, 9998");
+                exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+                document.cookie = name + "=" + value + ";expires=" + exp.toGMTString() +";path=/";
+            }
+        function changeTime(){
+            var url = "<{:U('hotel/roomnum')}>";
+            var hotel_id = <?php echo $_GET['hotel_id']?>;
+            $.post(url,{hotel_id:hotel_id},function(data) {
+                for(var i=0;len=data.length,i<len;i++){
+                    $('.remain-rooms'+data[i][0]).text("还剩"+data[i][1]+"间");
+                }
+            },'json')
+        }
+    </script>
+<script src="__TMPL__statics/js/jquery.flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(document).ready(function () {
+        /*轮播幻灯图开始*/
+        $('.flexslider').flexslider({
+            directionNav: true,
+            pauseOnAction: false
+        });
+        /*轮播幻灯图结束*/
+    });
+</script>
+
+</body>
+</html>

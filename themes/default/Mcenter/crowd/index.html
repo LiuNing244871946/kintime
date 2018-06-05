@@ -1,0 +1,26 @@
+<include  file='public:header'/>  
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('member/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">我的众筹</div>
+        <i class="icon-menu"></i>
+    </header>
+    <?php }?>
+    <!-- 筛选TAB -->
+    
+    <div id="life" class="page-center-box">
+
+        <div id="scroll">
+            <div class="list-have-pic shop-list" style="margin:0 0 0.1rem;">
+            
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                loaddata('<{$nextpage}>', $(".list-have-pic"), true);
+            });
+        </script>
+
+    </div>
+<include  file='public:footer'/>

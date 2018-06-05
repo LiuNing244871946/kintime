@@ -1,0 +1,106 @@
+<include  file='public:header'/>  
+<style type="text/css">
+#header_lan_pull{display:none; position:absolute; top:0.54rem; right:0; width:100%; min-width:0.9rem; background:#fff none; box-shadow:0 0 0.03rem #999;}
+#header_lan_pull ul{position:relative; z-index:1000; background:#fff none;}
+#header_lan_pull i{ position:absolute; z-index:999; top:-0.04rem; left:50%; display:inline-block; width:0; height:0; content:''; background:#fff none; width:0.08rem; height:0.08rem; transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-o-transform:rotate(-45deg); box-shadow:0 0 0.03rem #999;}
+#header_lan_pull li{ display:block;}
+#header_lan_pull li span{ display:block; border-bottom:1px solid #dedede; font-size:0.14rem; line-height:0.4rem; color:#333; text-align:center;}
+#header_lan_pull li span.on{ background:#eee none;}
+#header_lan_pulll li:last-child span{border-bottom:none 0px;}
+</style>
+<body style="overflow-x:hidden;">
+
+<iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
+    <?php if(!$is_app){?>
+	<header>
+
+  <a href="<{:AppLink('mobile/index/index')}>"><i class="icon-goback"></i></a>
+		<div class="title">登 录</div>
+
+		<div class="lang-tab">
+            <i class="lang-icon"></i>
+            <div id="header_lan_pull">
+                <i></i>
+                <ul>
+                    <li><span class="on lanSelect" id="zh">简体中文</span></li>
+                    <li><span id="en" class="lanSelect">English</span></li>
+                    <li><span id="lao" class="lanSelect">ລາວ</span></li>
+                </ul>
+            </div>
+        </div>
+
+	</header>
+    <?php }?>
+    <div id="login" class="page-center-box">
+
+    	<form action="<{:U('passport/login')}>" method="post" target="baocms_frm">
+
+            <div id="scroll">
+
+                <div id="login-input">
+                    <div id="input-con">
+                        <select name="areacode" id="areacode">
+                            <option value='86'>中国+86</option>
+                            <option value='856'>老挝+856</option>
+                        </select>
+                        <input type="text" name="account" placeholder="手机号登录" />
+
+                    </div>
+
+                    
+                    <input type="password" name="password" placeholder="密码" />
+
+                </div>
+
+                <input type="submit" class="submit" value="登 录" />
+
+                <div class="forget-out"><a href="<{:AppLink('passport/forget',array('way'=>2))}>">忘记密码？</a>
+                	<a href="<{:AppLink('passport/register',array('invite_id'=>0))}>" style="float:right;">注册</a>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".lang-tab").click(function () {
+            $(this).find("#header_lan_pull").toggle();
+            switch(cookies.get('lan')){
+                case 'zh':
+                    $(".lanSelect").removeClass('on');
+                    $('#zh').addClass('on');
+                    break;
+                case 'en':
+                    $(".lanSelect").removeClass('on');
+                    $('#en').addClass('on');
+                    break;
+                case 'lao':
+                    $(".lanSelect").removeClass('on');
+                    $('#lao').addClass('on');
+                    break;
+                default:
+                    $(".lanSelect").removeClass('on');
+                    $('#zh').addClass('on');
+                    break;
+            };
+        });
+        $('.lanSelect').click(function(){
+            var lan = $(this).attr('id');
+            $.post('<{:U("mobile/index/language")}>',{lan:lan},function(result){
+                if(result.status == 'success'){
+                    layer.msg(result.msg);
+                    cookies.set('lan',result.lan,{expires:30});
+                    language();
+                    location.reload();
+                }else{
+                    layer.msg(result.msg,{icon:2});
+                }                                                       
+            },'json');
+        });
+    })
+</script>
+</body>
+
+</html>

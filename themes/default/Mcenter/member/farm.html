@@ -1,0 +1,51 @@
+<include  file='public:header'/>    
+
+<body>
+    <?php if(!$is_app){?>
+    <header> 
+    	<a href="<{:AppLink('mobile/index/index')}>"><i class="icon-goback"></i></a>
+        <div class="title"> 完成支付</div>
+    </header>
+    <?php }?>
+    <div id="index" class="page-center-box">
+        <div id="scroll">
+            <div class="payFinish">
+                <div class="sh_buy_bt">
+                    <div class="fl">订单编号：<{$order.order_id}></div>
+                    <div class="fr">下单时间：<{$order.create_time|date='Y-m-d H:i',###}></div>
+                </div>
+                <div class="sh_waimai_order_nr">
+                    <div class="wz">
+                        <ul>
+                            <li>
+                                <div class="fl left">
+                                    <div class="payFinish_img"><img src="__ROOT__/attachs/<{$farm['photo']}>" width="60" height="60"></div>
+                                    <p class="payFinish_wz"><{$f['title']}></p>
+                                </div>
+                                <div class="fr"><span class="ml10">￥<{$order.amount}></span></div>
+                                <div class="clear"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="sh_waimai_order_price">
+                    <div class="fl">预约时间：</div>
+                    <div class="fr"><{$order.gotime|date='Y-m-d H:i:s',###}></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="sh_waimai_order_price">
+                    <div class="fl">付款方式：<{$paytype[$detail['code']]['name']}></div>
+                    <div class="fr">订单总额：<span class="main_color">￥<{$order['amount']}></span></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="sh_waimai_order_price">
+                    <div>地址：<{$farm['addr']}></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bfix shop-button" >
+        <a href="<{:AppLink('mcenter/farm/detail',array('order_id'=>$order['order_id']))}>"><span class="shop-pay">查看详情</span></a>
+        <a href="<{:AppLink('mobile/farm/index')}>"><span class="shop-del">继续逛逛</span></a>
+    </div>
+<include  file='public:footer'/>

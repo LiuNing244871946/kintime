@@ -1,0 +1,62 @@
+<include file="public:header"/>
+
+<body>
+<header> <a href="#"><i class="icon-goback"></i></a>
+    <div class="title"> 评论 </div>
+    <i class="icon-menu3"><a href="#" id="shareIco"></a></i>
+</header>
+
+<div class="page-center-box">
+    <form method="post" target="baocms_frm" action="<{:U('tribe/reply',array('post_id'=>$post_id,'commment_id'=>$comment_id))}>">
+    <div class="tribe_fabu">
+        <input type="hidden" name="comment_id" value="<{$comment_id}>"/>
+        <div class="cont"><textarea name="contents" placeholder="写点什么吧"></textarea></div>
+        <div class="appointForm_imgdup border_t border_b mb10">
+        	<div class="Upload-img-box">
+                        <div class="Upload-btn"><input type="file" id="fileToUpload" name="fileToUpload" data-role="none">上传图片</div>
+                        <div class="Upload-img">
+                            <div class="list-img  loading" style="display:none;"><img src=""></div>
+                            <div class="list-img jq_photo" style="display:none;"></div>
+                        </div>
+                    </div>
+                    <script type="text/javascript" src="__TMPL__statics/js/ajaxfileupload.js"></script>
+                    <script>
+                        function ajaxupload() {
+                            $(".loading").show();
+                            $.ajaxFileUpload({
+                                url: '<{:U("app/upload/upload",array("model"=>"tribecomments"))}>',
+                                type: 'post',
+                                fileElementId: 'fileToUpload',
+                                dataType: 'text',
+                                secureuri: false, //一般设置为false
+                                success: function (data, status) {
+                                    $(".loading").hide();
+                                    var str = '<div class="list-img" style="width:0.87rem; height:0.87rem;"><img src="__ROOT__/attachs/' + data + '"><input type="hidden" name="photos[]" value="' + data + '" /></div>';
+                                    $(".loading").before(str);
+                                    $("#fileToUpload").unbind('change');
+                                    $("#fileToUpload").change(function () {
+                                        ajaxupload();
+                                    });
+                                }
+                            });
+                        }
+                        $(document).ready(function () {
+                            $("#fileToUpload").change(function () {
+                                ajaxupload();
+                            });
+                            $(document).on("click", ".photo img", function () {
+                                $(this).parent().remove();
+                            });
+                        });
+                    </script>
+            <div class="clear"></div>
+        </div>
+        <div class="btn_box mar10 pad_t10">
+            <input type="submit" class="long_btn" value="评论">
+        </div>
+    </div>
+</form>
+</div>
+<iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
+</body>
+</html>

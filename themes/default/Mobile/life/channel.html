@@ -1,0 +1,71 @@
+<include  file='public:header'/>    
+
+<body>
+    <?php if(!$is_app){?>
+	<header>
+		<a href="<{:AppLink('life/index')}>"><i class="icon-goback"></i></a>
+		<div class="title"><{$channel[$channel_id]}></div>
+                  <i class="icon-menu" style="margin-right:0.30rem;"><a href="<{:AppLink('life/cates',array('channel_id'=>$channel_id))}>">发布</i>
+		<i class="icon-menu" id="ico_6"></i></a>
+	</header>
+    <?php }?>
+	<!-- 筛选TAB -->
+    <script>
+		$(function(){
+			$("#search-bar li").each(function(e){
+				$(this).click(function(){
+					if($(this).hasClass("on")){
+						$(this).parent().find("li").removeClass("on");
+						$(this).removeClass("on");
+						$(".serch-bar-mask").hide();
+					}
+					else{
+						$(this).parent().find("li").removeClass("on");
+						$(this).addClass("on");
+						$(".serch-bar-mask").show();
+					}
+					$(".serch-bar-mask .serch-bar-mask-list").each(function(i){
+						
+						if(e==i){
+							$(this).parent().find(".serch-bar-mask-list").hide();
+							$(this).show();
+						}
+						else{
+							$(this).hide();
+						}
+						$(this).find("li").click(function(){
+							$(this).parent().find("li").removeClass("on");
+							$(this).addClass("on");
+						});
+					});
+				});
+			});
+		});
+    </script>
+    
+	<div id="life" class="page-center-box">
+		<div id="scroll">
+        	
+			<!-- 列表 -->
+			<div class="list-have-pic">
+				
+
+			</div>
+			<script>
+        		$(document).ready(function () {
+            		loaddata('<{$nextpage}>', $(".list-have-pic"), true);
+       		    });
+    		</script>
+		</div>
+	</div>
+    <!--新增-->
+    <style>
+    .floatBtn_box{ position:fixed; z-index:99; bottom:0.62rem; right:0.02rem; width:0.4rem; overflow:hidden; border-radius:0.03rem; background:#24d0aa; border:0.01rem solid #1a9484; padding:0.01rem; box-shadow:-0.01rem 0.01rem 0.02rem #5eb5a2;}
+    .floatBtn_box .btn{ display:block; width:0.3rem; border-radius:0.03rem; padding:0.04rem 0.05rem; height:0.32rem; text-align:center; font-size:0.12rem; line-height:0.16rem; color:#fff; margin-bottom:0.01rem; background:#18b794; /*background:rgba(47, 189, 170, 0.8); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#BF2fbdaa,endColorstr=#BF2fbdaa);*/}
+    </style>
+    <div class="floatBtn_box">
+    	<a href="<{:AppLink('mcenter/life/index')}>" class="btn">我的信息</a>
+        <a href="<{:AppLink('life/cates',array('channel_id'=>$channel_id))}>" class="btn" style="margin-bottom:0;">我要发布</a>
+    </div>
+    <!--新增-->
+<include file="public:footer"/>

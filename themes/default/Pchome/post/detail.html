@@ -1,0 +1,134 @@
+<include  file='public:header'/>  
+<include  file='public:top'/>
+<include  file='public:nav'/>
+<div style="background:#f1f1f1;">
+<style>
+    .jfsy_flexslider .flex-direction-nav{top:156px;}
+    .jfsy_flexslider .flex-control-nav{top:326px; text-align: center;}
+</style>
+    <div class="tBar pagewd">
+        <div class="jfsy_banner" style="height: 346px;">
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('.jfsy_flexslider').flexslider({
+                        directionNav: true,
+                        pauseOnAction: false,
+                    });
+
+                });//首页轮播js
+            </script>
+            <div class="jfsy_flexslider">
+                <ul class="slides">
+                    <calldata mdl="Ad" where=" bg_date ELT '{$today}' AND end_date EGT '{$today}' AND  city_id IN ({$city_ids})  AND closed=0 AND site_id=41" limit="0,3" cache="21600" order="orderby asc">
+                        <li class="sy_hotgzLi flex-active-slide" style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 1; display: block; z-index: 2;"><a href="<{$item.link_url}>" title="<{$item.title}>" target="_blank"><img width="1200" height="346" src="__ROOT__/attachs/<{$item.photo}>" draggable="false"></a></li>
+                    </calldata>
+
+
+                </ul>
+                <ol class="flex-control-nav flex-control-paging"></ol>
+
+            </div>
+        </div>
+        <div>
+            <div class="left tBar_l">
+                <div class="tBarLink_box mb10">
+                    <ul class="left tBarLink">
+                        <li><a href="<{:U('post/index',array('community_id'=>$detail['community_id']))}>" class="on">全部</a></li>
+                        <li><a href="<{:U('post/index',array('community_id'=>$detail['community_id'],'order'=>'new'))}>">新帖</a></li>
+                        <li><a href="<{:U('post/index',array('community_id'=>$detail['community_id'],'order'=>'hot'))}>">热帖</a></li>
+                    </ul>
+                    <a href="<{:U('post/index',array('community_id'=>$detail['community_id']))}>#fabu" class="right btn">发帖</a>
+                </div>
+                <div class="tBarList_nr">
+                    <div class="tBarDetail">
+                        <div class="tBarFrom">
+                            <div class="left tBarFrom_l">
+                                <div class="img"><img src="__ROOT__/attachs/<{$user.face|default='default.jpg'}>"  width="100%" height="100%"  /></div>
+                                <p><{$user.nickname}></p>
+                            </div>
+                            <div class="left tBarFrom_r">
+                                <h1><{$detail.title}></h1>
+                                <p class="from">楼主：<{$user.nickname}>    <{$detail.create_time|date='Y-m-d H:i',###}></p>
+                                <p><{$detail.details}></p>
+                                <if condition="!empty($pics)">
+                                    <div class="imgList">
+                                        <foreach name="pics" item="item">
+                                            <img src="__ROOT__/attachs/<{$item.pic}>" />
+                                        </foreach>
+                                    </div>
+                                </if>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="tBarComment mb10">
+                            <h2>评论（<{$detail.reply_num|default='0'}>条）</h2>
+                            <ul class="list_box mb10">
+                                <foreach name="list" item="item">
+                                    <li class="tBarCommentList_nr">
+                                        <div class="left img"><img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']}>" /></div>
+                                        <div class="wz">
+                                            <div class="from">
+                                                <div class="left">
+                                                    <p class="name"><{$users[$item['user_id']]['nickname']}></p>
+                                                    <span class="floor"><{$item.floor}>楼</span>
+                                                </div>
+                                                <div class="right graycl date"><{$item.create_time|date='Y-m-d H:i',###}></div>
+                                            </div>
+                                            <p class="nr"><{$item.contents}></p>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </li>
+                                </foreach>
+                            </ul>
+                            <div class="x">
+                                <{$page}>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height:1px; width:100%; border:none 0; border-bottom:1px solid #dedede; margin-top:40px;" />
+                    <div class="tBarFabu">
+                        <h3>发表回复</h3>
+                        <textarea name="contents" class="jq_contents" placeholder="写点什么吧"></textarea>
+                        <div class="sub_btn"><input type="button" id="reply" class="btn" value="发表回复" /></div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $("#reply").click(function () { //点评
+                        var contents = $(".jq_contents").val();
+                        var post_id = "<{$detail.post_id}>";
+                        if (contents == "" || contents == null || contents == undefined) {
+                            layer.msg('请填写回复内容');
+                            return false;
+                        }
+                        var url = "<{:U('post/reply')}>";
+                        $.post(url, {post_id: post_id, contents: contents}, function (data) {
+                            if (data.status == 'login') {
+                                ajaxLogin();
+                            } else if (data.status == 'success') {
+                                layer.msg(data.msg, function () {
+                                    setTimeout(function () {
+                                        window.location.reload(true);
+                                    }, 1000)
+                                });
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                        }, 'json')
+                    });
+                });
+            </script>
+            <div class="right tBar_r">
+                <div class="tBarAnnout">
+                    <h3><em></em>小区公告</h3>
+                    <p class="nr"><{$news.title}></p>
+                    <p class="nr"><{$news.details}></p>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<!--main end-->
+<include  file='public:footer'/>  

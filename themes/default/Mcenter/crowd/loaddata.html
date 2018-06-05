@@ -1,0 +1,29 @@
+ 
+<!-- 循环 -->
+<foreach name="list" item="var">
+<div class="list-box border_t">
+    <div class="shop-order">
+        <p class="left">众筹ID:<{$var.list_id}></p>
+        <p class="right black9">状态：
+             <if condition="$var[is_zhong] EQ '1'">
+                已中奖
+             </if>
+        </p>
+    </div>
+</div>
+<div class="list-box mb10">
+    <a href="">
+        <div class="list-content activ-list-content" id="order-title" style="margin-left:0.08rem;">
+            <p class="activ-title">众筹名称：<{$goodss[$var['goods_id']]['title']}></p>
+            <p class="">姓名：<{$var.name|default=''}></p>
+            <p class="">电话：<{$var.mobile|default=''}></p>
+            <p class="">地址：<{$var.addr|default=''}></p>
+            <p class="">支持时间：<{$var.dateline|date='Y-m-d H:i:s',###}></p>        
+            <div class="spread-looker">支持金额：<span><{$var['price']/100}></span>元</div>
+        </div>
+    </a>
+</div>
+</foreach>
+<!-- 循环 -->
+
+

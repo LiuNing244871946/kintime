@@ -1,0 +1,91 @@
+<include file="public:header"/>
+
+<body style="background:#cd2f58;">
+    <?php if(!$is_app){?>
+	<header>
+		<a href="javascript:history.back()"><i class="icon-goback"></i></a>
+		<div class="title">全民经济人</div>
+		<i class="icon-menu"></i>
+	</header>
+<?php }?>
+ <div id="life" class="page-center-box">
+    <div id="scroll">
+        <div class="natnalEco_box">
+            <div class="natnalEco">
+                <div class="img_bg"><img src="__TMPL__statics/img/natnalEco1.png"></div>
+                <div class="btn_box">
+                    <div class="img"><img src="__TMPL__statics/img/natnalEco2.png"></div>
+                    
+                    <!-- <a href="javascript:void(0);" id="shareIco" class="btn share" style="background: none;"><img src="__TMPL__statics/img/natnalEcoBtn.png"></a> -->
+                    
+                </div>
+            </div>
+            <div class="weixin_sm">
+                <p>让朋友扫描以下二维码<php>if(empty($MEMBER)){</php>（您当前未登录，请登录后分享给朋友）<php>}</php></p>
+              
+                <div id="code"></div> 
+              
+            </div>
+            <script type="text/javascript" src="__TMPL__statics/js/jquery.qrcode.min.js"></script>
+        
+                <script>
+                   $('#code').qrcode("http://<{$Think.SERVER.HTTP_HOST}>__ROOT__<{:U('passport/register',array('invite_id'=>$MEMBER['user_id']))}>"); 
+                </script>
+            <php>if(empty($MEMBER)){</php>
+            <script>
+                function lo(){
+                    location.href='<{:U("passport/login")}>';
+                }
+                $(document).ready(function(){
+                    $(".btn").click(function(){
+                         error('请登录后再分享',3000,"lo()");
+                    });
+                });
+            </script>
+            <php>}else{</php>
+                <div class="bdcolor">
+                    <div class="bdcolor_bg"></div>
+                    <div class="bdsharebuttonbox" data-tag="share_1">
+                        <a class="bds_weixin" data-cmd="weixin">微信</a>
+                        <a class="bds_qzone" data-cmd="qzone" href="#">QQ空间</a>
+                        <a class="bds_sqq" data-cmd="sqq">腾讯QQ</a>
+                        <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+                        <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+                        <div class="bd-share-popup-footer">
+                            <a class="bd-share-popup-close" onClick="$('.bdcolor').hide();" href="javascript:void(0);">取消</a>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".share").click(function () {
+                            $(".bdcolor").show();
+                        });
+                    });
+                    window._bd_share_config = {
+                        common: {
+                            bdText: '<{$detail.title}>',
+                            bdDesc: '<{$detail.title}>',
+                            bdUrl: "http://<{$Think.SERVER.HTTP_HOST}>__ROOT__<{:U('index/index',array('invite'=>$MEMBER['user_id']))}>",
+                            bdPic: 'http://<{$Think.SERVER.HTTP_HOST}>__TMPL__statics/img/natnalEco2.png'
+                        },
+                        share: [{
+                                "bdSize": 32,
+                            }],
+                    }
+                    with (document)
+                        0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+                </script>
+            <php>}</php>
+            <!-- <div class="nr">
+            	<h3><span>活动内容</span></h3>
+                <p><{:nl2br($CONFIG['quanming']['content'])}> </p>
+            </div> -->
+            <div class="nr">
+            	<h3><span>活动规则</span></h3>
+                <p><{:nl2br($CONFIG['quanming']['intro'])}> </p>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="public:footer"/>

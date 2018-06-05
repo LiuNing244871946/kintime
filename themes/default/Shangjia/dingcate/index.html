@@ -1,0 +1,48 @@
+<include file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-bookSeat">订座</a> > <a href="" set-lan="html:n-bookSet">订座设置</a> > <a set-lan="html:n-dishesClassify">菜品分类</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('dingcate/index')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <span set-lan="html:n-classifyName">分类名称：</span><input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索" set-lan="value:n-search" />
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('dingcate/create')}>" set-lan="html:n-addClassification">添加分类+</a></div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change on"><a href="<{:U('dingcate/index')}>" set-lan="html:n-dishesClassify">菜品分类</a></li>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('dingmenu/index')}>" set-lan="html:n-dishesConfigure">菜品配置</a></li>
+        </ul>
+    </div>
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-id">ID</td>
+            <td set-lan="html:n-classifyName">分类名称</td>
+            <td set-lan="html:n-sort">排序</td>
+            <td set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+        <tr>
+            <tr>
+                <td><{$var.cate_id}></td>
+                <td><{$var.cate_name}></td>
+                <td><{$var.orderby}></td>
+                <td>
+                   <a href="<{:U('dingcate/edit',array('cate_id'=>$var['cate_id']))}>" set-lan="html:n-edit">编辑</a>
+                   <a mini='confirm' href="<{:U('dingcate/delete',array('cate_id'=>$var['cate_id']))}>" set-lan="html:n-delete">删除</a>
+                </td>
+            </tr>
+        </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+<include file='public:footer'/>

@@ -1,0 +1,15 @@
+<foreach name="list" item="item">
+    <li>
+        <div class="fl">
+            <div class="img"><a href="<{:AppLink('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"><div class="bq"><eq name="item.is_new" value="1"><em class="ico_1"></em></eq><eq name="item.is_hot" value="1"><em class="ico_2"></em></eq></div></a></div>
+            <h4 class="overflow_clear"><a href="<{:AppLink('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>"><{:bao_msubstr($item['title'],0,12,false)}></a><a href="javascript:void(0);" class="right rang"><{$item.d}></a></h4>
+            <p class="black9"><{:bao_msubstr($item['intro'],0,30,false)}></p>
+            <p class="price fontcl1">￥<{:round($item['tuan_price']/100,2)}><del>￥<{:round($item['price']/100,2)}></del></p>
+        </div>
+    <php>$save = $item['price'] - $item['tuan_price'];</php>
+    <div class="fr"><a href="<{:AppLink('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>" class="btn">立省<{:round($save/100,2)}>元</a></div>
+    <div class="clear"></div>
+</li>
+</foreach>
+
+

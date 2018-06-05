@@ -1,0 +1,20 @@
+<volist name="list" id="item" key="index ">
+
+    <div class="list-box">
+        <div class="list-img">
+            <a class="pic" href="<{:AppLink('shop/detail',array('shop_id'=>$item['shop_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"></a>
+        </div>
+        <div class="list-content">
+            <p>
+                <a class="fl" title="<{$item.shop_name}>" href="<{:AppLink('shop/detail',array('shop_id'=>$item['shop_id']))}>"><{:msubstr($item['shop_name'],0,6,'utf-8',false)}></a>
+                <span class="range fr"><{$item.d}></span>
+            </p>
+            <div class="clear"></div>
+            <p class="c_h overflow_clear"><{$item.addr}></p>
+            <div class="listBox_tag_box"><if condition="$item.is_tuan eq 1"><span class="listBox_tag bg_1">抢</span></if><if condition="$item.is_ele eq 1"><span class="listBox_tag bg_2">外</span></if><if condition="$item.is_coupon eq 1"><span class="listBox_tag bg_3">券</span></if><if condition="$item.is_breaks eq 1"><span class="listBox_tag bg_4">买</span></if><if condition="$item.is_mart eq 1"><span class="listBox_tag bg_5">微</span></if></div>
+            <php>$w = $item['score'] * 0.018;</php>
+            <if condition="$item.tel neq null"><a href="tel:<{$item.tel}>"><div class="seller_tel_btn"></div></a><else/><a href="tel:<{$item.mobile}>"><div class="seller_tel_btn"></div></a></if></div>
+        </div>
+    </div>
+
+</volist>

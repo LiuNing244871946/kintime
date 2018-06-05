@@ -1,0 +1,174 @@
+<include  file='public:header'/>
+<script src = "__TMPL__statics/js/elecart.js?v=20150822" ></script>
+<script>
+    var is_app = "<{$is_app}>";
+    $(function () {
+        if ($('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            $('#shangjia_tab li').width(100 / $('#shangjia_tab li').length + '%');
+            $('.page-center-box').css('top', '0.9rem');
+        }//头部切换tab结束
+        if ($('.elePrompt').length > 0 && $('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            if(is_app){
+                $('#shangjia_tab').css("cssText", "top:0.4rem !important");
+            }else{
+                $('#shangjia_tab').css('top', '0.9rem');
+            }
+            $('.page-center-box').css('top', '1.3rem');
+        } else if ($('.elePrompt').length > 0 || $('#shangjia_tab').length > 0) {
+            $('.page-center-box').css('top', '0.9rem');
+        }//头部提示结束
+        $(".frame-set-left ul li").click(function () {
+            $(".frame-set-left ul li").removeClass('active');
+            $(this).addClass('active');
+            var cate = $(this).attr('rel');
+            if (cate == 'all') {
+                $('.list-box').show();
+            } else {
+                $('.list-box').hide();
+                $('.' + cate).show();
+            }
+        });
+    });
+</script>
+<?php if(!$is_app){?>
+<body scroll="no">
+<header>
+    <a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>"><i class="icon-goback"></i></a>
+    <div class="title">店铺菜单</div>
+</header>
+<?php }?>
+<!--头部切换开始-->
+<ul id="shangjia_tab">
+    <li><a href="<{:U('ele/shop',array('shop_id'=>$detail['shop_id']))}>" class="on" set-lan="html:m-menu">菜单</a></li>
+    <li><a href="<{:U('ele/detail',array('shop_id'=>$detail['shop_id']))}>" set-lan="html:m-details">详情</a></li>
+    <li><a href="<{:U('ele/dianping',array('shop_id'=>$detail['shop_id']))}>" set-lan="html:m-evaluation">评价</a></li>
+</ul>
+<!--头部切换结束-->
+<div id="ele" class="shop_page page-center-box mt10 ">
+    <div class="frame-set-left" style="overflow: scroll;">
+        <ul>
+            <li class="active" rel="all"><a href="javascript:void(0);" set-lan="html:m-all-categories">全部分类</a></li>
+            <foreach name="cates" item="item">
+                <li rel="cate_<{$item.cate_id}>"><a href="javascript:void(0);"><if condition="$lang eq 1 "><{$item.cate_name}><elseif condition="$lang eq 2" /><{$item.lao_cate_name}><elseif condition="$lang eq 3" /><{$item.eng_cate_name}></if></a></li>
+            </foreach>
+        </ul>
+    </div>
+    <div class="frame-set-right" style="overflow: scroll;">
+        <div id="scroll">
+            <div class="list-have-pic">
+                <div class="eleList_box">
+                    <foreach name="list" item="var">
+                        <div class="list-box cate_<{$var.cate_id}>">
+                            <div class="list-img">
+                                <img src="__ROOT__/attachs/<{$var.photo}>">
+                            </div>
+                            <div class="list-content">
+                                <p class="overflow_clear"><if condition="$lang eq 1 "><{$var.product_name}><elseif condition="$lang eq 2" /><{$var.lao_product_name}><elseif condition="$lang eq 3" /><{$var.eng_product_name}></if></p>
+                                <br/>
+                                <p class="price fontcl1">₭<{$var['price']}></p>
+                                <div class="num-input">
+                                    <div class="btn jq_jian" val="<{$var['price']}>" did="<{$var.product_id}>" onclick="dec(this);">-</div>
+                                    <div class="input"><input type="text" class="ordernum" readonly="readonly" value="<{$var.cart_num}>" /></div>
+                                    <div class="btn active jq_addcart" val="<{$var['price']}>" did="<{$var.product_id}>" onclick="addcart(this);" >+</div>
+                                </div>
+                            </div>
+                        </div>
+                    </foreach>
+                </div>
+
+            </div>                
+        </div>
+    </div>
+</div>
+<footer class="footer-cart eleFooter-cart">
+    <div class="cart">
+        <a id="cart_1" href="javascript:void(0);"><div class="cart-num" id="num"></div></a>
+    </div>
+    <div class="price">₭<span id="total_price"></span><p>(₭<{$detail['since_money']}><span set-lan="html:m-get-up">起送</span>,<span set-lan="html:m-delivery-fee">配送费</span><{$delivery_money}>)</p></div>
+    <div id="cart_2" class="disable"><a href="javascript:void(0);" style="color:#FFFFFF;"><span set-lan="html:m-confirm-order">确认下单</span></a></div>
+</footer>
+</body>
+<!--JS 购物车-->
+<script type="text/javascript">
+    var cart_url =  "<{:AppLink('ele/cart',array('nowtime'=>$nowtime))}>";
+    
+    $(document).ready(function () {
+        var price = window.ele.totalprice("<{$detail['shop_id']}>");
+        var since_money = "<{$detail['since_money']}>";
+        if(price > since_money){
+            $('#cart_1').attr('href',cart_url);
+            $('#cart_2').find('a').attr('href', cart_url);
+            $('#cart_2').removeClass('disable');
+            $('#cart_2').addClass('btn');
+        }else{
+            $('#cart_1').attr('href', "javascript:void(0);");
+            $('#cart_2').find('a').attr('href', "javascript:void(0);");
+            $('#cart_2').addClass('disable');
+            $('#cart_2').removeClass('btn');
+        }
+        
+    })
+
+
+
+    function addcart(o) {
+        var data = {}, shop_id = "<{$detail['shop_id']}>";
+        data['product_id'] = $(o).attr('did');
+        data['price'] = $(o).attr('val');
+        var v = $(o).parent().find(".ordernum").val();
+        v++;
+        $(o).parent().find(".ordernum").val(v);
+        window.ele.addcart(shop_id, data);
+        $("#num").text(window.ele.count("<{$detail['shop_id']}>"));
+        $("#total_price").html(window.ele.totalprice("<{$detail['shop_id']}>"));
+        var since_money = "<{$detail['since_money']}>";
+        var flag = window.ele.totalprice("<{$detail['shop_id']}>") - since_money;
+        //if (window.ele.totalprice("<{$detail['shop_id']}>") < since_money) {
+	   	if (flag < 0) {
+            $('#cart_2').addClass('disable');
+        } else {
+            $('#cart_1').attr('href', cart_url);
+            $('#cart_2').find('a').attr('href', cart_url);
+            $('#cart_2').removeClass('disable');
+            $('#cart_2').addClass('btn');
+        }
+    }
+    function dec(e) {
+        var product_id = $(e).attr('did'), shop_id = "<{$detail['shop_id']}>";
+        window.ele.dec(shop_id, product_id);
+        var v = $(e).parent().find(".ordernum").val();
+        if(v > 1){
+            v--;
+            $(e).parent().find(".ordernum").val(v);
+        }else if(v == 1){
+            $(e).parent().find(".ordernum").val('');
+        }
+        $("#num").text(window.ele.count("<{$detail['shop_id']}>"));
+        $("#total_price").html(window.ele.totalprice("<{$detail['shop_id']}>"));
+        var since_money = "<{$detail['since_money']}>";
+        var flag = window.ele.totalprice("<{$detail['shop_id']}>") - since_money;
+        //if (window.ele.totalprice("<{$detail['shop_id']}>") < since_money) {
+        if(flag < 0){
+            $('#cart_1').attr('href', "javascript:void(0);");
+            $('#cart_2').find('a').attr('href', "javascript:void(0);");
+            $('#cart_2').addClass('disable');
+            $('#cart_2').removeClass('btn');
+        } else {
+            $('#cart_1').attr('href', cart_url);
+            $('#cart_2').find('a').attr('href', cart_url);
+            $('#cart_2').removeClass('disable');
+            $('#cart_2').addClass('btn');
+        }
+    }
+
+//初始化购物城数据
+    ~function () {
+        var count = window.ele.count("<{$detail['shop_id']}>");
+        var totalprice = window.ele.totalprice("<{$detail['shop_id']}>");
+        $("#num").text(count);
+        $("#total_price").html(totalprice);
+    }();
+</script>
+</html>

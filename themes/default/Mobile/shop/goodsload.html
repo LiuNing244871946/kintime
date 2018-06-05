@@ -1,0 +1,15 @@
+<foreach name="list" item="item">
+    <li>
+        <div class="fl">
+            <div class="img"><a href="<{:AppLink('mall/detail',array('goods_id'=>$item['goods_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"></a></div>
+            <h4 class="overflow_clear"><a href="<{:AppLink('mall/detail',array('goods_id'=>$item['goods_id']))}>"><{$item.title}></a></h4>
+            <p class="black9 mt10 mb_5">已售:<{$item.sold_num}></p>
+            <p class="price fontcl1">￥<{:round($item['mall_price']/100,2)}><del>￥<{:round($item['price']/100,2)}></del></p>
+        </div>
+    <php>$save = $item['price'] - $item['mall_price'];</php>
+    <div class="fr"><a href="<{:AppLink('mall/detail',array('goods_id'=>$item['goods_id']))}>" class="btn">立省<{:round($save/100,2)}>元</a></div>
+    <div class="clear"></div>
+</li>
+</foreach>
+
+

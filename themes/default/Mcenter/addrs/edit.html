@@ -1,0 +1,155 @@
+<include  file='public:header'/>
+<script type="text/javascript" src="https://maps.google.cn/maps/api/js?v=3.20&region=cn&language=zh-CN&key=AIzaSyAj1gNUTDZJLvPeePsU5ltjfX-hJU1N_8c&libraries=places"></script>  
+<body style="background: #F3F4F5">
+<?php if(!$is_app){?>
+	<header>
+		<a href="javascript:self.location=document.referrer"><i class="icon-goback"></i></a>
+		<div class="title">修改收货地址</div>
+		<i class="icon-menu"></i>
+	</header>
+<?php }?>
+<script src="<{:U('app/datas/cab',array('name'=>'cityareas'))}>"></script> <!-- 获取下拉 -->
+	<div id="addr_form">
+		<div id="addr_con">
+			<div id="addr_user">
+				<span class="addr_text">联系人:</span>
+				<input type="text" class="add-text" id="name" name="name" value="<{$detail.name}>">
+			</div>
+			<div id="addr_city">
+				<span class="addr_text">城市：</span>
+				<select id="city_ids" name="city_id" class="add-text"></select>
+			</div>
+			<div id="addr_area">
+				<span class="addr_text">区域：</span>
+				<select id="area_ids" name="area_id" class="add-text"></select>
+			</div>
+			<div id="addr_business">
+				<span class="addr_text">商圈：</span>
+				<select id="business_ids" name="business_id" class="add-text"></select>
+			</div>
+			<div id="addr_phone">
+				<span class="addr_text">手机号码：</span>
+				<div id="addr_mobilecon">
+					<select id="areacode">
+						<option value="86">中国+86</option>
+						<option value="856">老挝+856</option>
+					</select>
+					<input type="text" class="add-text2" name="mobile" id="mobile" value="<{$detail.mobile}>">
+				</div>
+			</div>
+			<div id="addr2">
+				<span class="addr_text">收货地址：</span>
+				<input type="text" class="add-text2 add-dw" name="addr" id="addr" value="<{$detail.addr}>">
+			</div>
+			<div id="map_addr">
+				<span style="display: block;display: flex;display: -webkit-flex;height: .3rem;">
+					<input type="text" readonly="ture" placeholder="经度" id="map_lng" value="<{$detail.lng}>" />
+					<input type="text" readonly="ture" placeholder="纬度" id="map_lat" value="<{$detail.lat}>" />
+				</span>
+				<!-- <input type="button" id="map_addrBtn" value="地图选点"> -->
+				<div id="map_con">
+					<div id="map_keywords">
+						<select id="g-country">
+					        <option value="CN">中国</option>
+					        <option value="LA">老挝</option>
+					    </select>
+					    <input type="text" id="map_text" placeholder="搜地址" />
+					</div>
+					
+					<div id="map"></div>
+				</div>
+			</div>
+			<div id="addr_button"><input type="submit" value="立即修改" id="edit_post" /></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			get_option();
+			changeCAB(<{$detail.city_id}>,<{$detail.area_id}>,<{$detail.business_id}>);
+			if (<{$detail.areacode}> === 86) {
+				document.getElementById('areacode').value='86';
+			}else if(<{$detail.areacode}> === 856){
+				document.getElementById('areacode').value='856';
+			}
+			// 地图
+			$('#map').height($('#map').width());
+			var pos_U={
+				lat:<{$detail.lat}>,
+	            lng:<{$detail.lng}>
+			};
+            map(pos_U);
+
+            $('#edit_post').click(function(){
+            	var addr_id = <{$detail.addr_id}>;
+            	var name = $('#name').val();
+				var city_id = $('#city_ids').val();
+				var area_id = $('#area_ids').val();
+				var business_id = $('#business_ids').val();
+				var areacode = $('#areacode').val();
+				var mobile = $('#mobile').val();
+				var addr = $('#addr').val();
+				var lng = $('#map_lng').val();
+				var lat = $('#map_lat').val();
+
+				$.post('<{:U("mobile/addr/edit_addr")}>',{addr_id:addr_id,name:name,city_id:city_id,area_id:area_id,business_id:business_id,areacode:areacode,mobile:mobile,addr:addr,lng:lng,lat:lat},function(result){										
+						if(result.status == 'success'){
+							layer.msg(result.msg);
+							setTimeout(function(){
+								self.location=document.referrer;
+								// location.reload(true);
+							},3000);
+						}else{
+							layer.msg(result.msg,{icon:2});
+						}														
+					},'json');
+            })
+			
+		})
+
+		function map (pos_U){
+			var map = new google.maps.Map(document.getElementById('map'),{
+		        zoom:15,
+		        center:pos_U,
+		        gestureHandling:'greedy',
+		        zoomControl:false,
+		        mapTypeControl:false,
+		        streetViewControl:false,
+		        fullscreenControl:false	
+		    });
+		    var marker_U = new google.maps.Marker({
+		        position:pos_U,
+		        map:map,
+		        animation:google.maps.Animation.DROP
+		    });
+		    var ac = new google.maps.places.Autocomplete(
+		            (document.getElementById('map_text')),
+		            {
+		                // types:['address'],
+		                componentRestrictions:{country:'CN'}
+		            }
+		        );
+		    ac.addListener('place_changed',function(){
+		        var place = ac.getPlace();
+		        map.panTo(place.geometry.location);
+		        marker_U.setPosition(place.geometry.location);
+		    });
+		    document.getElementById('g-country').addEventListener('change',function(){
+		        var countryText = document.getElementById('g-country').value;
+		        ac.setComponentRestrictions({'country':countryText});
+		        if (countryText==='LA') {
+		            marker_U.setPosition({lat:17.97571240175261,lng:102.63320446014404});
+		            map.setCenter({lat:17.97571240175261,lng:102.63320446014404});
+		        }else if (countryText==='CN') {
+		            marker_U.setPosition({lat:30.268760105204333,lng:120.2266301214695});
+		            map.setCenter({lat:30.268760105204333,lng:120.2266301214695});
+		        }
+		    })
+		    map.addListener('click',function(e){
+		    	document.getElementById('map_lat').value = e.latLng.lat();
+        		document.getElementById('map_lng').value = e.latLng.lng();
+		        marker_U.setPosition(e.latLng);
+		    });
+
+		}
+	</script>
+<include  file='public:footer'/>

@@ -1,0 +1,36 @@
+<include file="public:header"/>
+<body>
+    <?php if(!$is_app){?>
+<header>
+    <div class="header_color">
+        <a href="<{:AppLink('mcenter/member/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">
+            设置昵称
+        </div>
+        
+    </div>
+</header>
+    <?php }?>
+<div id="" class="page-center-box">
+		<div class="baseSet_box">
+            <div class="form_box">
+                <form method="post"  action="<{:U('mcenter/info/nickname')}>"  target="baocms_frm">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <th>设置昵称</td>
+                            <td><div class="int_box"><input class="oldPassw" name="nickname" type="text" value="<{$MEMBER.nickname}>" /></div></td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="2"><div class="btn_box">
+                                <input class="btn" type="submit" value="确认保存" />
+                            </div></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>                
+        </div>
+
+</div>   
+
+<include file="public:footer"/>

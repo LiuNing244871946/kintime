@@ -1,0 +1,46 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">设置</li>
+        <li class="li2">外卖配送设置</li>
+        <li class="li2 li3">外卖配送费设置</li>
+    </ul>
+</div>
+<{:BA('elesetting/create','','添加设置','','remberBtn')}>
+<form  target="baocms_frm" method="post">
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;text-align: center;" >
+                <tr>
+                    <td>ID</td>
+                    <td>公里数范围(km)</td>
+                    <td>配送费(₭)</td>
+                    <td>骑手所得提成(₭)</td>
+                    <td>操作</td>
+                </tr>
+                <foreach name="list" item="var">
+                    <tr>
+                        <td>
+                            <{$var.elesetting_id}>
+                        </td>
+                        <td>
+                            <{$var.mileage}>km
+                        </td>
+                        <td>
+                            <{$var.delivery}>₭
+
+                        </td>
+                        <td>
+                            <{$var.rider}>₭
+                        </td>
+                        <td>
+                            <{:BA('elesetting/edit',array("elesetting_id"=>$var["elesetting_id"]),'编辑','','remberBtn')}>
+                            <{:BA('elesetting/delete',array("elesetting_id"=>$var["elesetting_id"]),'删除','','remberBtn')}>
+                        </td>
+                    </tr>
+                </foreach>
+            </table>
+        </div>
+    </div>
+</form>
+<include  file='public:footer'/>       

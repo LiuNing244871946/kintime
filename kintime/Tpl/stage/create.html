@@ -1,0 +1,21 @@
+<include  file='public:header'/>
+<form  target="baocms_frm" action="<{:U('stage/create')}>" method="post">
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >   
+                
+                <tr>
+                    <td class="lfTdBt">分期数：</td>
+                    <td class="rgTdBt"><input type="text" name="data[periods]" value="<{$detail.periods|default=''}>" class="scAddTextName w210" />
+
+                    </td>
+                </tr>
+     
+
+    </table>
+       <input type="submit" value="确认添加" class="smtQrIpt" />
+</div>
+
+</div>
+</form>
+<include  file='public:footer'/>       

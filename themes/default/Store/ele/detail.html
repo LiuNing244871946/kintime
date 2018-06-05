@@ -1,0 +1,108 @@
+<include  file='public:header'/>
+<header> 
+    <i class="left"><a href="<{:U('store/ele/index')}>" id="icon_goback"></a></i>
+    <div class="title">外卖订单详情</div>
+    <i class="right"></i> 
+</header>
+
+<section>
+    <div class="sh_waimai_details">
+    	<div class="sh_list_public_box">
+            <ul>
+                <li class="list_box mb10">
+                    <div class="fl">订单ID：<{$order.order_id}></div>
+                    <div class="fr fontcl1">
+                        <eq name="order.status" value="1">订单待接单</eq>
+                        <eq name="order.status" value="2">订单待配送</eq>
+                        <eq name="order.status" value="3">订单已完成</eq>
+                    </div>
+                    <div class="clear"></div>
+                </li>
+                <li class="list_box mb10">
+                    <ul>
+                        <volist name="op" id="op">
+                    	<li class="sh_waimai_xq_cai">
+                            <p class="fl"><{$ep[$op['product_id']]['product_name']}></p>
+                            <div class="fr">
+                            	<span class="mr10 grey9">×<{$op.num}></span><span class="grey9"></span>
+                            </div>
+                        </li>
+                        </volist>
+                    </ul>
+                </li>
+                <li class="list_box mb10">
+                    <table class="sh_waimai_xq_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <th>合计</th>
+                            <td><p class="black6">￥<b class="fontcl1"><{:round($order['total_price']/100,2)}></b><span class="fontcl1 addCode">+</span>￥<b class="fontcl1"><{:round($order['logistics']/100,2)}></b>（配送费）<gt name="order.fan_money" value="0"><span class="tag">优惠减<{$order.fan_money}>元</span></gt></p></td>
+                        </tr>
+                        <tr>
+                            <th>结算价</th>
+                            <td><p class="black6">￥<b class="fontcl1"><{:round($order['need_pay']/100,2)}></b></p></td>
+                        </tr>
+                    </table>
+                </li>
+                <li class="list_box mb10">
+                    <table class="sh_waimai_xq_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <th>订餐者</th>
+                            <td><{$addr.name}></td>
+                        </tr>
+                        <tr>
+                            <th>手机号</th>
+                            <td><div class="posit_r"><{$addr.mobile}><a href="tel:<{$addr.mobile}>" class="ico ico_1 tel"></a></div></td>
+                        </tr>
+                        <tr>
+                            <th>目的地</th>
+                            <td><div class="posit_r"><{$addr.addr}><!--<a href="#" class="ico ico_2 addr"></a>--></div></td>
+                        </tr>
+                        <tr>
+                            <th>下单时间</th>
+                            <td><{$order.create_time|date='Y-m-d H:i:s',###}></td>
+                        </tr>
+                    </table>
+                </li>
+                <li class="list_box mb10">
+                    <table class="sh_waimai_xq_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <th>配送方式</th>
+                            <td><notempty name='do'>第三方配送<else/>商家配送</notempty> （配送费 <span class="fontcl1">￥<{:round($order['logistics']/100,2)}></span>）</td>
+                        </tr>
+                        <notempty name='do'>
+                        <tr>
+                            <th>配送员</th>
+                            <td>
+                                <gt name="do.delivery_id" value="0">
+                                    <div class="posit_r"><{$delivery.name}>(<{$delivery.mobile}>)<a href="#" class="ico ico_1 tel"></a></div>
+                                    <else/>
+                                    还未接单
+                                </gt>
+                            </td>
+                        </tr>
+                        </notempty>
+                    </table>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</section>
+
+    <empty name="do">
+        <eq name="order.status" value="0">
+            <footer>
+            <div class="sh_login_nr" style="margin-top:0.05rem;">
+                <a href="<{:U('ele/status',array('o'=>$var['order_id'],'s'=>1))}>" class="btn" style="display:block;text-align:center;">接单</a>
+            </div>
+            </footer>
+        </eq>
+        <eq name="order.status" value="1">
+            <footer>
+            <div class="sh_login_nr" style="margin-top:0.05rem;">
+                <a class="btn" style="display:block;text-align:center;" href="<{:U('ele/status',array('o'=>$var['order_id'],'s'=>2))}>" >确定配送</a>
+            </div>
+            </footer>
+        </eq>
+    </empty>
+</body>
+</html>

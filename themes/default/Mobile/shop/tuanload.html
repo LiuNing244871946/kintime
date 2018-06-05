@@ -1,0 +1,14 @@
+<foreach name="list" item="item">
+    <li>
+        <div class="fl">
+            <div class="img"><a href="<{:AppLink('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"><div class="bq"><eq name="item.is_new" value="1"><em class="ico_1"></em></eq><eq name="item.is_hot" value="1"><em class="ico_2"></em></eq></div></a></div>
+            <h4 class="overflow_clear"><a href="<{:AppLink('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>"><if condition="$lang eq 1 "><{$item.title}><elseif condition="$lang eq 2" /><{$item.lao_title}><elseif condition="$lang eq 3" /><{$item.eng_title}></if></a></h4>
+            <p class="black9"><if condition="$lang eq 1 "><{:bao_msubstr($item['intro'],0,30,false)}><elseif condition="$lang eq 2" /><{:bao_msubstr($item['lao_intro'],0,30,false)}><elseif condition="$lang eq 3" /><{:bao_msubstr($item['eng_intro'],0,30,false)}></if></p>
+            <p class="price fontcl1">₭<{:round($item['tuan_price'],2)}></p>
+        </div>
+    <div class="fr"><a href="<{:AppLink('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>" class="btn">立即购买</a></div>
+    <div class="clear"></div>
+</li>
+</foreach>
+
+

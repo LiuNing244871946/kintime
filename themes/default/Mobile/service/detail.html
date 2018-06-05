@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+        <title>我的-服务中心-问题</title>
+        <link rel="stylesheet" href="__TMPL__statics/css/reset.css?v=20160105"/>
+        <link rel="stylesheet" href="__TMPL__statics/css/css_1.css?v=20160105"/>
+        <link rel="stylesheet" href="__TMPL__statics/css/style.css?v=20160105"/>
+        <script> var BAO_PUBLIC = '__PUBLIC__';
+            var BAO_ROOT = '__ROOT__';</script>
+        <?php if($is_app){?>
+        <style>
+            .page-center-box{top: 0rem !important;}
+        </style>
+        <?php }?>
+    </head>
+
+    <body>
+        <?php if(!$is_app){?>
+        <header>
+            <i class="left"><a href="<{:AppLink('service/index')}>" class="gobackIco"></a></i>
+            <div class="title">
+                <{$detail.title}>
+            </div>
+            <i class="right"></i>
+        </header>
+        <?php }?>
+        <section class="page-center-box">
+            <div class="serve_center_page">
+                <ul class="message_list_box">
+                    <li class="message_list">
+                        <div class="wz" style="margin-left:0;">
+                            <{$detail.intro}>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </body>
+</html>

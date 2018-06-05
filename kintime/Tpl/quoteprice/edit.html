@@ -1,0 +1,50 @@
+<div class="listBox clfx" style="width: 500px;">
+    <div class="menuManage">
+        <form target="baocms_frm" action="<{:U('quoteprice/edit',array('id'=>$detail['id']))}>" method="post">
+            <div class="mainScAdd">
+                <div class="tableBox">
+                    <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+
+                        <tr>
+                            <td class="lfTdBt">币种：</td>
+                            <td class="rgTdBt"><{$detail.type}>
+
+                            </td>
+                        </tr><tr>
+                            <td class="lfTdBt">牌价：</td>
+                            <td class="rgTdBt"><input type="text" name="lv" value="<{$detail.lv}>" class="scAddTextName w150" />
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="smtQr"><input type="submit" value="确定编辑" class="smtQrIpt" /></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="<{:U('app/datas/cityarea')}>"></script>
+<script>
+	function check(val){
+		if(val == '3'){
+			$('.city').css('display','block'); 
+		}else{
+			$('.city').css('display','none'); 
+		}	
+	}
+	/*var city_id = "<{$detail.city_id}>";
+	$(document).ready(function(){
+		var city_str = '<option value="0">请选择.....</option>';
+		for(a in cityareas.city){
+		   if(city_id == cityareas.city[a].city_id){
+			   city_str += '<option selected="selected" value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+		   }else{
+				city_str += '<option value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+		   }  
+		}
+		$("#city_id").html(city_str);
+
+	});*/
+</script>
+

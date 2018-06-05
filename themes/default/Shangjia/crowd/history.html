@@ -1,0 +1,58 @@
+<include  file='public:header'/>
+
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">商家管理</a> > <a href="" set-lan="html:n-crowdFund">众筹</a> > <a set-lan="html:n-postCrowd">往期众筹</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('crowd/history')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l"><span set-lan="html:n-crowdName">众筹名称：</span><input type="text" class="radius3 tuan_topser"  name="keyword" value="<{$keyword}>"/><input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索" set-lan="value:n-search" /></div>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('crowd/create')}>" set-lan="html:n-crowdPublish">发布众筹+</a></div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli"><a href="<{:U('crowd/index')}>" set-lan="html:n-forCrowd">正在众筹</a></li>
+            <li class="tuanfabu_tabli on"><a href="<{:U('crowd/history')}>" set-lan="html:n-postCrowd">往期众筹</a></li>
+        </ul>
+    </div>   
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td width="50" set-lan="html:n-crowdId">众筹ID</td>
+            <td width="120" set-lan="html:n-crowdImg">众筹图片</td>
+            <td width="130" set-lan="html:n-crowdName">众筹名称</td>
+            <td width="150" set-lan="html:n-crowdOut">众筹过期时间</td>
+            <td width="80" set-lan="html:n-crowdMoney">众筹金额</td>
+            <td width="70" set-lan="html:n-crowdedMoney">已筹金额</td>
+            <td width="70" set-lan="html:n-state">状态</td>
+            <td width="300" set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+        <tr>
+            <tr>
+                <td><{$var.goods_id}></td>
+                <td><img src="__ROOT__/attachs/<{$crowd[$var[goods_id]][img]}>"  style="width: 160px; margin: 0px auto;" /></td>
+                <td><{$var.title}></td>
+                <td><{$crowd[$var[goods_id]][ltime]|date='Y-m-d',###}></td>
+                <td><{$crowd[$var[goods_id]][all_price]/100}></td>
+                <td style="height: 100px;"><{$crowd[$var[goods_id]][have_price]}></td>
+                <td><eq name="var.audit" value="0"><span set-lan="html:n-waitAudit">等待审核</span><else/><span set-lan="html:n-normal">正常</span></eq></td>
+                <td>
+                    <a href="<{:U('crowd/setting',array('goods_id'=>$var['goods_id']))}>" set-lan="html:n-topic">话题</a>
+                    <a href="<{:U('crowd/setting',array('goods_id'=>$var['goods_id']))}>" set-lan="html:n-participationSupport">参与支持</a>
+                    <a href="<{:U('crowd/setting',array('goods_id'=>$var['goods_id']))}>" set-lan="html:n-focusPraise">关注点赞</a>
+                </td>
+            </tr>
+        </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+
+<include  file='public:footer'/>

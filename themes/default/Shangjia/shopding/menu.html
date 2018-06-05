@@ -1,0 +1,63 @@
+<include file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:q-Other">美食电子菜单</a> > <a href="" set-lan="html:q-Foodandbeveragesettings">菜品列表</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('shopding/menu')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <span set-lan="html:q-Nameofthedish">菜品名称</span>：<input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" set-lan="val:q-search" value="搜 索"/>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('shopding/menucreate')}>" set-lan="html:q-Adddishes">添加菜品+</a></div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('shopding/menu')}>" set-lan="html:q-Configurationofdishes">菜品列表</a></li>
+        </ul>
+    </div>
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:q-Thedishes">菜名</td>
+            <td set-lan="html:q-classification">分类</td>
+            <td set-lan="html:q-thumbnail">缩略图</td>
+            <td set-lan="html:q-price">价格</td>
+            <td set-lan="html:q-Whetherthenewproductisnew">是否新品</td>
+            <td set-lan="html:q-Isitfavorable">是否优惠</td>
+            <td set-lan="html:q-Isitrecommended">是否推荐</td>
+            <td>状态</td>
+            <td set-lan="html:q-operation">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.menu_name}><br/><{$var.lao_menu_name}><br/><{$var.eng_menu_name}></td>
+                <td><{$dingcates[$var['cate_id']]['cate_name']}><br/><{$dingcates[$var['cate_id']]['lao_cate_name']}><br/><{$dingcates[$var['cate_id']]['eng_cate_name']}></td>
+                <td><img style="margin: 10px auto; width: 120px;" src="__ROOT__/attachs/<{$var.photo}>" /></td>
+                <td><{$var['ding_price']}></td>
+                <td>
+                    <eq name="var.is_new" value="1"><span set-lan="html:q-new">新品</span><else/><span set-lan="html:q-nothing">无</span></eq>
+                </td>
+                <td>
+                    <eq name="var.is_sale" value="1"><span set-lan="html:q-Discount">优惠</span><else/><span set-lan="html:q-nothing">无</span></eq>
+                </td>
+                <td>
+                    <eq name="var.is_tuijian" value="1"><sapn set-lan="html:q-Recommend">推荐</sapn><else/><span set-lan="html:q-nothing">无</span></eq>
+                </td>
+                <td>
+                    <if condition="$var.audit eq 0"><span set-lan="html:n-recommend">审核中</span><elseif condition="$var.audit eq 1"/><span set-lan="html:n-haveNot">正常</span><else/><span set-lan="html:n-haveNot">拒绝</span></if>
+                </td>
+                <td>
+                    <a href="<{:U('shopding/menuedit',array('menu_id'=>$var['menu_id']))}>" set-lan="html:q-edit">编辑</a>
+                    <a mini='confirm' href="<{:U('shopding/menudelete',array('menu_id'=>$var['menu_id']))}>" set-lan="html:q-delete">删除</a>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+<include file='public:footer'/>

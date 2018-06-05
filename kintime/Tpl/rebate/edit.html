@@ -1,0 +1,42 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">系统</li>
+        <li class="li2">返利管理</li>
+        <li class="li2 li3">编辑返利</li>
+    </ul>
+</div>
+<form  target="baocms_frm" action="<{:U('rebate/edit',array('id'=>$detail['id']))}>" method="post">
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+                <tr>
+                    <td class="lfTdBt">商家折扣：</td>
+                    <td class="rgTdBt"><input type="text" name="data[name]" value="<{$detail.name|default=''}>" class="scAddTextName w210" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">用户返利：</td>
+                    <td class="rgTdBt"><input type="text" name="data[user]" value="<{$detail.user|default=''}>" class="scAddTextName w210" />%
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">推荐人返利：</td>
+                    <td class="rgTdBt"><input type="text" name="data[tui_user]" value="<{$detail.tui_user|default=''}>" class="scAddTextName w210" />%
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">平台返利：</td>
+                    <td class="rgTdBt"><input type="text" name="data[platform]" value="<{$detail.platform|default=''}>" class="scAddTextName w210" />%
+                    </td>
+                </tr><tr>
+                    <td class="lfTdBt">平台所得折扣：</td>
+                    <td class="rgTdBt"><input type="text" name="data[rebate]" value="<{$detail.rebate|default=''}>" class="scAddTextName w210" />%
+                    </td>
+                </tr>
+    </table>
+</div>
+<div class="smtQr"><input type="submit" value="确认编辑" class="smtQrIpt" /></div>
+</div>
+</form>
+<include  file='public:footer'/>       

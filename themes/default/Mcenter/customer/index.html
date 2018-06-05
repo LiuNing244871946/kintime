@@ -1,0 +1,42 @@
+<include  file='public:header'/>  
+<body style="background: #f0efef;">
+<?php if(!$is_app){?>
+	<header>
+		<a href="/mcenter/member/"><i class="icon-goback"></i></a>
+		<div class="title">客服中心</div>
+		<i class="icon-menu"></i>
+	</header>
+<?php }?>
+	<div id="customer_con">
+		<div id="customer_phone">
+			<div class="customer_title">联系电话</div>
+			<ul id="customer_phonelists">
+				<li class="customer_phoneitem">
+					<span class="customer_phonetext">老挝客服</span>
+					<a href="tel:+856-2028881777" class="customer_phonecon">+856-2028881777</a>
+				</li>
+				<li class="customer_phoneitem">
+					<span class="customer_phonetext">中国客服</span>
+					<a href="tel:+86-13758245518" class="customer_phonecon">+86-13758245518</a>
+				</li>
+			</ul>
+		</div>
+		<div id="customer_qr">
+			<div class="customer_title">微信客服</div>
+			<div id="customer_qrcon">
+				<div id="customer_qrtext">
+					<div class="customer_qrtext">请长按客服二维码，</div>
+					<div class="customer_qrtext">保存到相册后打开微信扫码添加！</div>
+				</div>
+				<div id="customer_qrimg">
+					<span class="customer_qrimg">
+						<img src="../../themes/default/mobile/statics/img/customer/weixin_c01.jpg">
+					</span>
+					<span class="customer_qrimg">
+						<img src="../../themes/default/mobile/statics/img/customer/weixin_c02.jpg">
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+<include  file='public:footer'/>

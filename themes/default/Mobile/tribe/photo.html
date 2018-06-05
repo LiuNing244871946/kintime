@@ -1,0 +1,14 @@
+<include file="public:header"/>
+<body>
+<header> <a href="#"><i class="icon-goback"></i></a>
+    <div class="title">部落相册</div>
+    <i class="icon-menu3"><a href="#" id="shareIco"></a></i>
+</header>
+
+<div class="page-center-box">
+   <foreach name="photos" item="var2">
+        <div style="margin-bottom:0.1rem; width:100%;"><img style="width:100%;" src="__ROOT__/attachs/<{$var2.photo}>"/></div>                              
+    </foreach>
+</div>
+</body>
+</html>

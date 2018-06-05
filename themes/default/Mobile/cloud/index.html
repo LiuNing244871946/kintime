@@ -1,0 +1,41 @@
+<include file="public:header"/>
+<script>
+    $(document).ready(function (e) {
+        $(".yiyuanChoice").click(function () {
+            $(".monthChoice_pull").slideToggle();
+        });
+    });
+</script>
+<body>
+    <header>
+        <a href="<{:U('index/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">云购列表</div>
+        <i class="icon-menu2" style="width: 1rem;"  id=""><a href="javascript:void(0);" class="yiyuanChoice">云购类型<em></em></a></i>
+    </header>
+    <div class="monthChoice_pull" style="display:none;">
+        <em></em>
+        <div class="monthChoice_pull_list">
+            <ul>
+                <li><a <if condition="empty($type)">class="on"</if> href="<{:U('cloud/index')}>">全部</a></li>
+                <volist name="types" id="item" key="index">
+                    <li><a <if condition='$type eq $index'>class="on"</if> href="<{:U('cloud/index',array('type'=>$index))}>"><{$item.type_name}></a></li>
+                </volist>
+            </ul>
+        </div>
+    </div>    
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <div class="yiyuanList_box">
+                <ul>
+
+                </ul>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    loaddata('<{$nextpage}>', $(".yiyuanList_box"), true);
+                });
+            </script>
+        </div>
+    </div>
+
+<include file="public:footer"/>

@@ -1,0 +1,70 @@
+<include file="public:header"/>
+<body>
+<?php if(!$is_app){?>
+<header>
+    <a href="<{:U('mcenter/hotel/index')}>"><i class="icon-goback"></i></a>
+    <div class="title" set-lan="html:q-orderdetails">
+    	订单详情
+    </div>
+</header>
+<?php }?>
+<div class="page-center-box">
+    <div class="hotelOrd">
+        <p class="fontcl2 ts">
+                <if condition="!$detail['order_status']">
+                    <span set-lan="html:q-Waitingforpayment">等待支付</span>
+                    <if condition="$detail['room']['is_cancel'] eq 1">
+                        <a href="<{:AppLink('mcenter/hotel/cancel',array('order_id'=>$detail['order_id']))}>" class="btn right" set-lan="html:q-Cancellationoforder">取消订单</a>
+                    </if>
+                <elseif condition="$detail['order_status'] eq 1"/>
+                    <span set-lan="html:q-Orderhasbeenpaid">订单已支付</span> 
+                    <if condition="$detail['room']['is_cancel'] eq 1">
+                        <a href="<{:AppLink('mcenter/hotel/cancel',array('order_id'=>$detail['order_id']))}>" class="btn right" set-lan="html:q-Cancellationoforder">取消订单</a>
+                    </if>
+                <elseif condition="$detail['order_status'] eq -1"/>
+                    <span set-lan="html:q-Theorderhasbeencancelled">订单已取消</span>
+                <else/>
+                    <span set-lan="html:q-Theorderhasbeencompleted">订单已完成</span>
+                    <eq name="detail.comment_status" value="0">
+                        <a href="<{:AppLink('mcenter/hotel/comment',array('order_id'=>$detail['order_id']))}>" class="btn right" set-lan="html:q-Toevaluate">去评价</a>
+                    <else/>
+                        <span set-lan="html:q-Havebeenevaluated">已评价</span>
+                    </eq>
+                </if>
+        </p>
+        <div class="infor">
+        	<h3><span set-lan="html:q-Ordernumber">订单编号</span>：<{$detail.order_id}></h3>
+        	<h3><if condition="$lang eq 1 "><{$detail.hotel.hotel_name}><elseif condition="$lang eq 2" /><{$detail.hotel.lao_hotel_name}><elseif condition="$lang eq 3" /><{$detail.hotel.eng_hotel_name}></if><span class="bq" set-lan="html:q-group">房</span></h3>
+        	<p class="black9"><span set-lan="html:q-Check">入住</span>：<{$detail.stime}><span class="ml25"><span set-lan="html:q-Departure">离店</span>：<{$detail.ltime}></span></p>
+                <p class="black9"><span set-lan="html:q-Hoteltype">酒店房型</span>：<if condition="$lang eq 1 "><{$roomtype[$detail['room']['type']]}><elseif condition="$lang eq 2" /><{$lao_roomtype[$detail['room']['type']]}><elseif condition="$lang eq 3" /><{$eng_roomtype[$detail['room']['type']]}></if><if condition="$detail['room']['is_zc'] eq 1">-<span set-lan="html:q-Havebreakfast">有早餐</span></if></p>
+            <p class="black9"><span set-lan="html:q-hoteladdress">酒店地址</span>：<if condition="$lang eq 1 "><{$detail.hotel.addr}><elseif condition="$lang eq 2" /><{$detail.hotel.lao_addr}><elseif condition="$lang eq 3" /><{$detail.hotel.eng_addr}></if></p>
+        </div>
+        <div class="box"><sapn set-lan="html:q-price">单价</sapn>：<span class="black9"><span set-lan="html:q-qian">₭</span><{$detail['room']['price']}></span></div>
+        <div class="box"><span set-lan="html:q-Numberofrooms">房间数</span>：<span class="black9"><{$detail.num}></span></div>
+        <div class="box"><span set-lan="html:q-Totalorder">订单总额</span>：<span class="black9"><{$detail.amount}></span></div>
+        <div class="box"><span set-lan="html:q-Timetostore">到店时间</span>：<span class="black9"><{$detail.last_time}></span></div>
+        <div class="box"><span set-lan="html:q-Occupant">入住人</span>：<span class="black9"><{$detail.name}></span></div>
+        <div class="box"><span set-lan="html:q-phone">手机号</span>：<span class="black9"><{$detail.mobile}></span></div>
+        <div class="box"><span set-lan="html:q-Accommodationpreference">住宿偏好</span>：<span class="black9"><{$detail.note}></span></div>
+    </div>
+</div>
+<if condition="$detail['online_pay'] eq 1">
+    <if condition="!$detail['order_status']">
+        <footer>
+                <div class="hotelOrd_footer">
+                <p class="fontcl2 left mt10"><span set-lan="html:q-Onlinepayment">在线支付</span>:<span set-lan="html:q-qian">₭</span><{$detail.amount}></p>
+                <input type="button" set-lan="val:q-Immediatepayment" value="立即支付" id="pay_btn" class="btn right">
+            </div>
+        </footer>
+    </if>
+</if>
+<script>
+    $(document).ready(function(){
+        $("#pay_btn").click(function(){
+            var url = "<{:AppLink('mobile/hotel/pay',array('order_id'=>$detail['order_id']))}>";
+            window.location.href = url;
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<include file="public:header"/>
+<script>
+    $(function () {
+        $("#search-bar li").each(function (e) {
+            $(this).click(function () {
+                if ($(this).hasClass("on")) {
+                    $(this).parent().find("li").removeClass("on");
+                    $(this).removeClass("on");
+                    $(".serch-bar-mask").hide();
+                }
+                else {
+                    $(this).parent().find("li").removeClass("on");
+                    $(this).addClass("on");
+                    $(".serch-bar-mask").show();
+                }
+                $(".serch-bar-mask .serch-bar-mask-list").each(function (i) {
+
+                    if (e == i) {
+                        $(this).parent().find(".serch-bar-mask-list").hide();
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                    $(this).find("li").click(function () {
+                        $(this).parent().find("li").removeClass("on");
+                        $(this).addClass("on");
+                    });
+                });
+            });
+        });
+    });
+</script>
+<body>
+ <?php if(!$is_app){?>
+<header>
+    <a href="<{:AppLink('/mobile')}>"><i class="icon-goback"></i></a>
+    <div class="title">
+    	<div class="box_search">
+            <a href="/mobile/index/search.html" set-lan="html:q-search"><i></i>输入商户名/搜索词</a>
+        </div>
+    </div>
+    <i class="icon-menu"></i>
+</header>
+ <?php }?>
+<!-- 筛选TAB -->
+<div id="search-bar">
+    <ul>
+        <li><span style="margin-left:0.23rem;" set-lan="html:q-classification">分类</span><i style="right:0.01rem;"></i></li>
+        <li><span set-lan="html:q-region">地区</span><i></i></li>
+        <li><span set-lan="html:q-tradingarea">商圈</span><i></i></li>
+        <li><span style="margin-left:0.23rem;" set-lan="html:q-sort">排序</span><i style="right:0.01rem;"></i></li>
+    </ul>
+</div>
+
+<div class="serch-bar-mask" style="display:none;">
+    <div class="serch-bar-mask-list">
+        <ul>
+            <li class="<if condition='empty($cate_id)'>on</if> "><a href="<{:LinkTo('hotel/index',$linkArr,array('cate_id'=>0))}>" set-lan="html:q-all">全部</a></li>
+            <volist name="cates" id="var">
+                <li <if condition="$cate_id eq $i">class="on"</if> ><a title="<{$var}>" href="<{:LinkTo('hotel/index',$linkArr,array('cate_id'=>$i))}>"><{$var}></a></li>
+            </volist>
+        </ul>
+    </div>
+    <div class="serch-bar-mask-list">
+        <ul>
+            <li class="<if condition='empty($area_id)'>on</if>"><a href="<{:LinkTo('hotel/index',$linkArr,array('area_id'=>0,'business_id'=>0))}>" set-lan="html:q-allregions">全部区域</a></li>
+            <foreach name="areas" item="var">
+                <eq name="var.city_id" value="$city_id">
+                <li <if condition="$var.area_id eq $area_id">class='on'</if>>
+                    <a href="<{:LinkTo('hotel/index',$linkArr,array('area_id'=>$var['area_id']))}>"><{$var.area_name}></a>
+                </li>
+                </eq>
+            </foreach>
+        </ul>
+    </div>
+    <if condition="!empty($area_id)">
+        <div class="serch-bar-mask-list">
+            <ul>
+                <li class="<if condition='empty($business_id)'>on</if> "><a href="<{:LinkTo('hotel/index',$linkArr,array('business_id'=>0))}>" set-lan="html:q-allbusinesscircles">全部商圈</a></li>
+                <foreach name="bizs" item="var">
+                    <eq name="var.area_id" value="$area_id">
+                    <li <if condition="$var.business_id eq $business_id">class="on"</if> ><a href="<{:LinkTo('hotel/index',$linkArr,array('business_id'=>$var['business_id']))}>"><{$var.business_name}></a></li>
+                    </eq>
+                </foreach>
+            </ul>
+        </div>
+        <else/>
+            <div class="serch-bar-mask-list">
+                    &nbsp;
+            </div>
+        </if>
+    <div class="serch-bar-mask-list">
+        <ul>
+            <li <if condition="$order eq m">class="on"</if>><a href="<{:LinkTo('hotel/index',$linkArr,array('order'=>m))}>" set-lan="html:q-defaultsort">默认排序</a></li>
+            <li <if condition="$order eq d">class="on"</if>><a href="<{:LinkTo('hotel/index',$linkArr,array('order'=>d))}>" set-lan="html:q-Lately">距离最近</a></li>
+            <li <if condition="$order eq s">class="on"</if>><a href="<{:LinkTo('hotel/index',$linkArr,array('order'=>s))}>" set-lan="html:q-topsales">销量最高</a></li>
+            <li <if condition="$order eq p">class="on"</if>><a href="<{:LinkTo('hotel/index',$linkArr,array('order'=>p))}>" set-lan="html:q-Lowestprice">价格最低</a></li>
+        </ul>
+    </div>
+    
+    <div class="serch-bar-mask-bg"></div>
+</div>
+<div class="page-center-box">
+    <div id="scroll">
+        <div class="hotel_list_box">
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+    loaddata('<{$nextpage}>', $(".hotel_list_box ul"), true);
+    });
+</script>
+<include file="public:footer"/>

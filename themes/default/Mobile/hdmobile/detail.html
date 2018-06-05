@@ -1,0 +1,256 @@
+<include file="public:header"/>
+<script>
+    $(function () {
+        $(".attention_xq .tab").each(function (e) {
+            $(this).click(function () {
+                $(this).parent().find(".tab").removeClass("on");
+                $(this).addClass("on");
+                $(".pinglun_box .list_box").each(function (i) {
+                    if (e == i) {
+
+                        $(this).parent().find(".list_box").hide();
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });//评论切换结束
+        $("#comment_show").click(function () {
+            $(".comment_mask").toggle();
+        });
+        $(".message_show").click(function () {
+            $(".message_mask").toggle();
+        });
+    });
+</script>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('hdmobile/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">活动详情</div>
+        <a href="javascript:void(0);"><i class="icon-menu share" id="shareIco"></i></a>
+    </header>
+    <?php }?>
+    <div class="bdcolor">
+        <div class="bdcolor_bg"></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_weixin" data-cmd="weixin">微信</a>
+            <a class="bds_qzone" data-cmd="qzone" href="#">QQ空间</a>
+            <a class="bds_sqq" data-cmd="sqq">腾讯QQ</a>
+            <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+            <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+            <div class="bd-share-popup-footer">
+                <a class="bd-share-popup-close" onClick="$('.bdcolor').hide();" href="javascript:void(0);">取消</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".share").click(function () {
+                $(".bdcolor").show();
+            });
+        });
+        window._bd_share_config = {
+            common: {
+                bdText: '<{$detail.title}>',
+                bdDesc: '<{$detail.title}>',
+                bdUrl: location.href,
+                bdPic: 'http://<{$Think.SERVER.HTTP_HOST}>__ROOT__/attachs/<{$detail.photo|default='default.jpg'}>'
+            },
+            share: [{
+                    "bdSize": 32,
+                }],
+        }
+        with (document)
+            0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+    </script>
+
+    <!--输入弹出层开始-->
+    <div class="publish_mask comment_mask">
+        <div class="cont"> 
+            <textarea name="contents" class="jq_contents" placeholder="写点什么吧"></textarea>
+            <input type="button" id="dianping" class="btn" value="提 交">
+        </div>
+    </div>
+    <div class="publish_mask message_mask">
+        <div class="cont">
+            <textarea name="content" class="jq_content" placeholder="写点什么吧"></textarea>
+            <input type="button" id="send_message" class="btn" value="提 交">
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#dianping").click(function () { //点评
+                var contents = $(".jq_contents").val();
+                var huodong_id = "<{$detail.huodong_id}>";
+                if (contents == "" || contents == null || contents == undefined) {
+                    layer.msg('请填写评论内容');
+                }
+                var url1 = "<{:U('mobile/hdmobile/dianping')}>";
+                $.post(url1, {huodong_id: huodong_id, contents: contents}, function (data) {
+                    if (data.status == 'login') {
+                        layer.msg(data.message, function () {
+                            setTimeout(function () {
+                                if (!is_app) {
+                                    window.location.href = "<{:U('mobile/passport/login')}>";
+                                } else {
+                                    <?php if ($is_android){?>
+                                    window.jsObj.goLogin();
+                                    <?php }else{?>
+                                     goload();
+                                    <?php }?>
+                                }
+                            }, 1000)
+                        });
+                    } else if (data.status == 'success') {
+                        layer.msg(data.message, function () {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000)
+                        });
+                    } else {
+                        layer.msg(data.message);
+                    }
+                }, 'json')
+            });
+
+            $("#send_message").click(function () { //发消息
+                var content = $(".jq_content").val();
+                var user_id = "<{$huser['user_id']}>";
+                if (content == "" || content == null || content == undefined) {
+                    layer.msg('请填写评论内容');
+                }
+                var url2 = "<{:U('mobile/hdmobile/send_message')}>";
+                $.post(url2, {user_id: user_id, content: content}, function (data) {
+                    if (data.status == 'login') {
+                        layer.msg(data.message, function () {
+                            setTimeout(function () {
+                                if (!is_app) {
+                                    window.location.href = "<{:U('mobile/passport/login')}>";
+                                } else {
+                                    goload();
+                                }
+                            }, 1000)
+                        });
+                    } else if (data.status == 'success') {
+                        layer.msg(data.message, function () {
+                            setTimeout(function () {
+                                location.reload(true);
+                            }, 1000)
+                        });
+                    } else {
+                        layer.msg(data.message);
+                    }
+                }, 'json')
+            })
+
+        })
+    </script>
+
+    <!--输入弹出层结束-->
+
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <div class="appointList_box mt10">
+                <div class="appointList">
+                    <div class="infor">
+                        <div class="fl">
+                            <img src="__ROOT__/attachs/<{$huser['face']}>" />
+                            <p class="overflow_clear"><a class="message_show" href="javascript:void(0);"><{$huser.nickname}></a></p>
+                            <php>
+                                if(!empty($hex['born_year'])){
+                                $by = $y - $hex['born_year'];
+                                }else{
+                                $by = '未知';
+                                }
+                            </php>
+                            <p class="tag">
+                                <span class="bg_1"><if condition="$hex['sex'] eq 1"><em class="sex"></em><else/><em class="sex nv"></em></if><{$by}></span>
+                            <if condition="!empty($hex['job'])"><span class="bg_2"><{$hex.job}></span></if>
+                            <span class="bg_3"><{$stars[$hex['star_id']]}></span>
+                            </p>
+                        </div>
+                        <div class="fr">
+                            <p class="black9 rang"><{$detail.d}></p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="hdnr">
+                        <div class="fl">
+                            <p class="bt"><em class="ico_<{$detail.cate_id}>"></em><{$detail.title}><if condition="$detail['sign'] eq 1"><span class="state">已报名</span><elseif condition="$detail['sign'] eq 2"/><span class="state">已约满</span></if></p>
+                            <p class="black9 liIco"><if condition="$detail['limit_num'] eq 0">人数不限<else/>限<{$detail.limit_num}>人</if> <if condition="$detail['sex'] eq 3">男女不限<elseif condition="$detail['sex'] eq 2"/>限男生<else/>限女生</if></p>
+                            <p class="black9 liIco"><{$detail.intro}></p>
+                        </div>
+                        <div class="fr"><a href="javascript:void(0);" class="pay">我买单</a></div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="hdnr hdnr_xq">
+                        <div class="fl">
+                            <p><em class="ico_1"></em><{$detail.addr}></p>
+                            <p class="black9"><em class="ico_2"></em>交通工具：<{$traffic[$detail['traffic']]|default='不限'}></p>
+                            <p class="black9"><em class="ico_3"></em><{$detail.time}></p>
+                        </div>
+                        <div class="fr"><img src="__ROOT__/attachs/<{$detail.photo}>" /></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="attention_xq">
+                <div class="bt">
+                    <div class="fl">
+                        <span class="tab on"><a href="javascript:void(0);">看过<{$detail.views}></a></span>
+                        <span class="tab"><a href="javascript:void(0);">评论<{$detail.ping_num}></a></span>
+                    </div>
+                    <div class="fr black9">报名<{$detail.sign_num}></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="pinglun_box">
+                    <ul class="list_box" style="display:block;">
+                        <foreach name="huodonglooks" item="item">
+                            <li>
+                                <img src="__ROOT__/attachs/<{$lookusers[$item['user_id']]['face']}>" />
+                                <p class="overflow_clear"><a href="javascript:void(0);"><{$lookusers[$item['user_id']]['nickname']}></a></p>
+                            <php>
+                                if(!empty($ex[$item['user_id']]['born_year'])){
+                                $by = $y - $ex[$item['user_id']]['born_year'];
+                                }else{
+                                $by = '未知';
+                                }
+                            </php>
+                            <p class="tag">
+                                <span class="bg_1"><if condition="$ex[$item['user_id']]['sex'] eq 1"><em class="sex"></em><else/><em class="sex nv"></em></if><{$by}></span>
+                            <if condition="!empty($ex[$item['user_id']]['job'])"><span class="bg_2"><{$ex[$item['user_id']]['job']}></span></if>
+                            <span class="bg_3"><{$stars[$ex[$item['user_id']]['star_id']]}></span>
+                            </p>
+                            <div class="clear"></div>
+                            </li>
+                        </foreach>
+                    </ul>
+                    <ul class="list_box">
+                        <foreach name="list" item="item">
+                            <li>
+                                <img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']}>" />
+                                <p class="overflow_clear"><a href="javascript:void(0);" class="black9"><{$users[$item['user_id']]['nickname']}></a></p>
+                                <p class="nr"><{$item.contents}></p>
+                                <div class="clear"></div>
+                            </li>
+                        </foreach>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="appointFoot">
+            <div class="fl pinglun">
+                <a href="javascript:void(0);" class="linkA" id="comment_show"><em class="ico_1"></em>评论</a>
+                <a href="javascript:void(0);" class="linkA message_show"><em class="ico_2"></em>发消息</a>
+            </div>
+            <div class="fr"><if condition="$detail['sign'] eq 1"><span class="btn">已报名</span><elseif condition="$detail['sign'] eq 2"/><span class="btn">已约满</span><else/><span class="btn"><a style="color: #fff;" href="<{:AppLink('hdmobile/sign',array('huodong_id'=>$detail['huodong_id']))}>">去报名</a></span></if></div>
+            <div class="clear"></div>
+        </div>
+    </footer>
+</body>
+</html>

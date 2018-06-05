@@ -1,0 +1,47 @@
+<include file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:q-Reservation">美食电子菜单</a> > <a href="" set-lan="html:q-Setthereservation">菜品分类</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('shopding/cate')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <span set-lan="html:q-Classifiedname">分类名称</span>：<input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索"/>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('shopding/catecreate')}>"> <span set-lan="html:q-Addclassification">添加分类+</span></a></div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('shopding/cate')}>" set-lan="html:q-Classificationofdishes">菜品分类</a></li>
+        </ul>
+    </div>
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td>ID</td>
+            <td set-lan="html:q-Classifiedname">分类名称(中.老.英)</td>
+            <td set-lan="html:q-sort">排序</td>
+            <td set-lan="html:q-operation">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+        <tr>
+            <tr>
+                <td><{$var.cate_id}></td>
+                <td><{$var.cate_name}><br/><{$var.lao_cate_name}><br/><{$var.eng_cate_name}></td>
+                <td><{$var.orderby}></td>
+                <td>
+                   <a href="<{:U('shopding/cateedit',array('cate_id'=>$var['cate_id']))}>" set-lan="html:q-edit">编辑</a>
+                   <a mini='confirm' href="<{:U('shopding/catedelete',array('cate_id'=>$var['cate_id']))}>" set-lan="html:q-delete">删除</a>
+                </td>
+            </tr>
+        </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+<include file='public:footer'/>

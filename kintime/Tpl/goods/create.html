@@ -1,0 +1,327 @@
+<include  file='public:header'/>
+
+<div class="mainBt">
+    <ul>
+        <li class="li1">商家</li>
+        <li class="li2">购物管理</li>
+        <li class="li2 li3">新增商品</li>
+    </ul>
+</div>
+<div class="mainScAdd ">
+
+    <div class="tableBox">
+        <form  target="baocms_frm" action="<{:U('goods/create')}>" method="post">
+            <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >     
+                <tr>
+                    <td class="lfTdBt">商家：</td>
+                    <td class="rgTdBt">
+                        <div class="lt">
+                            <input type="hidden" id="weidian_id" name="data[weidian_id]" value="<{$detail.weidian_id|default=''}>"/>
+                            <input type="text" id="weidian_name" name="weidian_name" value="" class="manageInput" />
+                        </div>
+                        <a mini="select"  w="1000" h="600" href="<{:U('weidian/select')}>" class="remberBtn">选择商家</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">产品中文名称：</td>
+                    <td class="rgTdBt"><input type="text" name="data[title]" value="<{$detail.title|default=''}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">产品英文名称：</td>
+                    <td class="rgTdBt"><input type="text" name="data[eng_title]" value="<{$detail.eng_title|default=''}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">产品老文名称：</td>
+                    <td class="rgTdBt"><input type="text" name="data[lao_title]" value="<{$detail.lao_title|default=''}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">分类：</td>
+                    <td class="rgTdBt">
+                        <select id="cate_id" name="data[cate_id]" class="manageSelect w300">
+                            <foreach name="cates" item="var">
+                                <eq name="var.parent_id" value="0">
+                                <option value="<{$var.cate_id}>"  <eq name="var.cate_id" value="$detail.cate_id">selected="selected"</eq> ><{$var.cate_name}>|<{$var.eng_cate_name}>|<{$var.lao_cate_name}></option>                
+                                <foreach name="cates" item="var2">
+                                    <eq name="var2.parent_id" value="$var.cate_id">
+                                    <option value="<{$var2.cate_id}>"  <eq name="var2.cate_id" value="$detail.cate_id">selected="selected"</eq> > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<{$var2.cate_name}>|<{$var2.eng_cate_name}>|<{$var2.lao_cate_name}></option>
+                                    </eq>
+                                </foreach>
+                                </eq>
+                            </foreach>
+                        </select>
+                    </td>
+                </tr>  
+                <tr>                   
+                    <td class="lfTdBt">店铺商品分类：</td>
+                    <td class="rgTdBt">
+                        <select id="shopcate_id" name="data[shopcate_id]" class="seleFl w200">
+                        </select>
+                    </td>
+                </tr>
+                <script type="text/javascript">
+                    $('.remberBtn').click(function(){
+                        var time = setInterval(function(){
+                            if ($('#weidian_id').val()!=='') {
+                                clearInterval(time);
+                                $.post('<{:U("goods/shopcate")}>',{'weidian_id':$('#weidian_id').val()},function(data){
+                                    var shopcates = JSON.parse(data);
+                                    var cate_str = '<option value="0" selected="selected">请选择.....</option>';
+                                    if (Object.keys(shopcates).length) {
+                                        for(a in shopcates){
+                                            cate_str += '<option value="'+shopcates[a]['cate_id']+'">'+shopcates[a]['cate_name']+'</option>'; 
+                                        }
+                                        $("#shopcate_id").html(cate_str);
+                                    }
+                                })
+                            }
+                        },1000);
+                    })
+                </script> 
+
+                <tr>
+                    <td class="lfTdBt">
+                        <js file='__PUBLIC__/js/uploadify/jquery.uploadify.min.js'/>
+                        <link rel="stylesheet" href="__PUBLIC__/js/uploadify/uploadify.css">
+                        产品图：
+                    </td>
+                    <td class="rgTdBt">
+                        <div style="width: 300px;height: 100px; float: left;">
+                            <input type="hidden" name="data[photo]" value="<{$detail.photo}>" id="data_photo" />
+                            <input id="photo_file" name="photo_file" type="file" multiple="true" value="" />
+                        </div>
+                        <div style="width: 300px;height: 100px; float: left;">
+                            <img id="photo_img" width="80" height="80"  src="__ROOT__/attachs/<{$detail.photo|default='default.jpg'}>" />
+                            <a href="<{:U('setting/attachs')}>">产品图设置</a>
+                            建议尺寸<{$CONFIG.attachs.goods.thumb}>
+                        </div>
+                        <script>
+                            $("#photo_file").uploadify({
+                                'swf': '__PUBLIC__/js/uploadify/uploadify.swf?t=<{$nowtime}>',
+                                'uploader': '<{:U("app/upload/uploadify",array("model"=>"goods"))}>',
+                                'cancelImg': '__PUBLIC__/js/uploadify/uploadify-cancel.png',
+                                'buttonText': '上传缩略图',
+                                'fileTypeExts': '*.gif;*.jpg;*.png',
+                                'queueSizeLimit': 1,
+                                'fileSizeLimit':'3MB',
+                                'onUploadSuccess': function (file, data, response) {
+                                	data = eval(data);
+                                    $("#data_photo").val(data);
+                                    $("#photo_img").attr('src', '__ROOT__/attachs/' + data).show();
+                                }
+                            });
+
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">商品价格：</td>
+                    <td class="rgTdBt"><input type="text" name="data[mall_price]" value="<{$detail.mall_price|default=''}>" class="manageInput" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">商品重量：</td>
+                    <td class="rgTdBt"><input type="text" name="data[weight]" value="<{$detail.weight|default=''}>" class="manageInput" />Kg
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">是否支持分期：</td>
+                    <td class="rgTdBt">
+                        <label> <input type="radio" name="data[is_stage]" value="1" <eq name="detail.is_stage" value="1">checked="checked"</eq>  /> 支持</label>
+                        <label> <input type="radio" name="data[is_stage]" value="0"  <eq name="detail.is_stage" value="0">checked="checked"</eq> /> 不支持</label>
+                    </td>
+                </tr>
+                <tr id="speriods" style="display: none;">
+                    <td class="lfTdBt">商家分期：</td>
+                    <td class="rgTdBt speriods_content">
+                        <div style="display: flex;display: -webkit-flex;">
+                            <select name="data[sstage_id][0]" class="manageSelect w300">
+                                <foreach name="stage" item="var">
+                                    <option value="<{$var.id}>"  <eq name="var.id" value="$detail.sstage_id[0]">selected="selected"</eq> ><{$var.periods}>期</option>
+                                </foreach>
+                            </select>
+                            <input type="number" name="data[sinterest][0]" class="manageInput" style="margin-left: 10px;" placeholder="每期利息" min="0" max="1000">
+                            <code>利息只能为千分之几，不能再有小数，比如6，就表示每期利息为千分之6</code>
+                            <input type="button" id="speriods_add" value="新增一行" class="remberBtn" style="border: none;" />
+                        </div>
+                    </td>
+                </tr>
+                <tr id="kperiods">
+                    <td class="lfTdBt">平台分期：</td>
+                    <td class="rgTdBt kperiods_content">
+                        <div style="display: flex;display: -webkit-flex;">
+                            <select name="data[kstage_id][0]" class="manageSelect w300">
+                                <foreach name="stage" item="var">
+                                    <option value="<{$var.id}>"  <eq name="var.id" value="$detail.kstage_id[0]">selected="selected"</eq> ><{$var.periods}>期</option>
+                                </foreach>
+                            </select>
+                            <input type="number" name="data[kinterest][0]" class="manageInput" style="margin-left: 10px;" placeholder="每期利息" min="0" max="1000">
+                            <code>利息只能为千分之几，不能再有小数，比如6，就表示每期利息为千分之6</code>
+                            <input type="button" id="kperiods_add" value="新增一行" class="remberBtn" style="border: none;" />
+                        </div>
+                    </td>
+                </tr>
+                <script>
+                    $(document).ready(function (e) {
+                        $("input[name='data[is_stage]']").click(function(){
+                            if ($(this).val()==0) {
+                                $('#speriods').hide();
+                            }else if($(this).val()==1){
+                                $('#speriods').show();
+                            }
+                        })
+                        var kperiods_num = 0;
+                        $("#kperiods_add").click(function () {
+                            kperiods_num++;
+                            var html = '<div style="display: flex;display: -webkit-flex;"><select name="data[kstage_id]['+kperiods_num+']" class="manageSelect w300"><foreach name="stage" item="var"><option value="<{$var.id}>"  <eq name="var.id" value="$detail.kstage_id['+kperiods_num+']">selected="selected"</eq> ><{$var.periods}>期</option></foreach></select><input type="text" name="data[kinterest]['+kperiods_num+']" class="manageInput" style="margin-left: 10px;" placeholder="每期利息" min="0" max="1000"></div>';
+                            $(".kperiods_content").append(html);
+                        });
+                        var speriods_num = 0;
+                        $("#speriods_add").click(function () {
+                            speriods_num++;
+                            var html = '<div style="display: flex;display: -webkit-flex;"><select name="data[sstage_id]['+speriods_num+']" class="manageSelect w300"><foreach name="stage" item="var"><option value="<{$var.id}>"  <eq name="var.id" value="$detail.sstage_id['+speriods_num+']">selected="selected"</eq> ><{$var.periods}>期</option></foreach></select><input type="text" name="data[sinterest]['+speriods_num+']" class="manageInput" style="margin-left: 10px;" placeholder="每期利息" min="0" max="1000"></div>';
+                            $(".speriods_content").append(html);
+                        });
+                    });
+                </script>
+                <tr>
+                    <td class="lfTdBt">商品库存：</td>
+                    <td class="rgTdBt">  <input type="text" name="data[kucun]" value="<{$detail.kucun|default=''}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">产品销量：</td>
+                    <td class="rgTdBt"><input type="text" name="data[sold_num]" value="<{$detail.sold_num|default=''}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">浏览量：</td>
+                    <td class="rgTdBt"><input type="text" name="data[views]" value="<{$detail.views|default=''}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">商品中文属性：</td>
+                    <td class="rgTdBt"><input type="text" name="data[attr]" value="<{$detail.attr|default=''}>" class="manageInput" />
+                        <code>填写商品的大小、颜色、等属性信息。</code>
+                    </td>
+                </tr> 
+                <tr>
+                    <td class="lfTdBt">商品英文属性：</td>
+                    <td class="rgTdBt"><input type="text" name="data[eng_attr]" value="<{$detail.eng_attr|default=''}>" class="manageInput" />
+                        <code>填写商品的大小、颜色、等属性信息。</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">商品老文属性：</td>
+                    <td class="rgTdBt"><input type="text" name="data[lao_attr]" value="<{$detail.lao_attr|default=''}>" class="manageInput" />
+                        <code>填写商品的大小、颜色、等属性信息。</code>
+                    </td>
+                </tr> 
+                <tr>
+                    <td class="lfTdBt">商品单次最大购买数：</td>
+                    <td class="rgTdBt">  <input type="text" name="data[max_buy]" value="<{$detail.max_buy|default=''}>"  class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">排序：</td>
+                    <td class="rgTdBt"><input type="text" name="data[orderby]" value="<{$detail.orderby|default=''}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">中文购买须知：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="data_instructions" name="data[instructions]" style="width:800px;height:360px;"><{$detail.instructions}></script>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">英文购买须知：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="data_eng_instructions" name="data[eng_instructions]" style="width:800px;height:360px;"><{$detail.eng_instructions}></script>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">老文购买须知：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="data_lao_instructions" name="data[lao_instructions]" style="width:800px;height:360px;"><{$detail.lao_instructions}></script>
+                    </td>
+                </tr>
+                <link rel="stylesheet" href="__PUBLIC__/umeditor/themes/default/css/umeditor.min.css" type="text/css">
+                <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.config.js"></script>
+                <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.min.js"></script>
+                <script type="text/javascript" src="__PUBLIC__/umeditor/lang/zh-cn/zh-cn.js"></script>
+                <script>
+                    um = UM.getEditor('data_instructions', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    });
+                    um = UM.getEditor('data_eng_instructions', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    });
+                    um = UM.getEditor('data_lao_instructions', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    });
+                </script>
+                <tr>
+                    <td class="lfTdBt">商品中文详情：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="data_details" name="data[details]" style="width:800px;height:360px;"><{$detail.details}></script>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">商品英文详情：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="data_eng_details" name="data[eng_details]" style="width:800px;height:360px;"><{$detail.eng_details}></script>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">商品老文详情：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="data_lao_details" name="data[lao_details]" style="width:800px;height:360px;"><{$detail.lao_details}></script>
+                    </td>
+                </tr>
+                <script>
+                    um = UM.getEditor('data_details', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    });
+                    um = UM.getEditor('data_eng_details', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    });
+                    um = UM.getEditor('data_lao_details', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    });
+                </script>
+            </table>
+            <div style="margin-left:140px;margin-top:20px">
+                <input type="submit" value="确认添加" class="smtQrIpt" />
+            <div>
+</form>
+</div>
+</div>
+<include  file='public:footer'/>       

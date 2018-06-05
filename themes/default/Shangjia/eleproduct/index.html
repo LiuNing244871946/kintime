@@ -1,0 +1,63 @@
+<include file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-others">美食外卖</a> > <a href="" set-lan="html:n-beverageSetting">菜单管理</a> > <a set-lan="html:n-menuManagement">菜单管理</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('eleproduct/index')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <span set-lan="html:n-dishesName">菜品名称：</span><input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索" set-lan="value:n-search"/>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('eleproduct/create')}>" set-lan="html:n-addDishes">添加菜品+</a></div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change on"><a href="<{:U('eleproduct/index')}>" set-lan="html:n-menuManagement">菜单管理</a></li>
+        </ul>
+    </div>
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-dishesTitle">菜名</td>
+            <td set-lan="html:n-classify">分类</td>
+            <td set-lan="html:n-thumbnail">缩略图</td>
+            <td set-lan="html:n-price">价格</td>
+            <td set-lan="html:n-isNew">是否新品</td>
+            <td set-lan="html:n-isHot">是否热门</td>
+            <td set-lan="html:n-isRecommend">是否推荐</td>
+            <td>平台折扣</td>
+            <td>状态</td>
+            <td set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.product_name}><br/><{$var.lao_product_name}><br/><{$var.eng_product_name}></td>
+                <td><{$cates[$var['cate_id']]['cate_name']}><br/><{$cates[$var['cate_id']]['lao_cate_name']}><br/><{$cates[$var['cate_id']]['eng_cate_name']}></td>
+                <td><img style="margin: 10px auto;" src="__ROOT__/attachs/<{$var.photo}>" class="w80" /></td>
+                <td><{:round($var['price'],2)}></td>
+                <td><eq name="var.is_new" value="1"><span set-lan="html:n-newGoods">新品</span><else/><span set-lan="html:n-haveNot">无</span></eq></td>
+            <td>
+            <eq name="var.is_hot" value="1"><span set-lan="html:n-hot">热门</span><else/><span set-lan="html:n-haveNot">无</span></eq>
+            </td>
+            <td>
+            <eq name="var.is_tuijian" value="1"><span set-lan="html:n-recommend">推荐</span><else/><span set-lan="html:n-haveNot">无</span></eq>
+            </td>
+            <td><{$rebate[$rate][name]}></td>
+            <td>
+                <eq name="var.audit" value="0"><span set-lan="html:n-recommend">审核中</span><else/><span set-lan="html:n-haveNot">正常</span></eq>
+            </td>
+            <td>
+                <a href="<{:U('eleproduct/edit',array('product_id'=>$var['product_id']))}>" set-lan="html:n-edit">编辑</a>
+                <a mini='confirm' href="<{:U('eleproduct/delete',array('product_id'=>$var['product_id']))}>" set-lan="html:n-delete">删除</a>
+            </td>
+            </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+<include file='public:footer'/>

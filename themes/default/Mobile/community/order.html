@@ -1,0 +1,152 @@
+<include  file='public:header'/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('community/detail',array('community_id'=>$detail['community_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title">
+            生活缴费
+        </div>
+        <i class="icon-menu2" id=""><a href="javascript:(0);" class="monthChoice"><span><{$order_date}></span><em></em></a></i>
+    </header>
+    <?php }?>
+    <div class="monthChoice_pull" style="display:none;">
+        <em></em>
+        <div class="monthChoice_pull_list">
+            <ul>
+                <foreach name="days" item="item">
+                    <li><a href="<{:AppLink('community/order',array('community_id'=>$detail['community_id'],'order_date'=>$item))}>"><{$item}></a></li>
+                </foreach>
+            </ul>
+        </div>
+    </div>
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <div class="paymentList_box mt10">
+                <ul>
+                    <form method="post" id="payform">
+                        <input type="hidden" name="community_id" value="<{$detail.community_id}>">
+                        <input type="hidden" class="total" name="total" value="">
+                        <input type="hidden" name="order_date" value="<{$order_date}>">
+                        <if condition="!empty($products)">
+                            <foreach name="products" item="item">
+                                <li class="paymentList">
+                                    <label>
+                                        <div class="left nr">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <th>缴费类型</th>
+                                                    <td><{$item.type_name}></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>账单日期</th>
+                                                    <td><{$item.end_date}></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>缴费金额</th>
+                                                    <td><span class="price fontcl1"><{:round($item['money']/100,2)}>元</span></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="right"><eq name="item.is_pay" value="1"><span class="paidIco"></span><else/><span rel="<{:round($item['money']/100,2)}>" class="checkInt"><input type="hidden" name="type[<{$item['type']}>]" value=""/><input type="checkbox" /></span></eq></div>
+                                        <div class="clear"></div>
+                                    </label>
+                                </li>
+                            </foreach>
+                            <else/>
+                            <p style="height: 0.3rem; line-height: 0.3rem; padding: 0.2rem 0rem; text-align: center; font-size: 0.16rem;">暂无未缴费用</p>
+                        </if>
+                    </form>
+                </ul>
+            </div>
+            <div class="paymentAll"><a href="javascript:void(0);" class="btn">一键缴费</a></div>
+        </div>
+    </div>
+    <script>
+        function total(money) {
+            if (money > 0) {
+                $(".paymentPrice .right").find("a").addClass("order_pay");
+            } else {
+                $(".paymentPrice .right").find("a").removeClass("order_pay");
+            }
+        }
+
+        $(document).ready(function () {
+            var money = 0;
+            $(".paymentAll").click(function () {
+                money = 0;
+                $(".checkInt").each(function () {
+                    if ($(this).find(".checkInt").hasClass("on")) {
+                        money += 0;
+                    } else {
+                        money += parseFloat($(this).attr('rel'));
+                        $(this).find("input[type='hidden']").val(parseFloat($(this).attr('rel')).toFixed(2));
+                    }
+                });
+                $(".checkInt").addClass("on");
+                total(money);
+                $(".ml25").html(money.toFixed(2) + '元');
+                $(".total").val(money.toFixed(2));
+            });
+
+            $(".paymentList").click(function (e) {
+                if ($(this).find(".checkInt").hasClass("on")) {
+                    $(this).find("input[type='hidden']").val(0);
+                    money -= parseFloat($(this).find(".checkInt").attr('rel'));
+                    $(this).find(".checkInt").removeClass("on");
+                }
+                else {
+                    $(this).find("input[type='hidden']").val(parseFloat($(this).find(".checkInt").attr('rel')).toFixed(2));
+                    money += parseFloat($(this).find(".checkInt").attr('rel'));
+                    $(this).find(".checkInt").addClass("on");
+                }
+                $(".ml25").html(money.toFixed(2) + '元');
+                total(money);
+                $(".total").val(money.toFixed(2));
+            });
+
+
+            $(".monthChoice").click(function () {
+                $(".monthChoice_pull").slideToggle();
+            });
+            var is_app = "<{$is_app}>";
+            $(".paymentPrice").on('click', '.order_pay', function () {
+                var url = "<{:U('community/orderpay')}>";
+                var type = $("#payform").serialize();
+                $.post(url, type, function (data) {
+                    if (data.status == 'login') {
+                        layer.msg(data.msg, function () {
+                            setTimeout(function () {
+                                if (!is_app) {
+                                    window.location.href = "<{:U('mobile/passport/login')}>";
+                                } else {
+                                    <?php if ($is_android){?>
+                                    window.jsObj.goLogin();
+                                    <?php }else{?>
+                                     goload();
+                                    <?php }?>
+                                }
+                            }, 1000)
+                        });
+                    } else if (data.status == 'success') {
+                        layer.msg(data.msg, function () {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000)
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }, 'json')
+            })
+
+
+        });
+    </script>
+
+    <footer class="paymentPrice">
+        <div class="left price">应缴费<span class="fontcl1 ml25">0.00元</span></div>
+        <div class="right"><a href="javascript:void(0);" class="btn">付款</a></div>
+    </footer>
+
+</body>
+</html>

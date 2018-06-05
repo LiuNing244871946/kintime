@@ -1,0 +1,39 @@
+<include file="public:header"/>
+
+<body id="micro_shop">
+    <?php if(!$is_app){?>
+<header> 
+	<a href="<{:AppLink('mobile/index/index')}>"><i class="icon-goback"></i></a>
+    <div class="title">店铺列表</div>
+    <i class="icon-menu" id="ico_1"></i> </header><?php }?>
+    <script>
+		$(function(){
+			$("header #ico_1").click(function(){
+				$(".header_pull_box").toggle();
+			});
+		});
+    </script>
+    <div class="header_pull_box" style="display:none;">
+    	<em></em>
+        <div class="header_pull_list">
+            <ul>
+                <foreach name="cates" item="item">
+                    <li><a href="<{:LinkTo('mart/index',$linkArr,array('cat'=>$item['cate_id']))}>"><{$item.cate_name}></a></li>
+                </foreach>
+            </ul>
+        </div>
+    </div>
+<div id="seat" class="page-center-box">
+    <div id="scroll">
+   		<div class="list-have-pic">
+
+        </div>
+        <script>
+            $(document).ready(function () {
+                loaddata('<{$nextpage}>', $(".list-have-pic"), true);
+            });
+        </script>
+    </section>
+    </div>
+</div>
+<include file="public:footer"/>

@@ -1,0 +1,105 @@
+<include file="public:header"/>
+<script src="__TMPL__statics/js/jquery.flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.flexslider').flexslider({
+            directionNav: true,
+            pauseOnAction: false,
+        });//轮播js结束
+    });
+</script>
+
+<body>
+<header>
+    <a href="<{:U('/mobile')}>"><i class="icon-goback"></i></a>
+    <div class="title">
+    	头条
+    </div>
+    <i class="icon-menu"></i>
+</header>
+<div class="page-center-box">
+	<div class="tt_main">
+      <div class="tt_title">
+        <div class="tt_tab">
+          <a href="javascript:void(0);" class="on" val='1'>商家新闻</a>
+          <a href="javascript:void(0);" val='2'>平台资讯</a>
+        </div>
+        <div class="clear"></div>
+      </div>
+
+      <div class="tt_banner" id='tt1'>
+        <div class="flexslider">  
+          <ul class="slides">
+            <volist name="shop_adv" id="sad">
+            <li class="list" style='max-height:1rem;'>
+                <a href="<{$sad.link_url}>" ><img src="__ROOT__/attachs/<{$sad.photo}>"  width="657" height="246"/></a>
+              <div class="tt_bannerWZ line2"><h3><{$sad.title}></h3></div>
+            </li>
+            </volist>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tt_banner" id='tt2' style='display:none;'>
+        <div class="flexslider">  
+          <ul class="slides">
+            <volist name="site_adv" id="sad">
+            <li class="list">
+                <a href="<{$sad.link_url}>" ><img src="__ROOT__/attachs/<{$sad.photo}>"  width="657" height="246"/></a>
+              <div class="tt_bannerWZ line2"><h3><{$sad.title}></h3></div>
+            </li>
+            </volist>
+          </ul>
+        </div>
+      </div>
+
+      <ul class="tt_news" id='nn1'>
+          <volist name="shop_news" id="sn">
+             <li>
+               <div class="tt_news_bt ml10">
+                 <h3><a href="<{:U('headline/news_detail',array('news_id'=>$sn['news_id']))}>" class="black3"><{$sn.title}></a></h3>
+                 <p class="black9"><{$sn.views}>次阅读<span><{$sn.create_time|date='Y-m-d H:i:s',###}></span></p>
+               </div>
+               <div class="tt_news_pic mr10"><a href="<{:U('headline/news_detail',array('news_id'=>$sn['news_id']))}>"><img src="__ROOT__/attachs/<{$sn.photo}>"/></a></div>
+               <div class="clear"></div>
+             </li>
+         </volist>
+        </ul>
+
+      <ul class="tt_news" id='nn2' style='display:none;'>
+          <volist name="site_news" id="sn">
+             <li>
+               <div class="tt_news_bt ml10">
+                 <h3><a href="<{:U('headline/article_detail',array('article_id'=>$sn['article_id']))}>" class="black3"><{$sn.title}></a></h3>
+                 <p class="black9"><{$sn.views}>次阅读<span><{$sn.create_time|date='Y-m-d H:i:s',###}></span></p>
+               </div>
+               <div class="tt_news_pic mr10"><a href="<{:U('headline/article_detail',array('article_id'=>$sn['article_id']))}>"><img src="__ROOT__/attachs/<{$sn.photo}>"/></a></div>
+               <div class="clear"></div>
+             </li>
+         </volist>
+      </ul>
+            
+            
+    </div>
+</div>
+    <script>
+        $(document).ready(function(){
+            $('.tt_tab a').click(function(){
+                var val = $(this).attr('val');
+                $('.tt_tab a').removeClass('on');
+                $(this).addClass('on');
+                if(val == 1){
+                    $('#tt1').show();
+                    $('#nn1').show();
+                    $('#tt2').hide();
+                    $('#nn2').hide();
+                }else{
+                    $('#tt2').show();
+                    $('#nn2').show();
+                    $('#tt1').hide();
+                    $('#nn1').hide();
+                }
+            })
+        })
+    </script>
+<include file="public:footer"/>

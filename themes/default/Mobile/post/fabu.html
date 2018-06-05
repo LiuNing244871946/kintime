@@ -1,0 +1,75 @@
+<include  file='public:header'/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('post/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">
+            发帖子 
+        </div>
+        <i class="icon-menu" id=""></i>
+    </header>
+    <?php }?>
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <form method="post" action="<{:U('post/fabu')}>" target="baocms_frm">
+            <div class="luntanFabu">
+                
+                <input type="text" name="title"  placeholder="请输入标题"/>
+                
+                <textarea name="details" placeholder="有什么想分享给大家，说说看"></textarea>
+                
+                <!--<div class="uploadImg mt10 mb10">
+                    <div class="upload_btn_box">
+                        <label class="upload_btn"><input type="file">上传图片</label>（还能上传3张图片）
+                    </div>
+                    <div class="imgList">
+                        <img src="__TMPL__statics/img/tp47.png" />
+                        <img src="__TMPL__statics/img/tp14.png" />
+                        <img src="__TMPL__statics/img/tp66.png" />
+                    </div>
+                </div>-->
+                <div class="Upload-img-box">
+                        <div class="Upload-btn"><input type="file" id="fileToUpload" name="fileToUpload" data-role="none">上传图片</div>
+                        <div class="Upload-img">
+                            <div class="list-img loading" style="display:none;"><img src=""></div>
+                        </div>
+                    </div>
+                    <script type="text/javascript" src="__TMPL__statics/js/ajaxfileupload.js"></script>
+                    <script>
+                        function ajaxupload() {
+                            $(".loading").show();
+                            $.ajaxFileUpload({
+                                url: '<{:U("app/upload/upload",array("model"=>"life"))}>',
+                                type: 'post',
+                                fileElementId: 'fileToUpload',
+                                dataType: 'text',
+                                secureuri: false, //一般设置为false
+                                success: function (data, status) {
+                                    $(".loading").hide();
+                                    var str = '<div class="list-img"><img src="__ROOT__/attachs/' + data + '"><input type="hidden" name="photos[]" value="' + data + '" /></div>';
+                                    $(".loading").before(str);
+                                    $("#fileToUpload").unbind('change');
+                                    $("#fileToUpload").change(function () {
+                                        ajaxupload();
+                                    });
+                                }
+                            });
+                        }
+                        $(document).ready(function () {
+                            $("#fileToUpload").change(function () {
+                                ajaxupload();
+                            });
+                            $(document).on("click", ".photo img", function () {
+                                $(this).parent().remove();
+                            });
+                        });
+                    </script>
+                <input type="submit" value="免费发布" class="long_btn"/>
+            </div>
+            </form>
+        </div>
+    </div>
+
+
+<include file="public:footer"/>
+

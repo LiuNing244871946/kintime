@@ -1,0 +1,91 @@
+<include  file='public:header'/> 
+<body style=" background-color:#fafafa;">
+    <?php if($is_app&&!$is_android){?><div style="height: 0.2rem; width: 100%; background: #2FBDAA; position: fixed; top: 0rem;"></div><?php }?> 
+    <header>
+        <a href="<{:U('index/express')}>"><i class="icon-goback"></i></a>
+        <div class="title">订单列表-
+            <eq name="ss" value="0">抢单中</eq>
+            <eq name="ss" value="1">配送中</eq>
+            <eq name="ss" value="2">已完成</eq>
+        </div>
+        <i class="icon-menu"></i>
+    </header>
+    <section>
+        <ul class="wl_order_list_box">
+            <volist name="rdv" id="r">
+                <li class="wl_order_list">
+                    <div class="wl_order_bt">
+                        <div class="fl wl_order_bt_number" style="width: auto;">快递编号:<{$r.express_id}>    
+                            <span class="c_1">快</span>
+                            <span style="display: inline-block; float: right; color:#2fbdaa;">距离<{$r.d}></span>
+                        </div>
+                        <eq name="r.status" value="0"><div class="fl wl_order_bt_state">抢单中</div></eq>
+                        <eq name="r.status" value="1"><div class="fl wl_order_bt_state">配送中</div></eq>
+                        <eq name="r.status" value="2"><div class="fl wl_order_bt_state">已完成</div></eq>
+                    </div>
+                    <div class="wl_order_nr">
+                        <ul>
+                            <li>
+                                <div class="fl wl_order_nr_left"><p><{$r.title}></p></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="wl_order_total"><{$r.create_time|date='Y-m-d H:i:s',###}></div>
+                    <div class="wl_order_addre">
+                        <p><span>寄件人：</span><{$r.from_name}>  <{$r.from_mobile}></p>
+                        <p><span>地址：</span><{$r.to_addr}></p>
+                    </div>
+                    <div class="wl_order_addre bg_c1">
+                        <p><span>收件人：</span><{$r.to_name}>  <{$r.to_mobile}></p>
+                        <p><span>地址：</span><{$r.to_addr}></p>
+                    </div>
+                    <div class="wl_order_btn_box">
+                        <eq name="r.status" value="0"><a class="wl_order_btn qiang_btn" href="javascript:void(0);" val="<{$r.express_id}>">抢单</a></eq>
+                        <eq name="r.status" value="1"><a class="wl_order_btn ok_btn" href="javascript:void(0);" val="<{$r.express_id}>">完成</a></eq>
+                    </div>
+                </li>
+            </volist>
+            <script type="text/javascript" language="javascript">
+                $(document).ready(function () {
+                    $('.qiang_btn').click(function () {
+                        var id = $(this).attr('val');
+                        $.post('<{:U("lists/qiang")}>', {express_id: id}, function (result) {
+                            if (result.status == 'success') {
+                                layer.msg(result.message);
+                                setTimeout(function () {
+                                    location.reload(true);
+                                    window.location.href = "<{:U('lists/express',array('ss'=>1))}>";
+                                }, 1500);
+                            } else {
+                                layer.msg(result.message);
+                            }
+                        }, 'json');
+                    })
+
+                    $('.ok_btn').click(function () {
+                        var id = $(this).attr('val');
+                        $.post('<{:U("lists/express_ok")}>', {express_id: id}, function (result) {
+                            if (result.status == 'success') {
+                                layer.msg(result.message, {icon: 6});
+                                setTimeout(function () {
+                                    //location.reload(true);
+                                    window.location.href = "<{:U('lists/express',array('ss'=>2))}>";
+                                }, 1500);
+                            } else {
+                                layer.msg(result.message);
+                            }
+                        }, 'json');
+                    })
+                })
+
+            </script>
+
+
+
+        </ul>
+    </section>
+
+
+
+
+<include  file='public:footer'/> 

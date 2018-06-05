@@ -1,0 +1,99 @@
+<script type="text/javascript" src="https://maps.google.cn/maps/api/js?v=3.20&region=cn&language=zh-CN&key=AIzaSyAj1gNUTDZJLvPeePsU5ltjfX-hJU1N_8c&libraries=places"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+<div id="g-countryBox" style="height: 30px;">请选择国家：
+    <select id="g-country" style="height: 30px;line-height: 30px;">
+        <option value="CN">中国</option>
+        <option value="LA">老挝</option>
+    </select>
+</div>
+<div class="top">
+    <div id="r-result">请输入:<input type="text" id="suggestId" size="20" style="width:150px;" /></div>
+    <div class="right">    
+        <div class="points">经度<input type='text' name='lng' id='lng' value=""/></div>
+        <div class="points">纬度<input type='text' id='lat' name='lat' value=""/></div>
+        <div class="queren" onclick="showInfo();">确认</div>
+    </div>       
+</div>
+<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+<div id="allmap" style="width: 100%; height:440px;"></div>
+<style>
+     .top {height: 30px;}
+     .top input{
+         height: 30px; line-height: 30px;
+     }
+    .top #r-result{
+        float: left;
+    } 
+    .top .right{
+        float: right;
+    }
+    .top .right .points{
+        width: 110px;
+        float: left;
+        margin-right: 10px;
+    }
+    .top .right .points input{
+        width:75px;
+        display: inline-block;
+    }
+    .top .right .queren{
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background: red;
+        color: #fff;
+        float: right;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+</style>
+<script type="text/javascript">
+
+    var lat = parseFloat("<{$lat}>");
+    var lng = parseFloat("<{$lng}>");
+    var map = new google.maps.Map(document.getElementById('allmap'),{
+        zoom:15,
+        center:{lat:lat,lng:lng},
+        gestureHandling:'greedy'
+    });
+    var pos = {lat:lat,lng:lng};
+    var marker_S = new google.maps.Marker({
+        position:pos,
+        map:map,
+        animation:google.maps.Animation.DROP
+    });
+    function showInfo(e) {
+        parent.selectCallBack('data_lng', 'data_lat',document.getElementById('lng').value, document.getElementById('lat').value);
+    };
+    map.addListener('click',function(e){
+        document.getElementById('lat').value = e.latLng.lat();
+        document.getElementById('lng').value = e.latLng.lng();
+        marker_S.setPosition(e.latLng);
+        // console.log(e.latLng.lat(),e.latLng.lng());
+    });
+    var ac = new google.maps.places.Autocomplete(
+            (document.getElementById('suggestId')),
+            {
+                // types:['address'],
+                componentRestrictions:{country:'CN'}
+            }
+        );
+    ac.addListener('place_changed',function(){
+        var place = ac.getPlace();
+        map.panTo(place.geometry.location);
+        marker_S.setPosition(place.geometry.location);
+    });
+    document.getElementById('g-country').addEventListener('change',function(){
+        var countryText = document.getElementById('g-country').value;
+        ac.setComponentRestrictions({'country':countryText});
+        if (countryText==='LA') {
+            marker_S.setPosition({lat:17.97571240175261,lng:102.63320446014404});
+            map.setCenter({lat:17.97571240175261,lng:102.63320446014404});
+        }else if (countryText==='CN') {
+            marker_S.setPosition({lat:30.268760105204333,lng:120.2266301214695});
+            map.setCenter({lat:30.268760105204333,lng:120.2266301214695});
+        }
+        
+    })
+</script>

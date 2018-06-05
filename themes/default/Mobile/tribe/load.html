@@ -1,0 +1,40 @@
+<foreach name="list" item="item">
+    <li class="wenzibl-list">
+        <div class="wenzibl-list1">
+            <div class="zhuangtu fl"><img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']|default='default.jpg'}>"/></div>
+            <div class="zhuangtxt black9 font_line24 fl ml10">
+                <p class="biaoti overflow_clear"> <span class="shenlan"><{$users[$item['user_id']]['nickname']}></span> <a class="you-jt " href="#"></a> </p>
+                <p class="tim"><{$item.create_time|date='Y-m-d H:i',###}><span class="gang">刚刚</span> </p>
+            </div>
+            <div class="clear "></div>
+        </div>
+        <div class="wenzibl-list2 ">
+            <p class="black3 timu overflow_clear"><a href="<{:U('tribe/postdetail',array('post_id'=>$item['post_id']))}>"><{$item.title}></a></p>
+            <p class="black9 duan" style="height: 0.24rem;line-height: 0.24rem;overflow: hidden;"><{:cleanhtml($item['details'])}></p>
+            <div class="img-box">
+                <ul>
+                    <volist name="item.pics" id="pic">
+                        <php>if($key<3){</php>
+                        <li class="fl img-list <if condition='$key eq 0'>imgli</if>"><img src="__ROOT__/attachs/<{$pic}>" height="75"/></li>
+                        <php>}</php>
+                    </volist>
+                    <div class="clear "></div>
+                </ul>
+            </div>
+        </div>
+        <div class="wenzibl-list3  border_t border_b">
+            <ul>
+                <li class="dianjin-list fl"> <a href="javascript:void(0);" class="black9">
+                    <p class="jin"><em class="tubiao1"></em></p>
+                    </a> </li>
+                <li class="dianjin-list fl"> <a href="javascript:void(0);" class="black9">
+                    <p class="jin"><em class="tubiao2"></em><span><{$item.reply_num}></span></p>
+                    </a> </li>
+                <li class="dianjin-list fl"> <a href="javascript:void(0);" class="black9">
+                    <p class="jin"><em class="tubiao3"></em><span><{$item.zan_num}></span></p>
+                    </a> </li>
+                <div class="clear "></div>
+            </ul>
+        </div>
+    </li>
+</foreach>

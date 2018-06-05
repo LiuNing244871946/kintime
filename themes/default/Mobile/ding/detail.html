@@ -1,0 +1,76 @@
+<include file="public:header"/>
+<body>
+ <?php if(!$is_app){?>
+<header>
+    <a href="<{:AppLink('shop/detail',array('shop_id'=>$detail['shop_id']))}>"><i class="icon-goback"></i></a>
+    <div class="title"><{$shop.shop_name}></div>
+</header>
+<?php }?>
+<div class="page-center-box">
+    <div class="banner" style="height:auto; max-height:none;">
+        <div> 
+            <ul>
+                <li><img src="__ROOT__/attachs/<{$shop.photo}>"  width="100%"  style="height: 3rem;"/></li>
+            </ul>  
+        </div>
+    </div>
+    <!--btn-->
+    <div class="seatDelt_btn_box mb10">
+        <p class="fl black9"><span class="mr10">口味：<{$detail.kw_score}></span><span class="mr10">环境：<{$detail.hj_score}></span>服务：<{$detail.fw_score}></p>
+        <a href="<{:AppLink('ding/ding',array('shop_id'=>$detail['shop_id']))}>" class="pub_btn bgcl1 fr">在线订座</a>
+    </div>
+    <!--btn结束-->
+    <!--商家详细-->
+    <div class="seatDelt_infor border_t border_b">
+        <em class="ico ico_1 fl"></em>
+        <div class="pub_wz" style="font-size: .14rem;"><{$shop.addr}><span class="black9">（距离<span class="fontcl2"><{$detail.d}>）</span><a href="<{:U('shop/gps',array('shop_id'=>$detail['shop_id']))}>"><em class="linkIco"></em></a></div>
+        <div class="clear"></div>
+    </div>
+    <div class="seatDelt_infor border_b">
+        <em class="ico ico_2 fl"></em>
+        <div class="pub_wz"><a href="tel:<{$shop.tel}>"><{$shop.tel}></a> | <a href="tel:<{$shop.mobile}>"><{$shop.mobile}></a></div>
+        <div class="clear"></div>
+    </div>
+    <div class="seatDelt_infor border_b">
+        <em class="ico ico_3 fl"></em>
+        <div class="pub_wz" style="font-size: .14rem;">营业时间：<span class="black9 mr10"><{$detail.stime}>-<{$detail.ltime}></span></div>
+        <div class="clear"></div>
+    </div>
+    <p class="font_line24 fontcl1 ml10 mar10">温馨提示：用餐高峰期请提前下单，谢谢！</p>
+    <!--商家详细end-->
+    
+    <!--评价-->
+    <div class="seatDelt_tit border_t border_b mt10">
+        <h2 class="fl">总体评价：</h2>
+        <div class="fl"><span class="spxq_qgpstarBg"><span class="spxq_qgpstar" style="width:<{$detail['score']*20}>%;"></span></span><span class="fontcl1 ml10"><{$detail.score}>分</span><span class="black9 ml10">高于<{$high_to}>%的同行</span></div>
+    </div>
+    <div>
+        <foreach name="list" item="var">
+            <div class="guest-box" style="margin:0; padding:0.1rem; background:#fff;">
+                <div class="icon" style="background-image: url(__ROOT__/attachs/<{$users[$var['user_id']]['face']|default='default.png'}>);"></div>
+                <div class="guest-box-content">
+                    <p><{$users[$var['user_id']]['nickname']}><span><{$var.create_time|date='Y-m-d H:i',###}></span></p>
+                    <div class="spxq_qgpstarBg">
+                        <span class="spxq_qgpstar" style="width:<{$var['score']*20}>%;"></span>
+                    </div>
+                    <p class="c_h"><{$var.contents}></p>
+                    <p class="img">
+                        <volist name="pics" id="pic" key="index">
+                            <eq name="pic.order_id" value="$var['order_id']">
+                                <img <if condition="$index%3 eq 1">class="fst"</if>  src="__ROOT__/attachs/<{$pic.pic|default='default.jpg'}>">
+                            </eq>
+                        </volist>
+                    </p>
+                </div>
+            </div>
+        </foreach>
+    </div>
+    <if condition="$detail.comments eq 0"><img src="__ROOT__/attachs/nodianping.png" style="width:60%;margin: .5rem 20% .1rem 20%"><div style="text-align: center;font-size: .16rem;margin-bottom: .2rem;color: #999999;">暂无评论</div><else/><a href="<{:AppLink('ding/dianping',array('shop_id'=>$detail['shop_id']))}>" class="seatDelt_more border_b maincl">查看全部<{$detail.comments}>条评价&gt;&gt;</a></if>
+    
+    <!--评价end-->
+    
+
+</div>
+  
+</body>
+</html>

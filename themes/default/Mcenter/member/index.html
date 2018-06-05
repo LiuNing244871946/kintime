@@ -1,0 +1,155 @@
+<include file="public:header"/>
+
+<body>
+    <div id="personal" class="page-center-box" style="top:0;">
+        <div id="scroll">
+            <div class="personal_info_bg">
+            	<div class="title">我的</div>
+                <div class="info">
+                    <a style="display:block" href="<{:AppLink('/mcenter/information')}>">
+                    <div class="info-img"><img src="__ROOT__/attachs/<{$MEMBER.face|default='default.png'}>" /></div>
+                    <div class="info-content">
+                        <p class="name"><{$MEMBER.nickname}></p>
+                        <p><em></em><{$MEMBER.mobile}></p>
+                        <i></i>   
+                    </div>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+                <div class="mine-list">
+                    <ul>
+                        <li>
+                            <div class="mine-list-content"><a href="<{:AppLink('mobile/jifen/index')}>"><p><big><{$MEMBER.integral}></big>分</p>我的积分</a></div>
+                        </li>
+                        <li>
+                            <div class="mine-list-content"><a href="<{:AppLink('mcenter/money/index')}>"><p class="c2"><big><{$MEMBER['money']}></big>₭</p>我的余额</a></div>
+                        </li>
+                        
+                        <php>if($CONFIG['quanming']['is_money']){</php>  
+                        
+                        <li>
+                            <div class="mine-list-content">
+                                <eq name="MEMBER_EX.frozen_money" value="0">
+                                    
+                                    <a href="<{:AppLink('mcenter/money/fzmoney')}>">
+                                        
+                                    <p class="c3"><big>  0 </big>₭</p>
+                                        
+                                    冻结金
+                                    </a>
+                                    <else />
+                                    <eq name="MEMBER_EX.is_no_frozen" value="0">
+                                        <a href="javascript:void(0);">
+                                        <p class="c3"><big>    <{$MEMBER_EX['frozen_money']}> </big>₭</p>
+                                        冻结金
+                                        </a>
+                                        <else />
+                                        <a href="javascript:void(0);">
+                                            
+                                        <p class="c3"><big>  0 </big>₭</p>
+                                            
+                                        冻结金
+                                        </a>
+                                    </eq>
+                                </eq>
+                                
+                            </div>
+                            
+                        </li>
+                        
+                        <php>}else{</php>
+                        <li>
+                            <div class="mine-list-content"><a href="<{:AppLink('mcenter/tuan/index')}>"><p class="c3"><big><{$order}></big>个</p>团购订单</a></div>
+                            
+                        </li>
+                        <php>}</php>
+                    </ul>
+                </div>
+            </div>
+            <div class="personalLink_box">
+            	<div class="personalLinkOne mb10">
+                    <ul>
+                        <li class="list"><a href="<{:AppLink('/mcenter/tuan/index')}>"><em class="ico ico_1"></em><p>我的美食</p></a></li>
+                        <li class="list"><a href="<{:AppLink('/mcenter/eleorder/index')}>"><em class="ico ico_3"></em><p>我的外卖</p></a></li>
+                        <li class="list"><a href="<{:AppLink('mcenter/ding/index')}>"><em class="ico ico_4"></em><p>我的菜单</p></a></li>
+                        <li class="list"><a href="<{:AppLink('/mcenter/goods/index')}>"><em class="ico ico_2"></em><p>我的购物</p></a></li>
+                        <!-- <li class="list"><a href="<{:AppLink('mcenter/cloud/index')}>"><em class="ico ico_5"></em><p>我的云购</p></a></li> -->
+                        <li class="list"><a href="<{:AppLink('mcenter/hotel/index',array('st'=>1))}>"><em class="ico ico_6"></em><p>酒店订单</p></a></li>
+                    </ul>
+                </div>
+                <div class="list-box">
+                    <ul>
+                        <li>
+                            <a href="<{:AppLink('mcenter/tuancode/index')}>"><em class="ico ico_1"></em>我的美食券
+                            <div class="num"><{$code}></div></a>
+                        </li>
+                        <li>
+                            <a href="<{:AppLink('mcenter/coupon/index')}>"><em class="ico ico_2"></em>我的优惠券
+                            <div class="num"><{$coupon}></div></a>
+                        </li>
+                        <!--  <li>
+                            <a href="<{:AppLink('mcenter/crowd/index')}>"><em class="ico ico_13"></em>我的众筹
+                            <div class="num"><{$coupon}></div></a>
+                        </li> -->
+                        <!-- <li>
+                            <a href="<{:AppLink('mcenter/hdmobile/index')}>"><em class="ico ico_3"></em>我的活动
+                            <div class="num"><{$hd}></div></a>
+                        </li> -->
+                        <li>
+                            <a href="<{:AppLink('mobile/favorites/index')}>"><em class="ico ico_4"></em>我的关注
+                            <div class="num"><{$rsf}></div></a>
+                        </li>
+                        <!-- <li>
+                            <a href="<{:AppLink('mcenter/breaks/index')}>"><em class="ico ico_11"></em>优惠买单
+                            <div class="num"><{$breaks}></div></a>
+                        </li>   --> 
+                        <!-- <li>
+                            <a href="<{:AppLink('mcenter/yuyue/index',array('status'=>2))}>"><em class="ico ico_14"></em>我的预约
+                            <div class="num"><{$code}></div></a>
+                        </li> -->
+                           <!-- <li>
+                            <a href="<{:AppLink('mcenter/life/index')}>"><em class="ico ico_12"></em>我的生活信息
+                            <i></i></a>
+                        </li> -->
+                    </ul>
+                </div>
+                <!-- <div class="list-box">
+                    <ul>
+                        <li>
+                            <a href="<{:AppLink('mobile/extend/index')}>"><em class="ico ico_5"></em>全民经纪人</a>
+                        </li>
+                        <li>
+                            <a href="<{:AppLink('mcenter/exchange/index')}>"><em class="ico ico_6"></em>积分兑换</a>
+                        </li>
+                        <li>
+                            <a href="<{:AppLink('mcenter/express/index')}>"><em class="ico ico_7"></em>我的快递</a>
+                        </li>
+                 	</ul>
+                 </div> -->
+                 <div class="list-box">
+                    <ul>
+                        <li>
+                            <a href="<{:AppLink('mobile/extend/index')}>"><em class="ico ico_11"></em>我的二维码</a>
+                        </li> 
+                        <li>
+                            <a href="<{:AppLink('mcenter/cash/index')}>"><em class="ico ico_8"></em>提现申请</a>
+                        </li>
+                        <li>
+                            <a href="<{:AppLink('mcenter/customer/index')}>"><em class="ico ico_5"></em>联系客服</a>
+                        </li>
+                        <!-- <li>
+                            <a href="<{:AppLink('mcenter/message/index')}>"><em class="ico ico_9 on"></em>消息中心
+                            <i></i></a>
+                        </li> -->
+                        <li>
+                            <a href="<{:AppLink('mcenter/msg/index')}>"><em class="ico ico_10 on"></em>我的消息
+                            <i></i></a>
+                        </li>
+                      
+                    </ul>
+                </div>
+            </div>
+            <input type="button" class="submit" value="退出当前账号" onClick="javascript:window.location.href='<{:U('mobile/passport/logout')}>';">
+        </div>
+    </div>
+<include  file='public:footer'/>

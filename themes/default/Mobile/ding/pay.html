@@ -1,0 +1,64 @@
+<include  file='public:header'/>    
+<body>
+    <?php if(!$is_app){?>
+    <header>
+		<a href="<{:AppLink('ding/menu',array('shop_id'=>$order['shop_id'],'table_id'=>$order['table_num']))}>"><i class="icon-goback"></i></a>
+		<div class="title" set-lan="html:m-payment-order">支付订单</div>
+	</header>
+    <?php }?>
+    
+    
+    
+    <div id="seat" class="page-center-box">
+    	<form action="<{:U('ding/pay2',array('order_id'=>$order['order_id']))}>" method="post">
+		<div id="scroll" class="pay">
+            	
+            <div class="wap-form" style="margin-top: 0">
+            	 <?php if($is_android){ ?>
+  
+                    <ul>
+                        <li set-lan="html:m-payment-method">选择支付方式</li>
+                        <foreach name="payment" item="var">
+                            <li class="pay-li i-<{$var.payment_id}>">
+                                <label>  <input type="radio"  name="code" value="<{$var.code}>" > <{$var.name}></label>
+                            </li>
+                        </foreach>
+
+
+                    </ul>
+
+                    <?php }else{?>
+                    <script>
+                        $(function () {
+                            $(".seat-check input").click(function () {
+                                $(".seat-check").find("label").removeClass("on");
+                                $(this).parent("label").addClass("on");
+                            });
+                        });
+                    </script>
+                    <ul>
+                        <li  set-lan="html:m-payment-method">选择支付方式</li>
+
+                        <foreach name="payment" item="var">
+                            <li class="pay-li i-<{$var.payment_id}>">
+                                <if condition="$lang eq 1 "><{$var.name}><elseif condition="$lang eq 2" /><{$var.lao_name}><elseif condition="$lang eq 3" /><{$var.eng_name}></if><p><span set-lan="html:m-recommended-installed">推荐已安装</span><if condition="$lang eq 1 "><{$var.name}><elseif condition="$lang eq 2" /><{$var.lao_name}><elseif condition="$lang eq 3" /><{$var.eng_name}></if><{$var.id}><span set-lan="html:m-client-use">客户端的用户使用</span></p><div class="seat-check"><label><input type="radio" class="ui-radio" name="code" value="<{$var.code}>" ></label></div>
+                            </li>
+                        </foreach>
+
+
+                    </ul>
+                    <?php  }?>
+		
+			</div>
+			<div class="sure-pay-but">
+            
+              
+            	<div class="sure-pay right"><input type="submit" class="aniu fsub" value="确认支付" style="border:none;background:none;font-size:0.16rem;width:100%;color:#FFFFFF;" set-lan="value:m-surePay" /></div>
+            </div>
+            </div>
+		</div>
+        </form>
+	</div>
+
+    
+<include  file='public:footer'/>    

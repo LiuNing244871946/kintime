@@ -1,0 +1,552 @@
+<include  file='public:header'/>
+<script async defer src="https://maps.google.cn/maps/api/js?v=3.20&region=cn&language=zh-CN&key=AIzaSyAj1gNUTDZJLvPeePsU5ltjfX-hJU1N_8c"></script>
+<style type="text/css">
+#header_lan_pull{display:none; position:absolute; top:0.54rem; right:0; width:100%; min-width:0.9rem; background:#fff none; box-shadow:0 0 0.03rem #999;}
+#header_lan_pull ul{position:relative; z-index:1000; background:#fff none;}
+#header_lan_pull i{ position:absolute; z-index:999; top:-0.04rem; left:50%; display:inline-block; width:0; height:0; content:''; background:#fff none; width:0.08rem; height:0.08rem; transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-o-transform:rotate(-45deg); box-shadow:0 0 0.03rem #999;}
+#header_lan_pull li{ display:block;}
+#header_lan_pull li span{ display:block; border-bottom:1px solid #dedede; font-size:0.14rem; line-height:0.4rem; color:#333; text-align:center;}
+#header_lan_pull li span.on{ background:#eee none;}
+#header_lan_pulll li:last-child span{border-bottom:none 0px;}
+</style>
+<script>
+
+
+    $(function () {
+        var scrtime;
+        $(".sy_hotNews #quotation").hover(function () {
+            clearInterval(scrtime);
+
+        }, function () {
+
+            scrtime = setInterval(function () {
+                var $ul = $(".sy_hotNews #quotation ul");
+                var liHeight = $ul.find("li:last").height();
+                $ul.animate({marginTop: liHeight + 29 + "px"}, 1000, function () {
+
+                    $ul.find("li:last").prependTo($ul)
+                    $ul.find("li:first").hide();
+                    $ul.css({marginTop: 0});
+                    $ul.find("li:first").fadeIn(1000);
+                });
+            }, 3000);
+
+        }).trigger("mouseleave");
+    });//首页最新消息部分结束
+</script> 
+<body style="background:#fafafa none; font-size:0.12rem;">  
+    <?php if(!$is_app){?>
+    <header id="homeh">
+        <i class="city"><a class="index qiehuan" href="<{:AppLink('city/index')}>"><if condition="$lang eq 1 "><{:$city_name}><elseif condition="$lang eq 2" /><{:$lao_city_name}><elseif condition="$lang eq 3" /><{:$eng_city_name}></if></a></i>
+        <div class="title" id="homet">
+            <div class="box_search" id="homes">
+                <a href="<{:AppLink('mobile/index/search')}>"><i></i><span set-lan="html:search1">输入商户名/搜索词</span></a>
+            </div>
+        </div>
+        <div class="lang-tab">
+            <i class="lang-icon"></i>
+            <div id="header_lan_pull">
+                <i></i>
+                <ul>
+                    <li><span class="on lanSelect" id="zh">简体中文</span></li>
+                    <li><span id="en" class="lanSelect">English</span></li>
+                    <li><span id="lao" class="lanSelect">ລາວ</span></li>
+                </ul>
+            </div>
+        </div>
+        <!-- <i class="icon-menu" style="margin-right:0.30rem;"><a href="<{:AppLink('sign/signed')}>">签到</a></i>
+        <a href="<{:AppLink('sign/signed')}>"> <i class="icon-menu" id="ico_7"></i></a> -->
+    </header>
+    <?php }?>
+    <div id="index" class="page-center-box">
+        <div>
+            <!-- 广告开始-->
+            <div class="ads">
+                <script type="text/javascript">
+                    function selectCityId(cityname){
+                        var citynames = <{$citynames}>;
+                        var cityNum = citynames.length;
+                        for(var i=0;i<cityNum;i++){
+                            if(citynames[i]['name']==cityname){
+                                cookies.set('city_id',citynames[i]['id'],{expires:30});
+                            }
+                        }
+
+                    }
+                    $(document).ready(function () {
+                        $(".lang-tab").click(function () {
+                            $(this).find("#header_lan_pull").toggle();
+                            switch(cookies.get('lan')){
+                                case 'zh':
+                                    $(".lanSelect").removeClass('on');
+                                    $('#zh').addClass('on');
+                                    break;
+                                case 'en':
+                                    $(".lanSelect").removeClass('on');
+                                    $('#en').addClass('on');
+                                    break;
+                                case 'lao':
+                                    $(".lanSelect").removeClass('on');
+                                    $('#lao').addClass('on');
+                                    break;
+                                default:
+                                    $(".lanSelect").removeClass('on');
+                                    $('#zh').addClass('on');
+                                    break;
+                            };
+                        });
+                        $('.lanSelect').click(function(){
+                            var lan = $(this).attr('id');
+                            $.post('<{:U("mobile/index/language")}>',{lan:lan},function(result){
+                                if(result.status == 'success'){
+                                    layer.msg(result.msg);
+                                    cookies.set('lan',result.lan,{expires:30});
+                                    language();
+                                    location.reload();
+                                }else{
+                                    layer.msg(result.msg,{icon:2});
+                                }                                                       
+                            },'json');
+                        });
+
+                        if (cookies.get('dingwei')==='0') {
+
+                            var pos_U;
+                            var userCity;
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(function(position){
+                                    // 定位成功
+                                    pos_U = {
+                                        lat:position.coords.latitude,
+                                        lng:position.coords.longitude
+                                    };
+                                    var geocoder = new google.maps.Geocoder;
+                                    geocoder.geocode({'location':pos_U},function(results,status){
+                                        if (status === 'OK') {
+                                            var addressComponents = results[0].address_components;
+                                            var addressNum = addressComponents.length;
+                                            for (var i = 0; i <addressNum; i++) {
+                                                var address = addressComponents[i];
+                                                var types = address['types'];
+                                                var indexNum = types.indexOf('locality');
+                                                if(indexNum>=0){
+                                                    userCity = addressComponents[i]['long_name'];
+                                                    break;
+                                                }
+                                            };
+                                            switch(userCity){
+                                                case 'Vientiane':
+                                                    selectCityId('万象');
+                                                    break;
+                                                case 'LuangPrabang':
+                                                    selectCityId('琅勃拉邦');
+                                                    break;
+                                                default:
+                                                    layer.msg('当前城市暂未开通');
+                                            }
+                                        }else{
+                                            layer.msg('定位失败，请手动选择定位');
+                                        }
+                                    });
+                                },function(error){
+                                    // 定位失败
+                                    switch(error){
+                                        case error.PREMISSION_DENIED:
+                                            layer.msg('用户拒绝获取地理位置的请求。');
+                                            break;
+                                        case error.PREMISSION_UNAVAILABLE:
+                                            layer.msg('位置信息是不可用的。');
+                                            break;
+                                        case error.TIMEOUT:
+                                            layer.msg('请求用户地理位置超时。');
+                                            break;
+                                        case error.UNKNOWN_ERROR:
+                                            layer.msg('未知错误。');
+                                            break;
+                                        default :
+                                            layer.msg('未知错误2。');
+                                            break;
+                                    }
+                                })
+                            }else{
+                                layer.msg('错误：您的设备不支持定位！');
+                            };
+
+
+                        }
+
+
+                        $(".main_image").touchSlider({
+                            flexible: true,
+                            speed: 200,
+                            btn_prev: $("#btn_prev"),
+                            btn_next: $("#btn_next"),
+                            paging: $(".flicking_con a"),
+                            counter: function (e) {
+                                $(".flicking_con a").removeClass("on").eq(e.current - 1).addClass("on");
+                            }
+                        });
+
+                        $(".main_image").bind("mousedown", function () {
+                            $dragBln = false;
+                        });
+
+                        $(".main_image").bind("dragstart", function () {
+                            $dragBln = true;
+                        });
+
+                        $(".main_image a").click(function () {
+                            if ($dragBln) {
+                                return false;
+                            }
+                        });
+
+                        timer = setInterval(function () {
+                            $("#btn_next").click();
+                        }, 5000);
+
+                        $(".ele_banner").hover(function () {
+                            clearInterval(timer);
+                        }, function () {
+                            timer = setInterval(function () {
+                                $("#btn_next").click();
+                            }, 5000);
+                        });
+
+                        $(".main_image").bind("touchstart", function () {
+                            clearInterval(timer);
+                        }).bind("touchend", function () {
+                            timer = setInterval(function () {
+                                $("#btn_next").click();
+                            }, 5000);
+                        });
+
+                    });
+                </script>
+                <div class="ele_banner">
+                    <div class="flicking_con">
+                        <calldata mdl="Ad" where=" closed=0 AND site_id=39 AND city_id IN ({$city_ids})  and bg_date ELT '{$today}' AND end_date EGT '{$today}' " limit="0,5" cache="7200" order="orderby asc">
+                            <a href="#"></a>
+                        </calldata> 
+                    </div>
+                    <div class="main_image">
+                        <ul>
+                            <calldata mdl="Ad" where=" closed=0 AND site_id=39 AND city_id IN ({$city_ids}) and bg_date ELT '{$today}' AND end_date EGT '{$today}' " limit="0,5" cache="7200" order="orderby asc">
+                                <li>
+                                    <a href="<{$item.link_url}>" title="<{$item.title}>" class="favou-ig-1">
+                                        <img src="__ROOT__/attachs/<{$item.photo}>" alt="<{$item.title}>" />
+                                    </a>
+                                </li>
+                            </calldata> 
+                        </ul>
+                    </div>
+                    <a href="javascript:;" id="btn_prev"></a>
+                    <a href="javascript:;" id="btn_next"></a>
+                </div>
+            </div>
+            <!--<div class="banner"><a href="#"><img src="__TMPL__statics/img/index_banner.png"></a></div>-->
+            <!-- 广告结束-->
+            <!-- 首页分类开始-->
+            <!-- <div class="cate_shequ"><a href="<{:AppLink('community/index')}>"><em></em>我的社区服务</a></div> -->
+            <script src="__TMPL__statics/js/jquery.flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+            <script>
+                    $(document).ready(function () {
+                        $('.flexslider_cate').flexslider({
+                            directionNav: true,
+                            pauseOnAction: false,
+                            /*slideshow: false,*/
+                            /*touch:true,*/
+                        });
+                        /*首页菜单分类结束*/
+						$('.flexslider').flexslider({
+                            directionNav: true,
+                            pauseOnAction: false,
+                            /*slideshow: false,*/
+                            /*touch:true,*/
+                        });
+                        /*广告轮播end*/
+                    });
+            </script>
+            <div class="banner">
+                <div class="flexslider_cate"> 
+                    <ul class="slides">
+
+                        <volist name='nav' id='n'>
+                            <if condition="$i%8 eq 1">
+                                <li class="list">
+                                    <ul class="cate">
+                                        <li>
+                                            <a href="<{:AppLink($n['url'])}>"><img src="__ROOT__/attachs/<{$n.photo}>">
+                                                <p><if condition="$lang eq 1 "><{$n.title}><elseif condition="$lang eq 2" /><{$n.lao_title}><elseif condition="$lang eq 3" /><{$n.eng_title}></if></p></a>
+                                        </li>
+                                        <elseif condition="$i%8 eq 0"/>        
+
+                                        <li>
+                                            <a href="<{:AppLink($n['url'])}>"><img src="__ROOT__/attachs/<{$n.photo}>">
+                                                <p><if condition="$lang eq 1 "><{$n.title}><elseif condition="$lang eq 2" /><{$n.lao_title}><elseif condition="$lang eq 3" /><{$n.eng_title}></if></p></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <else/>
+                                <li>
+                                    <a href="<{:AppLink($n['url'])}>"><img src="__ROOT__/attachs/<{$n.photo}>">
+                                        <p><if condition="$lang eq 1 "><{$n.title}><elseif condition="$lang eq 2" /><{$n.lao_title}><elseif condition="$lang eq 3" /><{$n.eng_title}></if></p></a>
+                                </li>
+                            </if>
+                        </volist>
+
+
+                    </ul>  
+                </div>
+            </div>            
+            <!--首页分类结束-->
+            <!--快报消息-->
+            <!--<div class="fastNews mb10">
+            	<div class="fl"><span class="border_r pad_r10 mr10"><em class="ico ico_1"></em></span><em class="ico ico_2"></em></div>
+            	<div class="list_box">
+                  <ul>
+                        <li>
+                            <a href="#" class="stress">赖先生 订购：6张B1套餐 规格：398元/张</a>
+                        </li>
+                        <li>
+                            <a href="#" class="stress">刘小姐 订购：5张A1套餐 规格：388元/张</a>
+                        </li>
+                        <li>
+                            <a href="#" class="stress">王先生 订购：6张B1套餐 规格：398元/张</a>
+                        </li>
+                        <li>
+                            <a href="#" class="stress">贾先生 订购：6张B1套餐 规格：398元/张</a>
+                        </li>
+                  </ul>
+                </div>
+            </div>-->
+            <!-- <script>
+			$(function(){
+				var scrtime;
+				$(".fastNews .list_box").hover(function(){
+					clearInterval(scrtime);
+				
+				},function(){
+				
+				scrtime = setInterval(function(){
+					var $ul = $(".fastNews .list_box ul");
+					var liHeight = $ul.find("li:last").height();
+					$ul.animate({marginTop : liHeight + 29 + "px"},1000,function(){
+					
+					$ul.find("li:last").prependTo($ul)
+					$ul.find("li:first").hide();
+					$ul.css({marginTop:0});
+					$ul.find("li:first").fadeIn(1000);
+					});
+				},4000);
+				
+				}).trigger("mouseleave");
+			});
+			</script> -->
+            <!--快报消息end-->
+            <!--首页限时抢购开始-->
+            <div class="sy_title">
+                <span class="left" set-lan="html:m-package">热门套餐</span>
+                <!-- <div class="sy_limit_buy_time left"><em class="ico"></em>还剩<span class="time" remaintime="1442800030"></span></div> -->
+                <a href="<{:AppLink('tuan/index')}>" class="fr fontcl2 more" set-lan="html:m-more-package">更多套餐&gt;&gt;</a>
+            </div>
+            <script>
+                            $(function(){
+                                    var dateTime = new Date();
+                                    var difference = dateTime.getTime() - 1442200030*1000;	
+                                    setInterval(function(){
+                                      $("[remaintime]").each(function(){
+                                            var obj = $(this);
+                                            var endTime = new Date(parseInt(obj.attr('remaintime')) * 1000);
+                                            var nowTime = new Date();
+                                            var nMS=endTime.getTime() - nowTime.getTime() + difference;
+                                            var myD=Math.floor(nMS/(1000 * 60 * 60 * 24));
+                                            var myH=Math.floor(nMS/(1000*60*60)) % 24;
+                                            var myM=Math.floor(nMS/(1000*60)) % 60;
+                                            var myS=Math.floor(nMS/1000) % 60;
+                                            var myMS=Math.floor(nMS/100) % 10;
+                                            if(myD>= 0){
+                                                    var str = "<span>" + myH + "</span>" + ":" + "<span>" + myM + "</span>" + ":" + "<span>" + myS + "</span>";
+                                            }else{
+                                                    var str = "真遗憾您来晚了，抢购已经结束。";	
+                                            }
+                                            obj.html(str);
+                                      });
+                                    }, 100);
+                            });
+                    </script>
+            <div class="sy_limit_buy mb10">
+            	<div class="locatLabel_switch swiper-container5">
+                    <div class="swiper-wrapper">
+                        <calldata mdl="Tuan" where="closed=0 AND city_id=$city_id AND bg_date ELT '{$now}' AND end_date EGT '{$now}' " limit="0,10" cache="7200" order="tuan_id desc">
+                        <div class="box swiper-slide">
+                            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>" width="" height="">
+                            <p class="txt_center overflow_clear"><if condition="$lang eq 1 "><{$item.title}><elseif condition="$lang eq 2" /><{$item.lao_title}><elseif condition="$lang eq 3" /><{$item.eng_title}></if></p>
+                            <p class="txt_center fontcl1">₭<{$item['tuan_price']/100}><!--<small class="ml10"><span class="black9">￥<{$item['price']/100}></span></small>--></p></a> 
+                        </div>
+                         </calldata>
+                    </div>
+                </div>
+                <script src="__TMPL__index/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+                    var swiper = new Swiper('.swiper-container5', {
+                        pagination: '.swiper-pagination5',
+                        slidesPerView: 3.5,
+                        paginationClickable: true,
+                        spaceBetween: 10,
+                        freeMode: true
+                    });
+                </script>
+            </div>
+            <!--首页限时抢购结束-->
+            <!--特色频道start-->
+            <!-- <div class="sy_title" style="display:none"><span class="left">特色频道</span></div>
+            <div class="sy_tese mb10"  style="display:none">
+            	<ul>
+                    <li class="list listOne">
+                        <a href="<{:U('mobile/farm/index')}>">
+                        <div class="box">
+                            <h3 class="colr_1"><em class="ico"></em>农家乐</h3>
+                            <p>吃喝玩乐要啥有啥</p>
+                            <img src="__TMPL__statics/img/index/teseImg1.png">
+                        </div>
+                        </a>
+                    </li>
+                    <li class="list listThree">
+                        <a href="<{:U('mobile/ding/index')}>">
+                        <div class="box">
+                        	<img src="__TMPL__statics/img/index/teseImg3.png">
+                            <div class="pub_wz">
+                                <h3 class="colr_3"><em class="ico"></em>订饭店</h3>
+                                <p>不排队，提前订座</p>
+                            </div>
+                        </div>
+                        </a>
+                    </li>
+                    <li class="list listThree">
+                        <a href="<{:U('mobile/hotel/index')}>">
+                        <div class="box">
+                        	<img src="__TMPL__statics/img/index/teseImg4.png">
+                            <div class="pub_wz">
+                                <h3 class="colr_4"><em class="ico"></em>订酒店</h3>
+                                <p>精选同城优质房源</p>
+                            </div>
+                        </div>
+                        </a>
+                    </li>
+                    <li class="list listTwo">
+                        <a href="<{:U('mobile/mall/crowdList')}>">
+                        <div class="box">
+                        	<h3 class="colr_2"><em class="ico"></em>商品众筹</h3>
+                            <p>众筹的方式实现心愿</p>
+                            <img src="__TMPL__statics/img/index/teseImg2.png">
+                        </div>
+                        </a>
+                    </li>
+                    <li class="list listThree">
+                        <a href="<{:U('mobile/cloud/index')}>">
+                        <div class="box">
+                        	<img src="__TMPL__statics/img/index/teseImg5.png">
+                            <div class="pub_wz">
+                                <h3 class="colr_5"><em class="ico"></em>一元云购</h3>
+                                <p>爆款大牌随心购</p>
+                            </div>
+                        </div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div> -->
+            <!--特色频道end-->
+            <!--广告轮播-->
+           <!--  <div class="banner mb10">
+                <div class="flexslider" style="max-height:1.06rem;">
+                    <ul class="slides">
+                        <calldata mdl="Ad" where="closed=0 AND site_id=37 AND city_id IN ({$city_ids}) and bg_date ELT '{$today}' AND end_date EGT '{$today}' " limit="0,5" cache="7200" order="orderby asc">
+                            <li><a href="<{$item.link_url}>" title="<{$item.title}>"><img src="__ROOT__/attachs/<{$item.photo}>" alt="<{$item.title}>" width="100%" draggable="false"></a></li>
+                        </calldata>
+                    </ul>  
+                </div>
+            </div> -->
+            <!--广告轮播end-->
+            <!--热门商家-->
+            <div class="sy_title"><span class="left" set-lan="html:m-businesses">热门商家</span><a href="<{:AppLink('shop/index')}>" class="fr black9 more" set-lan="html:m-more-businesses">更多商家&gt;&gt;</a></div>
+            <div class="sy_hot_seller">
+            	<div class="sy_limit_buy mb10">
+                    <div class="locatLabel_switch swiper-container6">
+                        <div class="swiper-wrapper">
+                            <calldata mdl="Shop" where="closed=0 AND city_id=$city_id AND audit=1" limit="0,10" cache="7200" order="orderby asc,score_num desc">
+                            <div class="box swiper-slide">
+                                <a href="<{:U('shop/detail',array('shop_id'=>$item['shop_id']))}>"><img src="__ROOT__/attachs/<{$item['photo']}>" width="114" height="114">
+                                <p class="txt_center overflow_clear">
+                                <if condition="$lang eq 1 ">
+                                    <{$item.shop_name}>
+                                <elseif condition="$lang eq 2" />
+                                    <{$item.lao_shop_name}>
+                                <elseif condition="$lang eq 3" />
+                                    <{$item.eng_shop_name}>
+                                </if>
+                                </p>
+                                <p class="fontcl2"><{$item.fans_num}><span set-lan="html:m-attention">人关注</span><small class="ml10 fr black9" set-lan="html:m-sold">已售<{$item.score_num}></small></p></a>
+                            </div>
+                            </calldata>
+                        </div>
+                    </div>
+                    <script>
+                        var swiper = new Swiper('.swiper-container6', {
+                            pagination: '.swiper-pagination6',
+                            slidesPerView: 2.5,
+                            paginationClickable: true,
+                            spaceBetween: 10,
+                            freeMode: true
+                        });
+                    </script>
+                </div>
+            </div>
+            <!--热门商家end-->
+ 
+            <!--专享推荐-->
+            <div class="sy_recmd mb10">
+            	<div class="title"><span set-lan="html:m-exclusive">专享推荐</span></div>
+                <div class="sy_recmd_list_box">
+                    <ul>
+                        <calldata mdl="Shop" where="closed=0 AND city_id=$city_id AND audit=1" limit="0,10" cache="7200" order="score desc">
+                            <li class="sy_recmd_list">
+                                <div class="box">
+                                    <div class="pub_img"><a href="<{:U('shop/detail',array('shop_id'=>$item['shop_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>" width="145" height="145"></a></div>
+                                    <div class="pub_wz">
+                                        <h3 class="overflow_clear"><a href="<{:U('shop/detail',array('shop_id'=>$item['shop_id']))}>">
+                                            <if condition="$lang eq 1 ">
+                                                <{$item.shop_name}>
+                                            <elseif condition="$lang eq 2" />
+                                                <{$item.lao_shop_name}>
+                                            <elseif condition="$lang eq 3" />
+                                                <{$item.eng_shop_name}>
+                                            </if>   
+                                            </a></h3>
+                                        <P class="black9 overflow_clear">
+                                            <if condition="$lang eq 1 ">
+                                                <{$item.tags}>
+                                            <elseif condition="$lang eq 2" />
+                                                <{$item.lao_tags}>
+                                            <elseif condition="$lang eq 3" />
+                                                <{$item.eng_tags}>
+                                            </if>   
+                                        </P>
+                                        <div class="nr_box">
+                                            <p class="fl fontcl2"><{$item.fans_num}><span set-lan="html:m-attention">人关注</span></p>
+                                            <p class="fr price fontcl2"><span class="black9" set-lan="html:m-sold">已售<{$item.score}></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </calldata>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <!--专享推荐end-->
+
+        </div>
+    </div>
+<include file="public:footer"/>

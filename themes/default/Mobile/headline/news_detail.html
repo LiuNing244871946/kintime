@@ -1,0 +1,106 @@
+<include file="public:header"/>
+<script src="__TMPL__statics/js/jquery.flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.flexslider').flexslider({
+            directionNav: true,
+            pauseOnAction: false,
+        });//轮播js结束
+    });
+</script>
+<body>
+<header> <a href="<{:U('/mobile/headline')}>"><i class="icon-goback"></i></a>
+    <div class="title"> 新闻详情 </div>
+    <i class="icon-menu3"><a class="mall-fen" id="foucsIco" href="<{:AppLink('shop/favorites_news/',array('news_id'=>$detail['news_id']))}>" ></a><a href="#" id="shareIco" class="ml10"></a></i> 
+</header>
+    
+    <div class="bdcolor">
+        <div class="bdcolor_bg"></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_weixin" data-cmd="weixin">微信</a>
+            <a class="bds_qzone" data-cmd="qzone" href="#">QQ空间</a>
+            <a class="bds_sqq" data-cmd="sqq">腾讯QQ</a>
+            <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+            <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+            <div class="bd-share-popup-footer">
+                <a class="bd-share-popup-close" onClick="$('.bdcolor').hide();" href="javascript:void(0);">取消</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#shareIco").click(function () {
+                $(".bdcolor").show();
+            });
+            
+        });
+        window._bd_share_config = {
+            common: {
+                bdText: '<{$detail.title}>',
+                bdDesc: '<{$detail.title}>',
+                bdUrl: location.href,
+                bdPic: 'http://<{$Think.SERVER.HTTP_HOST}>__ROOT__/attachs/<{$detail.photo|default='default.jpg'}>'
+            },
+            share: [{
+                "bdSize": 32,
+            }],
+        }
+        with (document)
+            0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+    </script>
+    
+<div class="page-center-box">
+	<div class="tt_main">
+        <div class="banner">
+            <div class="flexslider">
+                <ul class="slides">
+                    <calldata mdl="Ad" where=" closed=0 AND site_id=39 AND city_id IN ({$city_ids}) and bg_date ELT '{$today}' AND end_date EGT '{$today}' " limit="0,5" cache="7200" order="orderby asc">
+                        <li class="list"><a href="<{$item.link_url}>" title="<{$item.title}>" ><img src="__ROOT__/attachs/<{$item.photo}>"  width="657" height="246" alt="<{$item.title}>" /></a></li>
+                    </calldata> 
+                </ul>
+            </div>
+        </div>
+        <ul class="ttxq_nr">
+            <li class="ttxq_liOne ml10" >
+                <div><img src="__ROOT__/attachs/<{$detail.shop.logo}>"/></div>
+                <p><b><{$detail.shop.shop_name}></b><span><{$detail.shop.create_time|date='Y-m-d',###}></span></p>
+                <div class="clear"></div>
+            </li>
+            <!--<li class="ttxq_liTwo mr10"><a href="#" class="ttxq_btn">美食</a></li>-->
+            <li class="clear"></li>
+        </ul>
+            <div class="ttxq_jieshao" style='line-height:0.22rem;padding:0.05rem 0.1rem;overflow:hidden;'>
+                <{$detail.details}>
+            </div>
+        <div class="ttxq_zixun">
+            <h3 class="pad_l10 rem16 ttxq_wenzi">商家还有其它资讯</h3>
+            <div class="locatLabel_switch swiper-container5">
+                <div class="swiper-wrapper">
+                    <volist name='other_news' id='on'>
+                    <div class="box swiper-slide">
+                        <div class="switch"> 
+                            <a href="<{:U('headline/news_detail',array('news_id'=>$on['news_id']))}>">
+                                <img src="__ROOT__/attachs/<{$on.photo}>"/>
+                                <p><{$on.title}></p>
+                            </a> 
+                        </div>
+                    </div>
+                    </volist>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="__TMPL__headline/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var swiper = new Swiper('.swiper-container5', {
+		pagination: '.swiper-pagination5',
+		slidesPerView: 2.5,
+		paginationClickable: true,
+		spaceBetween: 10,
+		freeMode: true
+	});
+    </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<include file="public:header"/>
+<body>
+<?php if(!$is_app){?>
+<header>
+    <a href="<{:U('hotel/detail',array('hotel_id'=>$hotel['hotel_id']))}>"><i class="icon-goback"></i></a>
+    <div class="title" set-lan="html:q-Ordersubmission">
+    	订单提交
+    </div>
+    <i class="icon-menu"><a href="#" class=""></a></i>
+</header>
+ <?php }?>
+<div class="page-center-box">
+    <div class="hotelOrd">
+        <p class="fontcl2 ts" set-lan="html:q-Unpaidcancellationwithin30minutesoftheorder">订单30分钟内未支付自动取消</p>
+        <div class="infor">
+        	<h3><if condition="$lang eq 1 "><{$hotel.hotel_name}><elseif condition="$lang eq 2" /><{$hotel.lao_hotel_name}><elseif condition="$lang eq 3" /><{$hotel.eng_hotel_name}></if>
+            <span class="bq" set-lan="html:q-group">房</span></h3>
+                <p class="black9" set-lan="html:q-Check">入住：
+                <span id="ft"><{$into_time}></span>
+                    <span class="ml25"><span set-lan="html:q-Departure">离店</span>：
+                <span id="tt"><{$out_time}></span>
+                    <span class="ml25"><span set-lan="html:q-common">共</span>：<span id="night_num"></span><span set-lan="html:q-night">晚</span></span>
+                </p>
+
+                <p class="black9" ><span set-lan="html:q-Hoteltype">酒店房型</span>：<if condition="$lang eq 1 "><{$roomtype[$detail['type']]}><elseif condition="$lang eq 2" /><{$lao_roomtype[$detail['type']]}><elseif condition="$lang eq 3" /><{$eng_roomtype[$detail['type']]}></if><if condition="$detail.is_zc" ><span set-lan="html:q-Havebreakfast">-有早餐</span></if></p>
+        </div>
+        <div class="box">
+        	<p class="left" set-lan="html:q-price">单价</p>
+           	<p class="right"><span set-lan="html:q-qian">₭</span><{$detail.price}><span set-lan="html:q-night">/晚</span></p>
+        </div>
+        <div class="box">
+        	<p class="left" set-lan="html:q-Numberofrooms">房间数</p>
+           	<div class="right jiajianBox">
+            	<input type="button" value="-" class="jian">
+                <input type="text" id="jq_num" value="1">
+                <input type="button" value="+" class="jia">
+            </div>
+        </div>
+        <div class="box">
+        	<p class="ts2" set-lan="html:q-Prompt">请真实填写入住房间数及人数，否则入住时会收取额外费用</p>
+        </div>
+        <div class="box">
+        	<p class="left" set-lan="html:q-Timetostore">到店时间</p>
+                <div class="right black9" style="width: 0.85rem; overflow: hidden; position: relative;">
+                        <select id="last_time" style="width: 1rem; border: none; font-size: 0.14rem;">
+                            <for start="0" end="24">
+                                <option <if condition="$i eq 14">selected="selected"</if> value="<{$i}>:00"><{$i}>:00</option>
+                                <option value="<{$i}>:30"><{$i}>:30</option>
+                            </for>
+                        </select>
+                    <em class="linkIco" style="position: absolute; right: 0.02rem; top: 0.05rem;"></em>
+                    </div>
+                 
+        </div>
+        <div class="box">
+            <div class="int_box">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th>入住人</th>
+                        <td><input type="text" id="realname" set-lan="val:q-Pleaseentertherealname" placeholder="请输入真实姓名"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="box">
+            <div class="int_box">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th set-lan="html:q-phone">手机号</th>
+                        <td id="input-con">
+                            <select name="areacode" id="areacode" style="border: none;">
+                                <option value='86' set-lan="html:q-china">中国+86</option>
+                                <option value='856' set-lan="html:q-Laos">老挝+856</option>
+                            </select>
+                            <input type="text" id="mobile" set-lan="val:q-Pleaseenterthephonenumber" placeholder="请输入手机号码"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="box">
+            <div class="int_box">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th set-lan="html:q-Accommodationpreference">住宿偏好</th>
+                        <td><input type="text" id="note" set-lan="val:q-Pleaseentertherequestforaccommodation" placeholder="请输入住宿要求"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <p class="box mb10"><span set-lan="html:q-Notrefundable">不可退</span>：<span class="black9" set-lan="html:q-orderconfirm">订单确认后不可取消或变更。如未入住，扣除全部费用。</span></p>
+        <p class="box mb10"><span set-lan="html:q-Predeterminedinstructions">预订说明</span>：<span class="black9" set-lan="html:q-Checkintime">办理入住时间：<{$hotel.in_time}>以后    办理退房时间：<{$hotel.out_time}>以前</span></p>
+    </div>
+</div>
+<footer>
+	<div class="hotelOrd_footer" id="online_pay">
+        <p class="fontcl2 left mt10"><span set-lan="html:q-Onlinepayment">在线支付</span>:<span set-lan="html:q-qian">₭</span><span id="jqtotal"></span></p>
+        <input type="button" set-lan="val:q-placeorder" value="提交订单" class="btn right">
+    </div>
+</footer>
+<script>
+        function get_night(stime,ltime){
+            var  aDate,  oDate1,  oDate2,  iDays  
+            oDate1  =  new  Date(stime.replace(/-/g, "/"));
+            oDate2  =  new  Date(ltime.replace(/-/g, "/"));
+            iDays  =  parseInt(Math.abs(oDate1.getTime()  -  oDate2.getTime())  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数 
+                return  iDays  
+        }
+        $(document).ready(function(){
+            var price = "<{$detail.price}>";
+            var sku = "<{$detail.sku}>";
+            function changetotal(num,night_num) {
+                $("#jqtotal").html(price * num * night_num);
+            }
+
+
+            var stime = $("#ft").html();
+            var ltime = $("#tt").html();
+            var night_num = get_night(stime,ltime)||0;
+            var num = $("#jq_num").val();
+            var total = price * num * night_num||0;
+            $("#night_num").html(night_num);
+            $("#jqtotal").html(total);
+
+
+            // + - 房间数量
+            $(".jia").click(function () {
+                var night_num = $("#night_num").html();
+                var num = $("#jq_num").val();
+                if (num < sku) {
+                    num++;
+                }else{
+                    layer.msg('房间已经不够了');
+                }
+                $("#jq_num").val(num);
+                changetotal(num,night_num);
+            });
+            $(".jian").click(function () {
+                var night_num = $("#night_num").html();
+                var num = $("#jq_num").val();
+                if (num > 1) {
+                    num--;
+                }else{
+                    layer.msg('不能再少了');
+                }
+                $("#jq_num").val(num);
+                changetotal(num,night_num);
+            });
+            $("#jq_num").keyup(function () {
+                var night_num = $("#night_num").html();
+                var num = parseInt($("#jq_num").val())||1;
+                if (num <= 0) {
+                    $("#jq_num").val(1);
+                    changetotal(num,night_num);
+                } else if(num < sku||num==sku){
+                    $("#jq_num").val(num);
+                    changetotal(num,night_num);
+                }else{
+                    $("#jq_num").val(sku);
+                    changetotal(sku,night_num);
+                    layer.msg('房间已经不够了');
+                }
+            });
+            
+            $(".btn").click(function(){
+                var is_app = "<{$is_app}>";
+                var stime = $("#ft").html();
+                var ltime = $("#tt").html();
+                var num = $("#jq_num").val();
+                var last_time = $('#last_time option:selected') .val();
+                var realname = $("#realname").val();
+                var areacode = $('#areacode').val();
+                var mobile = $("#mobile").val();
+                var note = $("#note").val();
+                var room_id = "<{$detail.room_id}>";
+                var url = "<{:U('hotel/orderCreate')}>";
+                if(stime >= ltime){
+                    layer.msg('选择时间不正确');
+                    return false;
+                }else{
+                    $.post(url,{stime:stime,ltime:ltime,num:num,last_time:last_time,realname:realname,areacode:areacode,mobile:mobile,note:note,room_id:room_id},function(data){
+                        if(data.status == 'login'){
+                            setTimeout(function () {
+                            if (!is_app) {
+                                window.location.href = "<{:U('mobile/passport/login')}>";
+                            } else {
+                                <?php if ($is_android){?>
+                                window.jsObj.goLogin();
+                                <?php }else{?>
+                                 goload();
+                                <?php }?>
+                            }
+                        }, 1000)
+                        }else if(data.status == 'success'){
+                            layer.msg(data.msg);
+                            var link = "<{:U('hotel/pay',array('order_id'=>oooo))}>";
+                            setTimeout(function () {
+                                window.location.href = link.replace('oooo', data.order_id);
+                            }, 1000);
+
+                        }else{
+                            layer.msg(data.msg);
+                        }
+                    },'json')
+                }
+            })
+
+        })
+    </script> 
+ 
+</body>
+</html>

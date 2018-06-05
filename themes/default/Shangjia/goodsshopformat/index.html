@@ -1,0 +1,40 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">商家管理</a> > <a href="" set-lan="html:n-specification">规格</a> > <a set-lan="html:n-specificationList">规格列表</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t tuanfabu_top">
+            <div class="left tuan_topser_l" set-lan="html:n-shopSelfClassifyList">商家自定义规格列表</div>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('goodsshopformat/create')}>" set-lan="html:n-addSpecification">添加规格+</a></div>
+        </div>
+    </div>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('goodsshopformat/index')}>" set-lan="html:n-specificationList">规格列表</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+        	<td set-lan="html:n-specificationIdentifier">规格编号</td>
+            <td set-lan="html:n-specificationName">规格名称</td>
+            <td set-lan="html:n-specificationContent">规格内容</td>
+            <td set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="formats" item="var">
+            <tr>
+            	<td><{$var.id}></td>
+                <td><{$var.name}></td>
+                <td><{$var.content}></td>
+                <td>
+                    <a href="<{:U('goodsshopformat/edit',array('id'=>$var['id']))}>" set-lan="html:n-edit">编辑</a>
+                    <a href="<{:U('goodsshopformat/delete',array('id'=>$var['id']))}>" set-lan="html:n-delete">删除</a>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+<include  file='public:footer'/>

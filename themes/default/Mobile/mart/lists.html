@@ -1,0 +1,96 @@
+<include  file='public:header'/>
+<script src = "__TMPL__statics/js/elecart.js?v=20150822" ></script>
+<script>
+    $(function () {
+        if ($('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            $('#shangjia_tab li').width(100 / $('#shangjia_tab li').length + '%');
+            $('.page-center-box').css('top', '2.4rem');
+        }//头部切换tab结束
+        if ($('.elePrompt').length > 0 && $('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            $('#shangjia_tab').css('top', '0.9rem');
+            $('.page-center-box').css('top', '1.3rem');
+        } else if ($('.elePrompt').length > 0 || $('#shangjia_tab').length > 0) {
+            $('.page-center-box').css('top', '2.4rem');
+        }//头部提示结束
+        $(".frame-set-left ul li").click(function(){
+            $(".frame-set-left ul li").removeClass('active');
+            $(this).addClass('active');
+            var cate = $(this).attr('rel');
+            if(cate == 'all'){
+                $('.list-box').show();
+            }else{
+                $('.list-box').hide();
+                $('.'+ cate).show();
+            }
+        }); 
+    });
+</script>
+<?php if(!$is_app){?>
+<header style="background: transparent;">
+    <a <if condition="!$goods_id">href="<{:AppLink('index/index')}>"<else/>href="<{:AppLink('mall/detail',array('goods_id'=>$goods_id))}>"</if> ><i class="icon-goback"></i></a>
+</header>
+<?php }?>
+<div id="f_sshopheader">
+    <img src="__ROOT__/attachs/<{$detail.pic}>" id="f_sshopbc" >
+    <div id="f_sshopinfo">
+        <span id="f_sshopinfo_l">
+            <img src="__ROOT__/attachs/<{$detail.logo}>" id="f_sshoplogo">
+            <span id="f_sshopname"><{$detail.weidian_name}></span>
+        </span>
+        <span id="f_sshopinfo_r">
+            <span id="f_sshopfans">
+                <span>100000</span>
+                <span>粉丝数</span>
+            </span>
+            <a href="<{:AppLink('shop/favorites/',array('shop_id'=>$detail['shop_id']))}>" id="f_sshopfav">
+                <em class="ico ico_2"></em>
+                <span>关注</span>
+            </a>
+        </span>
+    </div>
+</div>
+<!--头部切换开始-->
+<ul id="shangjia_tab" style="top: 2rem;">
+    <li><a href="<{:AppLink('mart/lists',array('id'=>$detail['id']))}>" class="on">商品</a></li>
+    <li><a href="<{:AppLink('mart/shopdetail',array('id'=>$detail['id']))}>">详情</a></li>
+    <li><a href="<{:AppLink('mart/dianping',array('id'=>$detail['id']))}>">评价</a></li>
+</ul>
+<!--头部切换结束-->
+<div id="app_nav" class="page-center-box">
+    <div class="frame-set-left">
+        <ul>
+            <li class="active" rel="all"><a href="javascript:void(0);">全部分类</a></li>
+            <foreach name="autocates" item="item">
+                <li rel="cate_<{$item.cate_id}>"><a href="javascript:void(0);"><{$item.cate_name}></a></li>
+            </foreach>
+        </ul>
+    </div>
+    <div class="frame-set-right">
+        <div id="scroll">
+            <div class="list-have-pic">
+                <div class="eleList_box">
+                    <foreach name="list" item="var">
+                        <php>$save = $var['price'] - $var['mall_price'];</php>
+                        <a href="<{:AppLink('mall/detail',array('goods_id'=>$var['goods_id']))}>">
+                            <div class="list-box cate_<{$var.shopcate_id}>">
+                                <div class="list-img">
+                                    <img src="__ROOT__/attachs/<{$var.photo}>">
+                                </div>
+                                <div class="list-content">
+                                    <p class="overflow_clear"><{$var.title}></p>
+                                    <br/>
+                                    <p class="price fontcl1"><{:round($var['mall_price']/100,2)}>元<del><{:round($var['price']/100,2)}>元</del></p>
+                                </div>
+                            </div>
+                        </a>
+                    </foreach>
+                </div>
+                
+            </div>                
+        </div>
+    </div>
+</div>
+</body>
+</html>

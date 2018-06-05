@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <{$CONFIG['site']['headinfo']}>
+        <title><php>if($config['title'])echo $config['title'];else echo $seo_title;</php></title>
+        <meta name="keywords" content="<{$seo_keywords}>" />
+        <meta name="description" content="<{$seo_description}>" />
+        <link href="__TMPL__statics/shopskin/green/css/style.css?v=20151022" rel="stylesheet" type="text/css">
+            <script> var BAO_PUBLIC = '__PUBLIC__';
+                var BAO_ROOT = '__ROOT__';</script>
+            <script src="__TMPL__statics/js/jquery.js?v=20150718"></script>
+            <script src="__PUBLIC__/js/layer/layer.js?v=20150718"></script>
+            <script src="__TMPL__statics/js/jquery.flexslider-min.js?v=20150718"></script>
+            <script src="__TMPL__statics/js/js.js?v=20150718"></script>
+            <script src="__PUBLIC__/js/web.js?v=20150718"></script>
+            <script src="__TMPL__statics/js/baocms.js?v=20150718"></script>
+    </head>
+    <script>
+                $(document).ready(function () {
+                    $(window).scroll(function () {
+                        if ($(window).scrollTop() > 100) {
+                            $(".nav_fixed").show();
+                        } else {
+                            $(".nav_fixed").hide();
+                        }//出现与隐藏
+
+                        var top = $(document).scrollTop();          //定义变量，获取滚动条的高度
+                        var menu = $(".nav_fixed");                      //定义变量，抓取#menu
+                        var items = $(".shangjiaC").find(".spxq_xqBt");    //定义变量，查找.item
+
+                        var curId = "";                             //定义变量，当前所在的楼层item #id 
+
+                        items.each(function () {
+                            var m = $(this);                        //定义变量，获取当前类
+                            var itemsTop = m.offset().top;        //定义变量，获取当前类的top偏移量
+                            if (top > itemsTop - 260) {
+                                curId = "#" + m.attr("id");
+                            } else {
+                                return false;
+                            }
+                        });
+
+                        //给相应的楼层设置on,取消其他楼层的on
+                        var curLink = menu.find(".on");
+                        if (curId && curLink.attr("href") != curId) {
+                            curLink.removeClass("on");
+                            menu.find("[href=" + curId + "]").addClass("on");
+                        }
+                        // console.log(top);
+                    });
+                });
+    </script>
+    <body style="background:#fafafa;">
+        <iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
+        <!--header部分结束-->
+        <script type="text/javascript" src="__TMPL__statics/js/jquery.qrcode.min.js"></script>
+        <style>
+            .sjxq_sjcpDwNr canvas{
+                width: 115px;
+                height: 115px;
+                margin: 0px auto;
+                background: #fff;
+                padding: 10px;
+            }
+        </style>
+        <!--浮动导航开始-->
+        <div class="nav nav_fixed">
+            <div class="navList">
+                <ul>
+                        <li class="navLi"><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>" class="navA">首页</a></li>
+                        <li class="navLi"><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>#spxq_xqBt1" class="navA">商家位置</a></li>
+                        <li class="navLi"><a href="<{:U('shop/tuan',array('shop_id'=>$detail['shop_id']))}>" class="navA on">商品抢购</a></li>
+                        <li class="navLi"><a href="<{:U('shop/goods',array('shop_id'=>$detail['shop_id']))}>" class="navA">商家商品</a></li>
+                        <li class="navLi"><a href="<{:U('shop/huodong',array('shop_id'=>$detail['shop_id']))}>" class="navA">商家活动</a></li>
+                        <li class="navLi"><a href="<{:U('shop/coupon',array('shop_id'=>$detail['shop_id']))}>" class="navA">商家优惠</a></li>
+                        <li class="navLi"><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>#spxq_xqBt6" class="navA">商家详情</a></li>
+                        <li class="navLi"><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>#spxq_xqBt7" class="navA">网友评价</a></li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!--浮动导航结束-->
+        <div class="topOne">
+            <div class="nr">
+                <div class="left">
+                    <ul class="topOne_nav">
+                        <li><a href="<{:U('pchome/index/index')}>"><i class="back"></i>回到首页</a></li>
+                        <li><a href="<{:U('pchome/tuan/nearby')}>">身边抢购</a></li>
+                        <li><a href="<{:U('pchome/huodong/index')}>">活动</a></li>
+                        <li><a href="<{:U('pchome/lifeservice/index')}>">上门服务</a></li>
+                        <li><a href="<{:U('pchome/mall/index')}>">同城优购</a></li>
+                        <li><a href="<{:U('pchome/ele/index')}>">外卖</a></li>
+                        <li><a href="<{:U('pchome/ding/index')}>">订座</a></li>
+                        <li><a href="<{:U('pchome/life/main')}>">同城信息</a></li>
+                        <li><a href="<{:U('pchome/coupon/index')}>">优惠券</a></li>
+                    </ul>
+                </div>
+                <if condition="empty($MEMBER)">
+                    <div class="right sy_topLogin">您好，欢迎访问<{$CONFIG.site.sitename}><a href="<{:U('pchome/passport/login')}>" class="on">登陆</a>|<a href="<{:U('passport/register')}>">注册</a>
+                        <else/>
+                        <div class="right sy_topLogin">欢迎 <b style="color: red;font-size:14px;"><{$MEMBER.nickname}></b> 来到<{$CONFIG.site.sitename}>&nbsp;&nbsp; <a href="<{:U('member/index/index')}>" >个人中心</a>|<a href="<{:U('pchome/passport/logout')}>" >退出登录</a>
+                            </if>
+                            <div class="topSm"> <span class="topSmt"><em>&nbsp;</em></span>
+                                <div class="topSmnr"><img src="__ROOT__/attachs/<{$CONFIG.site.wxcode}>" width="90" height="90" />
+                                    <p>扫描下载客户端</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <!--商家详情头部1结束-->
+            <div class="pagewd topTitle">
+                <div class="left">
+                    <h1><{$detail.shop_name}><i class="ico_5"></i></h1>
+                </div>
+                <div class="right">
+                    <div class="share bdsharebuttonbox spxq_qgFx" data-tag="share_1"><a mini='act' href="<{:U('shop/favorites',array('shop_id'=>$detail['shop_id']))}>"><em>&nbsp;</em>收藏本店</a><a data-cmd="more" href="javascript:void(0);"><em>&nbsp;</em>分享到</a></div>
+                    <script>window._bd_share_config = {share: [{"tag": "share_1", 'bdCustomStyle': '__TMPL__statics/empty.css'}]};
+                with (document)
+                    0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+                    </script>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!--商家详情头部2结束-->
+            <div class="nav">
+                <div class="navList">
+                    <ul>
+                        <li class="navLi"><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>" class="navA">首页</a></li>
+                        <li class="navLi"><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>#spxq_xqBt1" class="navA">商家位置</a></li>
+                        <li class="navLi"><a href="<{:U('shop/tuan',array('shop_id'=>$detail['shop_id']))}>" class="navA on">商品抢购</a></li>
+                        <li class="navLi"><a href="<{:U('shop/goods',array('shop_id'=>$detail['shop_id']))}>" class="navA">商家商品</a></li>
+                        <li class="navLi"><a href="<{:U('shop/huodong',array('shop_id'=>$detail['shop_id']))}>" class="navA">商家活动</a></li>
+                        <li class="navLi"><a href="<{:U('shop/coupon',array('shop_id'=>$detail['shop_id']))}>" class="navA">商家优惠</a></li>
+                        <li class="navLi"><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>#spxq_xqBt6" class="navA">商家详情</a></li>
+                        <li class="navLi"><a href="<{:U('shop/detail',array('shop_id'=>$detail['shop_id']))}>#spxq_xqBt7" class="navA">网友评价</a></li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!--商家详情导航结束-->
+
+            <!--商家详情内容部分开始-->
+            <div class="mask_bg mask_spxq_pjLi_img_mask">
+                <div class="mask_spxq_pjLi_img"><img src="" width="300" height="300" /></div>
+            </div>
+            <div class="content zy_content">    
+                <div class="shangjiaC">
+                    <div class="left shangjiaC_l">
+                        <div class="spxq_xqBt ptop_0" id="spxq_xqBt2">商家抢购</div>
+                        <div class="spxq_xqNr">
+                            <div class="sj_buy_list_box">
+                                <ul class="sj_buy_list">
+                                    <foreach name="list" item="item">
+                                        <li>
+                                            <div class="syPub_list">
+                                                <a target="_blank" title="<{$item.title}>" href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"  width="312" height="190" /></a>
+                                                <h3><a target="_blank" title="<{$item.title}>" href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>" class="overflow_clear"><{$item.title}></a></h3>
+                                                <p class="overflow_clear graycl"><{$item.intro}></p>
+                                                <hr style="border:none 0px; border-bottom: 1px solid #e0e0e0; margin-top:6px;" />
+                                                <div class="btn_box">
+                                                    <div class="left"><p><span class="price">￥<{:round($item['tuan_price']/100,2)}></span><del>￥<{:round($item['price']/100,2)}></del></p></div>
+                                                    <div class="right"><p class="">已售：<{$item.sold_num}></p><a target="_blank"  href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>" class="btn">立即抢购</a></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </foreach>
+                                </ul>
+                            </div>
+                            <div class="x">
+                                <{$page}>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="right shangjiaC_r">
+                        <div class="weixin_sm">
+                            <if condition="$ex['wei_pic'] eq null"><img src="__ROOT__/attachs/<{$CONFIG.site.wxcode}>"  width="132" height="132"/><else/><img src="<{$ex['wei_pic']}>" width="132" height="132" /></if>
+                            <p>扫描商家微信</p>
+                            <p>轻松购享优惠</p>
+                        </div>
+                        <div class="sjsy_newsList">
+                            <h3>新入驻商家</h3>
+                            <ul class="sjsy_newsUl">
+                                <calldata mdl="Shop" where=" closed=0 AND audit=1" limit="0,10" cache="86400" order="shop_id desc">
+                                    <li><a title="<{$item.shop_name}>" target="_blank" href="<{:U('shop/detail',array('shop_id'=>$item['shop_id']))}>"><{:bao_msubstr($item['shop_name'],0,10,false)}></a></li>
+                                </calldata>
+                            </ul>
+                        </div>
+                        <div class="sjsy_newsList">
+                            <h3>活动&优惠</h3>
+                            <div class="sjsy_hdyh">
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        $('.sjsy_flexslider').flexslider({
+                                            directionNav: true,
+                                            pauseOnAction: false,
+                                        });
+
+                                    });//首页轮播js
+                                </script>
+                                <div class="sjsy_flexslider">
+                                    <ul class="slides">
+                                        <calldata mdl="Activity" where=" closed=0 AND audit=1 AND bg_date ELT '{$today}' AND end_date EGT '{$today}'" limit="0,2" cache="21600" order="orderby asc">
+                                            <li class="sy_hotgzLi"><a target="_blank" href="<{:U('huodong/detail',array('activity_id'=>$item['activity_id']))}>" title="<{$item.title}>"><img src="__ROOT__/attachs/<{$item.photo}>" width="212" height="158" /></a></li>
+                                        </calldata>
+                                        <calldata mdl="Coupon" where="closed=0 AND audit=1 AND expire_date EGT '{$today}'" limit="0,2" cache="10800" order="coupon_id desc">
+                                            <li class="sy_hotgzLi"><a target="_blank" href="<{:U('coupon/detail',array('coupon_id'=>$item['coupon_id']))}>" title="<{$item.title}>"><img src="__ROOT__/attachs/<{$item.photo}>" width="212" height="158" /></a></li>
+                                        </calldata> 
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--商家详情内容部分结束-->
+            <include file="public:footer"/>

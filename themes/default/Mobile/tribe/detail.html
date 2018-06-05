@@ -1,0 +1,53 @@
+<include file="public:header"/>
+
+<body>
+ <?php if(!$is_app){?>
+<header> <a href="<{:AppLink('tribe/index')}>"><i class="icon-goback"></i></a>
+    <div class="title"> 兴趣圈 </div>
+    <i class="icon-menu3"></i>
+</header>
+  <?php }?>
+<div class="page-center-box">
+    <div  class="xingqu">
+        <div  class="xingqu-bigban"> <img src="__ROOT__/attachs/<{$detail.banner}>"/>
+            <div class="nr">
+                <div class="tuwen">
+                    <div class="fl caomao"><img src="__ROOT__/attachs/<{$detail.photo}>"/></div>
+                    <div class="fl tuwen-tx">
+                        <p class="font_size14 overflow_clear"><{$detail.tribe_name}></p>
+                        <p >话题<{$detail.posts}>&nbsp;&nbsp;关注<{$detail.fans}></p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="had txt_center"><a mini='act' href="<{:U('tribe/collect',array('tribe_id'=>$detail['tribe_id']))}>" class="btn"><em class="had-xin"></em><if condition="$detail['collect'] eq 1">已关注<else/>关注</if></a></div>
+            </div>
+        </div>
+        <div class="zhuye border_b">
+            <ul >
+                <li class=" zhuye-list txt_center fl"><a href="<{:U('tribe/detail',array('tribe_id'=>$detail['tribe_id']))}>" <if condition="$act eq 'detail'">class="on"</if> >主页</a></li>
+                <li class=" zhuye-list txt_center fl"><a href="<{:U('tribe/photo',array('tribe_id'=>$detail['tribe_id']))}>" <if condition="$act eq 'photo'">class="on"</if> >相册</a></li>
+                <div class="clear"></div>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <div class="quantibig black9"><span>全部话题（<{$count}>） </span></div>
+        <div class="zhuye-cont  border_t">
+            <ul>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        loaddata('<{$nextpage}>', $(".zhuye-cont ul"), true);
+    });
+</script>
+<footer>
+    <div class="" style="width:100%; padding-top:0.05rem; background:#fff;"><div class="ml10 mr10"><a href="<{:U('tribe/fabu',array('tribe_id'=>$detail['tribe_id']))}>" class="long_btn">发布话题</a></div></div>
+</footer>
+<div id="loading">
+    <div class="bao_loading">正在加载中....</div>
+</div>
+</body>
+</html>

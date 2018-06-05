@@ -1,0 +1,131 @@
+<include file="public:header"/>
+<body>
+ <?php if(!$is_app){?>
+<header> <a href="<{:AppLink('tribe/index')}>"><i class="icon-goback"></i></a>
+    <div class="title"><{$detail.title}></div>
+    <i class="icon-menu3"></i> 
+</header>
+  <?php }?>
+    
+    
+<div class="page-center-box">
+    <div class="huati_cont pad10 border_b mt10 mb10">
+        <a href="javascript:void(0);">
+            <div class="huati_box">
+                <div class="fl tu"><img src="__ROOT__/attachs/<{$auth['face']|default='default.jpg'}>"/></div>
+                <div class="wenzi "> 
+                    <p class="rem16 overflow_clear black3 fendou"><{$auth['nickname']|default='系统管理员'}></p>
+                </div>
+                <div class="clear "></div>
+            </div>
+        </a>
+    </div>
+    
+    <div class="bigtitle mt15 mb15">
+        <h2 class="black3 pad10"><{$detail.title}></h2>
+        <div class="pad10 font_size14">
+            <div  class=" black9 fl riqi"><{$detail.create_time|date='Y-m-d H:i',###}></div>
+            <div  class="fl ml10"><p class="lankuang txt_center"><{$tribe.tribe_name}>部落</p></div>
+        </div>
+        <div class="clear "></div>
+    </div>
+    
+    <!--文章内容部分-->
+    <div class="wen-content" style="padding: 0.1rem; font-size: 0.14rem;">
+        <{:cleanhtml($detail['details'])}>
+    </div>
+     <foreach name="pics" item="item">
+         <div style="padding: 0.1rem; padding-bottom: 0;" class="mb10"><img src="__ROOT__/attachs/<{$item.photo}>" width="300"  height="170" /></div>
+    </foreach>
+    <!--文章内容部分结束-->
+    
+    <div class="jingxuan">
+        <div class="jx-datucont mb10 border_b">
+             <div class="jx-datucont mb10 border_b">
+                 <calldata mdl="Ad" where=" bg_date ELT '{$today}' AND  city_id IN ({$city_ids}) AND end_date EGT '{$today}' AND closed=0 AND site_id=52" limit="0,1" cache="21600" order="orderby asc">
+                    <div class="jx-datubox border_t">
+                        <a href="<{$item.link_url}>" ><img style="width: 3rem; height: 1.2rem;" src="__ROOT__/attachs/<{$item.photo}>" width="300" height="120"/></a>
+                        <div class="tx-box mt10">
+                            <div class="fl shang black9"><{:bao_msubstr($item['title'],0,10,true)}></div>
+                            <div class="fr kank txt_center"><a href="<{$item.link_url}>" >去看看</a></div>
+                            <div class="clear "></div>
+                        </div>
+                    </div>
+                 </calldata>
+            </div>
+        </div>
+    </div>
+    
+    <!--推荐话题-->
+    <div class="tuij_cont mt10 mb10">
+        <div class="title black3"><p>推荐话题</p></div>
+        <div class=" black3">
+            <ul>
+                <foreach name="tui_list" item="item">
+                    <li class="tuij_box border_b overflow_clear"><a href="<{:U('tribe/postdetail',array('post_id'=>$item['post_id']))}>"><{$item.title}></a></li>
+                </foreach>
+            </ul>
+        </div>
+        <div class="txt_center more pad_t10 pad_b10 border_b"><a href="<{:U('tribe/detail',array('tribe_id'=>$detail['tribe_id']))}>">更多<{$tribe.tribe_name}>话题>></a></div>
+    </div>	
+    
+    <!--热门评论-->
+    <div class="renmenping mb10">
+        <div class="lun black3"><p>热门评论</p></div>
+        <div class="postmore">
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+    loaddata('<{$nextpage}>', $(".postmore ul"), true);
+    });
+</script>
+<footer>
+    <div class="huati-bot" style="width:100%; height:auto;">
+        <ul>
+            <li class="bott-box fl evlt_btn">
+                <a href="<{:U('tribe/reply',array('post_id'=>$detail['post_id']))}>">
+                    <div class="box1"> 
+                        <div class="ic2 fl"></div>
+                        <div class="ic1-tx black9 fl "><{$detail.reply_num}></div>
+                        <div class="clear "></div>
+                    </div>
+                </a>
+            </li>
+            <li class="bott-box fl " >
+                <a href="javascript:void(0);" id="zan_btn" class="bott-box0">
+                    <div class="box1"> 
+                        <div class="ic3 fl"></div>
+                        <div class="ic1-tx black9 fl "><{$detail.zan_num}></div>
+                        <div class="clear "></div>
+                    </div>
+                </a>
+            </li>
+            <div class="clear "></div>
+        </ul>
+    </div>
+</footer>
+<script>
+    $(document).ready(function(){
+        $("#zan_btn").click(function(){
+            var post_id = "<{$detail.post_id}>";
+            var url = "<{:U('tribe/zan')}>";
+            $.post(url,{post_id:post_id},function(data){
+                if(data.status == 'success'){
+                    layer.msg(data.msg);
+                    setTimeout(function(){
+                        window.location.reload(true);
+                    },1000)
+                }else{
+                    layer.msg(data.msg);
+                }
+            },'json')
+        })
+    })
+</script>
+</body>
+</html>

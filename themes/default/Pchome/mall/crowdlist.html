@@ -1,0 +1,52 @@
+<include file="public:header" /> 
+<include file="mall:top"/>
+<include file="public:nav2"/>
+
+<!--top END-->
+
+<div class="pagewd mt10">
+	<div class="mall_crowd_box">
+      <ul class="slides list_box">
+      	<volist name='itemss' id='item'>
+            	 <li class="list">
+                    <div class="pub_img"><a href="<{:U('mall/crowdDetail',array('goods_id'=>$item['goods_id']))}>"><img src="__ROOT__/attachs/<{$item.img}>" width="282" height="200" /> 
+                            <div  class="circle-svg indicatorContainer" data-dimension="120" data-text="<{$item['have_price']/$item['all_price']*100|ceil}>%" data-info="" data-width="6" data-fontsize="20" data-percent="<{$item['have_price']/$item['all_price']*100|ceil}>" data-fgcolor="#61a9dc" data-bgcolor="#eee" data-fill="#fff"></div>
+        
+                    </div>
+                    <div class="pub_wz">
+                        <h3 class="overflow_clear mb10"><a href="<{:U('mall/crowdDetail',array('goods_id'=>$item['goods_id']))}>"><{$item.title}></a></h3>
+                        <div class="mall_progressBar mb10">
+                            <div class="mall_progressBar_wrap">
+                                <span class="mall_progressBar_bar" style="width:<{$item['have_price']/$item['all_price']*100}>%;"></span>
+                            </div>
+                            <ul class="mall_progressBar_txt">
+                                <li class="left"><p><span class="graycl">已筹金额</span> <{$item['have_price']/100}></p></li>
+                                <li class="right"><p><span class="graycl">剩余金额</span> 
+                                <if condition="$item['all_price']-$item['have_price'] gt '0'">
+                                <{$item['all_price']/100-$item['have_price']/100}>
+                                <else/>
+                                0
+                                </if></p></li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+                        <a href="<{:U('mall/crowdDetail',array('goods_id'=>$item['goods_id']))}>" class="btn">立即众筹</a>
+                    </div>
+                </li>
+        </volist>
+       
+      </ul>
+      <div class="clear"></div>
+    </div>
+
+    <div class="x">
+        <{$page}>
+    </div>
+</div>
+<script src="__TMPL__mall/js/jquery.circliful.min.js??v=20160409"></script>
+<script>
+	$(document).ready(function() {
+		$('.indicatorContainer').circliful();
+	});
+</script>
+<include file="public:footer"/>

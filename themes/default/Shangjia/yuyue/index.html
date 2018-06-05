@@ -1,0 +1,50 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="javascript:void(0);" set-lan="html:q-Other">其他</a> > <a href="<{:U('yuyue/index')}>" set-lan="html:q-SubscribeList">预约列表</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t tuanfabu_top">
+            <div class="left tuan_topser_l" set-lan="html:q-aaa">预约客户到店消费，商家在网站确认消费，会对商家的排名有影响！</div>
+        </div>
+    </div>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('yuyue/index')}>" set-lan="html:q-SubscribeList">预约列表</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('yuyue/used')}>" set-lan="html:q-Consumptionconfirmation">消费确认</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:q-call">称呼</td>
+            <td set-lan="html:q-phone">手机</td>
+            <td set-lan="html:q-Timeofappointment">预约时间</td>
+            <td set-lan="html:q-Reservationnumber">预约人数</td>
+            <td set-lan="html:q-Leavingamessage.">留言</td> 
+            <td set-lan="html:q-Creationtime">创建时间</td>
+            <td set-lan="html:q-CreateIP">创建IP</td>
+            <td set-lan="html:q-Isuse">是否使用</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+            
+                    <td style="padding-left: 20px;"><{$var.name}></td>
+                    <td><{$var.mobile}></td>
+                
+                    <td><{$var.yuyue_date}>&nbsp;&nbsp;<{$var.yuyue_time}></td>
+                    <td>
+                <if condition="$var['number'] eq 10"><{$var.number}><span set-lan="html:q-bbb">人（及以上）</span><else /><{$var.number}><span set-lan="html:q-people">人</span> </if>
+                </td>
+                <td><{$var.content}></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                <td><{$var.create_ip}>(来自<{$var.create_ip_area}>)</td>
+                <td><eq name="var.used" value="1"> <span set-lan="html:q-Alreadyused">已使用</span> <else/> <span set-lan="html:q-notused">未使用</span> </eq></td>
+            </td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+<include  file='public:footer'/>

@@ -1,0 +1,42 @@
+<include  file='public:header'/>
+<div class="main-jsgl main-sc">
+    <form  target="baocms_frm" method="get"  action="<{:U('order/pickbution')}>">
+        <input type="hidden" name="order_id" value="<{:I('get.order_id')}>" /> 
+        <div class="tableBox">
+            <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                <tr>
+                    <td class="w50">ID</td>
+                    <td>快递商</td>
+                </tr>
+                <foreach name="list" item="var">
+                    <tr>
+                        <td><input type="radio" name="mail_id" rel="<{$var.mail_name}>" value="<{$var.mail_id}>" /><{$var.mail_id}></td>
+                        <td><{$var.mail_name}></td>
+                    </tr>
+                </foreach>
+            </table>
+        </div>
+        <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+            <div class="left">
+                <input style="border:1px solid #dbdbdb; width: 100px; height: 38px; line-height: 38px; text-align: center;" type="submit" id="select_btn" class="remberBtn" value="确定选择" />
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+
+<script>
+    $(document).ready(function (e) {
+        $("#select_btn").click(function () {
+            $("input[name='mail_id']").each(function (a) {
+                if ($(this).prop("checked") == true) {
+                    parent.selectCallBack2();
+                }
+            });
+        });
+
+    });
+</script>
+<include  file='public:footer'/>  
+
+

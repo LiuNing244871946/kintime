@@ -1,0 +1,83 @@
+<include  file='public:header'/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-others">美食外卖</a> > <a href="" set-lan="html:n-takeoutSetting">订单管理</a> > <a set-lan="html:n-sureOrder">配送订单</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('eleorder/wait')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+        <span set-lan="html:n-startTime">开始时间：</span><input type="text" class="radius3 tuan_topser"  name="bg_date" value="<{$bg_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+        <span set-lan="html:n-endTime">结束时间：</span><input type="text" class="radius3 tuan_topser"  name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+        <span set-lan="html:n-orderNumber">订单编号：</span><input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索" set-lan="value:n-search"/>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('eleorder/index')}>" set-lan="html:n-sureOrder">确认订单</a></li>
+            <li class="tuanfabu_tabli tabli_change on"><a href="<{:U('eleorder/wait')}>" set-lan="html:n-sentOrder">配送订单</a></li>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('eleorder/over')}>" set-lan="html:n-completedOrder">已完成订单</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-orderId">订单ID</td>
+            <td set-lan="html:n-dishes">菜品</td>
+            <td set-lan="html:n-number">数量</td>
+            <td>地址</td>
+            <td set-lan="html:n-totalValue">总价值（含包装费）</td>
+            <td set-lan="html:n-settlementPrice">结算价格</td>
+            <td set-lan="html:n-xiadanTime">下单时间</td>
+            <td>状态</td>
+        </tr>
+		<php>
+        $dv = D('Delivery');
+        $dvo = D('DeliveryOrder');
+        $shop = D('Shop');
+		$is_pei = $shop -> where('shop_id ='.$SHOP['shop_id']) -> getField('is_pei');
+                    //var_dump($list);
+        </php> 
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.order_id}></td>
+                <td>
+                <foreach name="goods" item="good">
+                    <if condition="$good['order_id'] eq $var['order_id']">    
+                        <p>
+                            <{$products[$good['product_id']]['product_name']}>：<{$good.num}><span set-lan="html:n-portion">份</span>
+                        </p>
+                    </if>
+                </foreach>
+                </td>
+                <td><{$var.num}></td>
+                <td>
+                    <{$areas[$addrs[$var['addr_id']]['area_id']]['area_name']}>、
+                    <{$business[$addrs[$var['addr_id']]['business_id']]['business_name']}>、
+                    <{$addrs[$var['addr_id']]['addr']}>
+                    <{$addrs[$var['addr_id']]['name']}>
+                    <{$addrs[$var['addr_id']]['mobile']}>
+                </td>
+                <td><{:round($var['settlement_price'],2)}></td>
+                <td><{:round($var['total_price'],2)}></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                <td>
+                    <if condition="$var['status'] eq 3">
+                         <a mini='confirm' href="<{:U('eleorder/send',array('order_id'=>$var['order_id']))}>" set-lan="html:n-completedSent">完成配送</a>  
+                    <elseif condition="$var['status'] eq 4"/>
+                         <span set-lan="html:n-riderTaking">骑手已接单</span>
+                    <elseif condition="$var['status'] eq 8"/>
+                         <span set-lan="html:n-riderSenting">骑手已送达</span>
+                    <else />
+                         <span set-lan="html:n-waitRiderTaking">等待骑手接单</span>
+                    </if>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+<include  file='public:footer'/>

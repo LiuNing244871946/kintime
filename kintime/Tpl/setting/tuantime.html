@@ -1,0 +1,27 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">设置</li>
+        <li class="li2">基本设置</li>
+        <li class="li2 li3">团购过期时间</li>
+    </ul>
+</div>
+<form  target="baocms_frm" action="<{:U('setting/tuantime')}>" method="post">
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+
+                <tr>
+                    <td class="lfTdBt">团购过期时间：</td>
+                    <td class="rgTdBt">
+                        <input type="text" name="data[tuan_time]" value="<{$CONFIG.tuantime.tuan_time}>" class="scAddTextName w150 " />分钟
+
+                    </td>
+                </tr>
+               
+            </table>
+        </div>
+        <div class="smtQr"><input type="submit" value="确认保存" class="smtQrIpt" /></div>
+    </div>
+</form>
+<include  file='public:footer'/>       

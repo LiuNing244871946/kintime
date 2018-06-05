@@ -1,0 +1,12 @@
+<volist name="list" id="item" key="index ">
+<div class="list-box">
+    <div class="list-img">
+        <a class="gai_pic" title="<{$item.weidian_name}>" href="<{:AppLink('mart/lists',array('id'=>$item['id']))}>"><img src="__ROOT__/attachs/<{$item.pic}>"></a>
+    </div>
+    <div class="list-content">
+        <p><b><a class="overflow_clear" title="<{$item.weidian_name}>" href="<{:AppLink('mart/lists',array('id'=>$item['id']))}>"><{:bao_msubstr($item['weidian_name'],0,10,false)}></a></b><span class="range"><{$item.d}></span></p>
+        <a href="<{:AppLink('mart/index',array('cat'=>$item['cate_id']))}>"><p class="c_h micro_c_1">类型：<{$cates[$item['cate_id']]['cate_name']}></p></a>
+        <p class="c_h overflow_clear">地址：<{$item['addr']}></p>
+    </div>
+</div>
+</volist>        

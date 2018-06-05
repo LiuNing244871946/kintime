@@ -1,0 +1,26 @@
+<include  file='public:header'/>    
+<body id="micro_shop">
+    <?php if(!$is_app){?>
+    <header> 
+        <a class="back" href="<{:AppLink('market/districtindex',array('market_id'=>$detail['market_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title"><{$detail.market_name}></div>
+        <i class="icon-menu"></i> 
+    </header>
+    <?php }?>
+    <div id="index" class="page-center-box">
+        <div id="sell">
+            <div class="billboard-content">
+                <div class="spread-intro">
+                    <ul>
+
+                    </ul>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        loaddata('<{$nextpage}>', $(".spread-intro ul"), true);
+                    });
+                </script>
+            </div>  
+        </div>
+    </div>
+<include file="public:footer"/>

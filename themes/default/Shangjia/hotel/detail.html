@@ -1,0 +1,86 @@
+<include  file='public:header'/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">酒店</a> > <a href="" set-lan="html:n-hotel">酒店订单</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l">
+                <if condition="$detail['order_status'] eq -1"><font style="color:red;" set-lan="html:n-haveCancel">已取消</font><elseif condition="$detail['order_status'] eq 2"/><font style="color:green;" set-lan="html:n-completed">已完成</font><elseif condition="$detail['order_status'] eq 1" set-lan="html:n-hadPaid"/>已付款<else/><span set-lan="html:n-waitDealwith">待付款</span></if>
+            </div>
+             <if condition="$detail['order_status'] eq 1"><a class="btn right" mini="confirm" href="<{:U('hotel/complete',array('order_id'=>$detail['order_id']))}>" set-lan="html:n-completeOrder">完成订单</a></if>
+            <if condition="$detail['order_status'] neq -1"><a class="btn right" mini="confirm" href="<{:U('hotel/cancel',array('order_id'=>$detail['order_id']))}>" set-lan="html:n-cancelOrder">取消订单</a></if>
+            <if condition="$detail['order_status'] eq -1"><if condition="$detail['closed'] eq 0"><a class="btn right" mini="confirm" href="<{:U('hotel/delete',array('order_id'=>$detail['order_id']))}>" set-lan="html:n-deleteOrder">删除订单</a></if></if>
+        </div>
+    </div>
+    <div class="hotel_orddtl_box">
+    	<div class="title" set-lan="html:n-reservationInfo">预订信息</div>
+        <div class="hotel_orddtl_infor">
+        	<ul>
+        	    <li class="list"><span set-lan="html:n-orderNum">订单号：</span><span class="fontcl2"><{$detail.order_id}></span></li>
+                <li class="list"><span set-lan="html:n-hotelName">酒店名称：</span><span class="fontcl2">中文:<{$detail.hotel.hotel_name}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp老文:<{$detail.hotel.lao_hotel_name}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;英文:<{$detail.hotel.eng_hotel_name}></span></li>
+                <li class="list"><span set-lan="html:n-hotelAddress">酒店地址：</span><span class="fontcl2">中文:<{$detail.hotel.addr}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;老文:<{$detail.hotel.lao_addr}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;英文:<{$detail.hotel.eng_addr}></span></li>
+                <li class="list"><span set-lan="html:n-checkinTime">入住时间：</span><span class="fontcl2"><{$detail.stime}></span></li>
+                <li class="list"><span set-lan="html:n-checkoutTime">退房时间：</span><span class="fontcl2"><{$detail.ltime}></span></li>
+                <li class="list"><span set-lan="html:n-all">共</span><{$detail.night_num}><span set-lan="html:n-night">晚</span></li>
+                <li class="list"><span set-lan="html:n-roomNumber">房间数：</span><span class="fontcl2"><{$detail.num}></span></li>
+                <li class="list"><span set-lan="html:n-unitPrice">单价：</span><span class="fontcl2"><{$detail.price}>₭</span></li>
+                <li class="list"><span set-lan="html:n-allPrice">总价：</span><span class="fontcl2"><{$detail.amount}>₭</span></li>
+    	    </ul>
+        </div>
+        <div class="hotel_orddtl_infor">
+        	<ul>
+                <li class="list"><span set-lan="html:n-occupantName">入住人姓名：</span><span class="fontcl2"><{$detail.name}></span></li>
+                <li class="list"><span set-lan="html:n-mobileNumber">手机号码：</span><span class="fontcl2"><{$detail.mobile}></span></li>
+                <li class="list"><span set-lan="html:n-lastArriveHotelTime">最晚到店时间：</span><span class="fontcl2"><{$detail.stime}> <{$detail.last_time}></span></li>
+    	    </ul>
+        </div>
+        <div class="hotel_orddtl_infor">
+        	<ul>
+                <li class="list"><span set-lan="html:n-additionalRemarks">补充说明：</span><span class="blackcl9"><{$detail.note}></span></li>
+    	    </ul>
+        </div>
+        <div class="hotel_orddtl_infor">
+        	<ul>
+                    <li class="list"><span set-lan="html:n-payType">支付方式：</span><span class="fontcl2"><if condition="$detail.online_pay eq 1"><span set-lan="html:n-payToShop">在线支付</span></if></span></li>
+    	    </ul>
+        </div>
+    </div>
+    
+    <div class="hotel_orddtl_box">
+    	<div class="title mb20" set-lan="html:n-orderDetails">订单详情</div>
+        <div class="hotel_orddtl_tabl mb20">
+        	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr class="title">
+                    <th class="first" set-lan="html:n-apartmentType">房型</th>
+                    <th set-lan="html:n-bedType">床型</th>
+                    <th set-lan="html:n-breakfast">早餐</th>
+                    <th set-lan="html:n-brand">宽带</th>
+                    <th set-lan="html:n-policy">是否可以取消</th>
+                    <th set-lan="html:n-inventory">房间数量</th>
+                    <th>休息晚数</th>
+                    <th class="last" set-lan="html:n-apartmentPrice">房价（含服务费）</th>
+                </tr>
+                <tr>
+                   <td>
+                        <div class="tuw" style="display: flex;display: -webkit-flex;">
+                            <img src="__ROOT__/attachs/<{$detail['room']['photo']}>" width="125" height="100">
+                            <span><{$detail['room']['title']}><br/><{$detail['room']['lao_title']}><br/><{$detail['room']['eng_title']}></span>
+                        </div>
+                    </td>
+                    <td><{$roomtype[$detail['room']['type']]}></td>
+                    <td><if condition="$detail['room']['is_zc'] eq 1"><span set-lan="html:n-provide">提供</span><else/><span set-lan="html:n-notProvide">不提供</span></if></td>
+                    <td><if condition="$detail['room']['is_kd'] eq 1"><span set-lan="html:n-provide">提供</span><else/><span set-lan="html:n-notProvide">不提供</span></if></td>
+                    <td><if condition="$detail['room']['is_cancel'] eq 1"><span set-lan="html:n-canCancel">可以取消</span><else/><span set-lan="html:n-cannotCancel">不可取消</span></if></td>
+                    <td><{$detail.num}></td>
+                    <td><{$detail.night_num}></td>
+                    <td><p class="price"><span class="fontcl2">₭<big><{$detail.price}></big></span>/<span set-lan="html:n-nightStart">晚起</span></p></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<include  file='public:footer'/>

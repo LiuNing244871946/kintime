@@ -1,0 +1,21 @@
+<div class="list-have-pic">
+    <volist name="list" id="item" key="index"> 
+        <div class="list-box">
+            <div class="list-img">
+                <a class="pic" title="<{$item.title}>" href="<{:AppLink('mall/detail',array('goods_id'=>$item['goods_id']))}>">
+                    <img src="__ROOT__/attachs/<{$item.photo}>" />
+                </a>
+            </div>
+            <div class="list-content">
+                <a href="<{:AppLink('mall/detail',array('goods_id'=>$item['goods_id']))}>">
+                    <p class="c_h h15 margin_b overflow_clear"><{$item.title}></p>
+                    <p class="overflow_clear"><{$item.attr}></p>
+                    <p>
+                        <span class="price">₭<{:round($item['mall_price'],2)}></span> 
+                        <span class="sell">已售：<{$item.sold_num}></span>
+                    </p>
+                </a>
+            </div>
+        </div>
+    </volist>
+</div>

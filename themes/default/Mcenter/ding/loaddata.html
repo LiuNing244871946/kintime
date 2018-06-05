@@ -1,0 +1,47 @@
+<div id="life" class="page-center-box" style="margin-top:0.54rem;">
+    <div id="scroll">
+        <!-- 列表 -->
+        <div class="list-have-pic">
+            <!-- 循环 -->
+            <foreach name="list" item="order">
+                <div class="list-box list-box-two">
+                    <div class="list-img">
+                        <a target="_blank" href="<{:AppLink('mobile/ding/detail',array('shop_id'=>$order['shop_id']))}>"><img src="__ROOT__/attachs/<{$shopinfo[$order['shop_id']]['photo']}>" /></a>
+                    </div>
+                    <div class="buy-content">
+                        <div class="distance">
+                            <p class="left"><a href="<{:AppLink('mobile/ding/detail',array('shop_id'=>$order['shop_id']))}>" style="margin-right: .1rem;" ><if condition="$lang eq 1 "><{$shopinfo[$order['shop_id']]['shop_name']}><elseif condition="$lang eq 2" /><{$shopinfo[$order['shop_id']]['lao_shop_name']}><elseif condition="$lang eq 3" /><{$shopinfo[$order['shop_id']]['eng_shop_name']}></if></a>(订单:<{$order['order_id']}>)</p>
+                            
+                        </div>
+                        <p><span set-lan="html:m-address">地址</span>：<if condition="$lang eq 1 "><{$shopinfo[$order['shop_id']]['addr']}><elseif condition="$lang eq 2" /><{$shopinfo[$order['shop_id']]['lao_addr']}><elseif condition="$lang eq 3" /><{$shopinfo[$order['shop_id']]['eng_addr']}></if></p>
+                        <div class="ordering-main">
+                            <div class="left">
+                                <span class="ordering-house"><if condition="$order['ding_type'] eq 0"><span set-lan="html:m-hall">电子菜单</span><else/><span set-lan="html:m-box">预约订座</span></if></span>
+                                <span class="ordering-house"><if condition="!$order['menu_amount']"><span set-lan="html:m-not-ordering">未点菜</span><else/><span set-lan="html:m-la-carte">已点菜</span></if></span>
+                            </div>
+                            			
+                        </div>
+                    </div>
+                    <div class="btn_box border_t txt_center">
+                    	<a class="pub_btn" href="<{:AppLink('ding/detail',array('order_id'=>$order['order_id']))}>" set-lan="html:m-shop-pay">查看详情</a>
+                        <if condition="$order['order_status'] eq 0">
+                            <if condition="!$order['menu_amount']">
+                                <a class="pub_btn bgcl1" href="<{:AppLink('mobile/ding/menu',array('order_id'=>$order['order_id']))}>">去点菜</a>
+                            <else/>
+                                <a class="pub_btn bgcl1" href="<{:AppLink('mobile/ding/pay',array('order_id'=>$order['order_id']))}>" set-lan="html:m-to-pay">去付款</a>
+                            </if>
+                            
+                        <elseif condition="$order['order_status'] eq 1" />
+                            <span class="pub_btn graybg" set-lan="html:m-already-paid">已付款</span>
+                        <elseif condition="$order['order_status'] eq 2" />
+                            <eq name="order.comment_status" value="0"><a href="<{:AppLink('ding/comment',array('order_id'=>$order['order_id']))}>" class="pub_btn ml10 bgcl1" set-lan="html:m-to-review">去点评</a><else/><a href="javascript:void(0);" class="pub_btn graybg" set-lan="html:m-reviewed">已点评</a></eq>
+                        <elseif condition="$order['order_status'] eq -1" />
+                            <span class="pub_btn graybg" set-lan="html:m-refunded">已退款</span>       
+                        </if>
+                    </div>
+                </div>
+            </foreach>
+            <!-- 循环 -->
+        </div>
+    </div>
+</div>

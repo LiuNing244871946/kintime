@@ -1,0 +1,259 @@
+<include file="public:header"/>
+<script src="__TMPL__statics/js/jquery.flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="__TMPL__statics/js/TouchSlide.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(document).ready(function () {
+        /*轮播幻灯图开始*/
+        $('.flexslider').flexslider({
+            directionNav: true,
+            pauseOnAction: false,
+            /*slideshow: false,*/
+            /*touch:true,*/
+        });
+        /*轮播幻灯图结束*/
+
+        /*首页效果图切换效果开始*/
+        TouchSlide({
+            slideCell: "#sqShopCate",
+            effect: "leftLoop",
+        });
+        /*首页效果图切换效果结束*/
+    });
+</script>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('cloud/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">云购详情</div>
+        <i class="icon-menu share" id="shareIco"></i>
+    </header>
+    <?php }?>
+    <div class="bdcolor">
+        <div class="bdcolor_bg"></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_weixin" data-cmd="weixin">微信</a>
+            <a class="bds_qzone" data-cmd="qzone" href="#">QQ空间</a>
+            <a class="bds_sqq" data-cmd="sqq">腾讯QQ</a>
+            <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+            <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+            <div class="bd-share-popup-footer">
+                <a class="bd-share-popup-close" onClick="$('.bdcolor').hide();" href="javascript:void(0);">取消</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".share").click(function () {
+                $(".bdcolor").show();
+            });
+        });
+        window._bd_share_config = {
+            common: {
+                bdText: '<{$detail.title}>',
+                bdDesc: '<{$detail.title}>',
+                bdUrl: location.href,
+                bdPic: 'http://<{$Think.SERVER.HTTP_HOST}>__ROOT__/attachs/<{$detail.photo|default='default.jpg'}>'
+            },
+            share: [{
+                    "bdSize": 32,
+                }],
+        }
+        with (document)
+            0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+    </script>
+
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <div class="banner">
+                <div class="flexslider"> 
+                    <ul class="slides">
+                        <li><a href="javascript:void(0);"><img src="__ROOT__/attachs/<{$detail.photo}>"  width="100%"/></a></li>
+                        <php>$a=1;</php>
+                        <foreach name="thumb" item="item">
+                            <if condition="$a elt 4">
+                                <li><a href="javascript:void(0);"><img src="__ROOT__/attachs/<{$item}>" width="100%"/></a></li>
+                            </if>
+                            <php>$a++;</php>
+                        </foreach>
+                    </ul>  
+                </div>
+            </div>
+            <div class="goodsDetail_intro mb10">
+                <div class="bt">
+                    <h3><{$detail.title}></h3>
+                    <p><{$detail.intro}></p>
+                </div>
+                <div class="yiyuan_join">
+                    <p class="black6">总需要：<{$detail.price}>人次</p>
+                    <php>$lefts = $detail['price'] - $detail['join']; $tt = round($detail['join']/$detail['price']*100,2);</php>
+                    <div class="yiyuan_progres"><span class="yiyuan_progres_bar" style="width:<{$tt}>%;"></span></div>
+                    <div class="join_num">
+                        <p class="fl black9"><{$detail.join}>已参与</p>
+                        <p class="fr black9">剩余 <span class="maincl"><{$lefts}>次</span></p>
+                    </div>
+                    <if condition="$detail['status'] eq 1">
+                        <div class="yiyuan_prize">
+                            <div class="infor">
+                                <img src="__ROOT__/attachs/<{$users[$detail['win_user_id']]['face']}>"/>
+                                <div class="wz">
+                                    <p>获奖者：<span class="orange"><{$users[$detail['win_user_id']]['nickname']}></span></p>
+                                    <p>用户IP：<{$zhong.create_ip}></p>
+                                    <p>本期参与：<span class="fontcl1"><{$total}></span>人次</p>
+                                    <p>接晓时间：<{$detail.lottery_time|date='Y-m-d H:i:s',###}></p>
+                                </div>
+                            </div>
+                            <P class="num">获奖号码：<{$detail.win_number}></P>
+                        </div>
+                    </if>
+                </div>
+            </div>
+            <div class="goodsDetail_infor mb10">
+                <h1>活动详情</h1>
+                <div class="nr">
+                    <{$detail.details}>
+                </div>
+            </div>
+            <div class="goodsDetail_infor mb10">
+                <h1>所参与记录</h1>
+                <div class="yiyuan_record">
+                    <ul>
+                        <foreach name="list" item="item">
+                            <li class="list">
+                                <img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']}>">
+                                <div class="wz">
+                                    <p><span class="name"><{$users[$item['user_id']]['nickname']}></span>（IP:<{$item['create_ip']}>）</p>
+                                    <p>参与了<span class="fontcl1"><{$item.num}></span>人次&nbsp;&nbsp;<{$item.create_time|date='Y-m-d H:i:s',###}>.<{$item.microtime}></p>
+                                </div>
+                            </li>
+                        </foreach>
+                    </ul>
+                </div>
+            </div>			
+        </div>
+    </div>
+    <div class="yiyuan_buynum_mask">
+        <div class="cont">
+            <div class="title">人数期次选择<a href="javascript:void(0);" class="closs fr">×</a></div>
+            <div class="nr">
+                <p>参与人次</p>
+                <div class="yiyuan_buynum_int">
+                    <ul>
+                        <li>
+                            <span class="minus" type="button">－</span>
+                        </li>
+                        <li>
+                            <input class="inp" type="text" value="<{$types[$detail['type']]['num']}>">
+                        </li>
+                        <li>
+                            <span class="add" type="button">＋</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="btn_box"><a href="javascript:void(0);" id="jq_join" class="btn">确定云购</a></div>
+            </div>
+        </div>
+    </div>
+<if condition="$detail['status'] eq 0">
+    <footer class="footer-cart">
+        <div class="btn-long yiyuan_buynum_btn" style="margin-top:0.07rem;">立即云购</div>
+    </footer>
+    <else/>
+    <footer class="footer-cart">
+        <div class="btn-long" style="margin-top:0.07rem;">已揭晓</div>
+    </footer>
+</if>
+<script>
+    $(document).ready(function () {
+        var left = parseInt("<{$left}>");
+        var lefts = parseInt("<{$lefts}>");
+        var limit = 0;
+        (left <= lefts) ? limit = left : limit = lefts;
+
+        var num = parseInt("<{$types[$detail['type']]['num']}>");
+        $(".minus").click(function () {
+            var v = parseInt($(".inp").val());
+            if (v > num) {
+                v = v - num;
+                $(".inp").val(v);
+            } else {
+                layer.msg('不能再少了');
+            }
+        });
+        $(".add").click(function () {
+            var v = parseInt($(".inp").val());
+            if (v < limit) {
+                v = v + num;
+                $(".inp").val(v);
+            } else {
+                layer.msg('您最多还能购买' + limit + '人次');
+            }
+        });
+        $(".inp").keyup(function () {
+            var v = parseInt($(this).val());
+            if (isNaN(v)) {
+                $(this).val(num);
+            } else {
+                if (v < num) {
+                    $(this).val(num);
+                    layer.msg('最少为' + num + '人次');
+                } else if (v > limit) {
+                    $(this).val(limit);
+                    layer.msg('您最多还能购买' + limit + '人次');
+                } else {
+                    var n = v - v % num;
+                    $(this).val(n);
+                }
+            }
+        });
+
+        var is_app = "<{$is_app}>";
+        $("#jq_join").click(function () {
+            var goods_id = "<{$detail.goods_id}>";
+            var num = $(".inp").val();
+            layer.confirm('您确定要花'+num+'元云购该商品？', {
+                area: ['200px', '150px'], //宽高
+                btn: ['是的', '不'], //按钮
+                shade: false //不显示遮罩
+            }, function () {
+                $.post("<{:U('cloud/cloudbuy1')}>", {goods_id: goods_id, num: num}, function (result) {
+                    if (result.status == "login") {
+                        if(!is_app){
+                            window.location.href = result.url;
+                        }else{
+                            <?php if ($is_android){?>
+                            window.jsObj.goLogin();
+                            <?php }else{?>
+                             goload();
+                            <?php }?>
+                        }
+                    } else if (result.status == "success") {
+                        layer.msg(result.msg);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        layer.msg(result.msg);
+                        if (result.url) {
+                            setTimeout(function () {
+                                window.location.href = result.url;
+                            }, 1000);
+                        }
+                    }
+                }, 'json');
+            });
+            $('.layui-layer-btn0').css('background', '#2fbdaa');
+        });
+
+        /*底部一元抢购部分*/
+        $(".yiyuan_buynum_btn").click(function () {
+            $(".yiyuan_buynum_mask").show();
+        });
+        $(".yiyuan_buynum_mask").find(".closs").click(function () {
+            $(".yiyuan_buynum_mask").hide();
+        });
+        /*底部一元抢购部分*/
+
+    });
+</script>
+</body>
+</html>

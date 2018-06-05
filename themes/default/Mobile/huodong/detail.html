@@ -1,0 +1,100 @@
+<include  file='public:header'/>  
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('huodong/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">活动详情</div>
+        <a class="share" href="javascript:void(0);" id="share"><i class="icon-menu" id="shareIco"></i></a>
+    </header>
+    <?php }?>
+    <div class="bdcolor">
+        <div class="bdcolor_bg"></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_weixin" data-cmd="weixin">微信</a>
+            <a class="bds_qzone" data-cmd="qzone" href="#">QQ空间</a>
+            <a class="bds_sqq" data-cmd="sqq">腾讯QQ</a>
+            <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+            <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+            <div class="bd-share-popup-footer">
+                <a class="bd-share-popup-close" onClick="$('.bdcolor').hide();" href="javascript:void(0);">取消</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".share").click(function () {
+                $(".bdcolor").show();
+            });
+        });
+        window._bd_share_config = {
+            common: {
+                bdText: '<{$detail.title}>',
+                bdDesc: '<{$detail.title}>',
+                bdUrl: location.href,
+                bdPic: 'http://<{$Think.SERVER.HTTP_HOST}>__ROOT__/attachs/<{$detail.photo|default='default.jpg'}>'
+            },
+            share: [{
+                "bdSize": 32,
+            }],
+        }
+        with (document)
+            0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+    </script>
+    <div id="" class="page-center-box">
+        <div id="scroll">
+   
+            <div class="huodongInfor mb10 mt10">
+                <div class="list_box">
+                    <div class="fl">
+                        <img src="__ROOT__/attachs/<{$detail.photo|default='default.jpg'}>" />
+                        <p class="overflow_clear"><{$detail.title}></p>
+                        <p class="black9 num"><{$detail.sign_num}>人已报名</p>
+                    </div>
+                    <div class="fr">
+                    <eq name="detail.sign" value="0">
+                        <a href="<{:AppLink('huodong/sign',array('activity_id'=>$detail['activity_id']))}>" class="btn">参加</a>
+                    <else/>
+                        已参加
+                    </eq>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <php>if(!empty($tuan)){</php>
+            <div class="huodongSj mb10">
+                <div class="title">活动团购<a href="<{:AppLink('shop/detail',array('shop_id'=>$tuan['shop_id']))}>" class="more">查看更多团购&gt;</a></div>
+                <ul class="list_box">
+                    <li>
+                    	<a href="<{:AppLink('tuan/detail',array('tuan_id'=>$tuan['tuan_id']))}>">
+                            <img src="__ROOT__/attachs/<{$tuan.photo}>" />
+                            <p class="bt"><{$tuan.title}></p>
+                            <p class="black9"><{$tuan.intro}></p>
+                            <p class="tag"><span class="bg_1">立刻抢购</span></p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <php>}</php>
+            
+            <div class="huodongSj mb10">
+            	<div class="title">活动地点及时间</div>
+                <div class="nr">
+                	<p>地址：<{$detail.addr}></p>
+                    <p>时间：<{$detail.time}></p>
+                </div>
+            </div>
+            <div class="huodongSj mb10">
+            	<div class="title">活动简介</div>
+                <div class="nr">
+                	<p><{$detail.intro}></p>
+                </div>
+            </div>
+			<div class="huodongSj mb10">
+            	<div class="title">活动详情</div>
+                <div class="nr">
+                	<p><{$detail.details}></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<include  file='public:footer'/>  

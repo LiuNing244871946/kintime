@@ -1,0 +1,30 @@
+<include  file='public:header'/>   
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <div class="header_color">
+            <a class="back" href="<{:AppLink('member/index')}>"><img  src="__TMPL__statics/img/back_icon.png"></a>
+            最近浏览
+        </div>
+    </header>
+    <?php }?>
+        <div class=" af_content">
+            <ul class="list_img style_2">
+
+            </ul>
+        </div>
+
+
+        <script>
+
+            $(document).ready(function(){
+                
+                    loaddata('<{:U("member/looksloading",array("t"=>$nowtime,"p"=>"0000"))}>',$(".af_content ul "),true);   
+
+
+                
+            });
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,433 @@
+<include  file='public:header'/>
+<script type="text/javascript" src="https://maps.google.cn/maps/api/js?v=3.20&region=cn&language=zh-CN&key=AIzaSyAj1gNUTDZJLvPeePsU5ltjfX-hJU1N_8c&libraries=places"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-systemSetup">酒店</a> > <a href="" set-lan="html:n-hotelManage">酒店资料</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-hotelInfoLimitTips">酒店资料修改后需要后台重新审核后才能正常运行，改动请慎重！！！ </div>
+        </div>
+    </div> 
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change on"><a href="<{:U('hotel/set_hotel')}>" set-lan="html:n-hotelInfo">酒店资料</a></li>
+        </ul>
+    </div>
+    <div class="tabnr_change  show">
+        <form method="post"  action="<{:U('hotel/set_hotel')}>" target="baocms_frm">
+            <table class="tuanfabu_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-hotelName">酒店名称(中文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[hotel_name]" value="<notempty name="hotel.hotel_name"><{$hotel.hotel_name}><else/><{$SHOP.mer_name}></notempty>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                 <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-hotelName">酒店名称(老文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[lao_hotel_name]" value="<notempty name="hotel.lao_hotel_name"><{$hotel.lao_hotel_name}><else/><{$SHOP.lao_mer_name}></notempty>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                 <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-hotelName">酒店名称(英文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[eng_hotel_name]" value="<notempty name="hotel.eng_hotel_name"><{$hotel.eng_hotel_name}><else/><{$SHOP.eng_mer_name}></notempty>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">所在城市区域：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[city_id]" style="float: left;"  id="city_id" class="tuanfabu_int tuanfabu_intw2"></select>
+                            <select name="data[area_id]" style="float: left;"  id="area_id" class="tuanfabu_int tuanfabu_intw2"></select>
+                        </div>
+                    </td>
+                </tr>
+                <script src="<{:U('app/datas/cityarea')}>"></script>
+                    <script>
+                        var city_id = <?php echo (int)$hotel['city_id'];?>;
+                        var area_id = <?php echo (int)$hotel['area_id'];?>;
+                        var business_id = <?php echo (int)$hotel['business_id'];?>;
+                        function changeCity(cid){
+                            var area_str = '<option value="0">请选择.....</option>';
+                            for(a in cityareas.area){
+                               if(cityareas.area[a].city_id ==cid){
+                                    if(area_id == cityareas.area[a].area_id){
+                                        area_str += '<option selected="selected" value="'+cityareas.area[a].area_id+'">'+cityareas.area[a].area_name+'</option>';
+                                    }else{
+                                         area_str += '<option value="'+cityareas.area[a].area_id+'">'+cityareas.area[a].area_name+'</option>';
+                                    }  
+                                }
+                            }
+                            $("#area_id").html(area_str);
+                        }
+                        function changeArea(aid){
+                            var business_str = '<option value="0">请选择.....</option>';
+                            for(a in cityareas.business){
+                               if(cityareas.business[a].area_id ==aid){
+                                    if(business_id == cityareas.business[a].business_id){
+                                        business_str += '<option selected="selected" value="'+cityareas.business[a].business_id+'">'+cityareas.business[a].business_name+'</option>';
+                                    }else{
+                                         business_str += '<option value="'+cityareas.business[a].business_id+'">'+cityareas.business[a].business_name+'</option>';
+                                    }  
+                                }
+                            }
+                            $("#business_id").html(business_str);
+                        }
+                        $(document).ready(function(){
+                            var city_str = '<option value="0">请选择.....</option>';
+                            for(a in cityareas.city){
+                               if(city_id == cityareas.city[a].city_id){
+                                   city_str += '<option selected="selected" value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+                               }else{
+                                    city_str += '<option value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+                               }  
+                            }
+                            $("#city_id").html(city_str);
+                            if(city_id){
+                                changeCity(city_id);
+                            }
+                            if(area_id){
+                                changeArea(area_id);
+                            }
+                            $("#city_id").change(function(){
+                                city_id = $(this).val();
+                                changeCity($(this).val());
+                            });
+                            
+                            $("#area_id").change(function () {
+                                area_id = $(this).val();
+                                changeArea($(this).val());
+
+                            });
+                        });
+                    </script>
+
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">所在商圈：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[business_id]" id="business_id" class="tuanfabu_int tuanfabu_intw2">  
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelAddress">酒店地址(中文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[addr]" value="<notempty name="hotel.addr"><{$hotel.addr}><else/><{$SHOP.addr}></notempty>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelAddress">酒店地址(老文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[lao_addr]" value="<notempty name="hotel.lao_addr"><{$hotel.lao_addr}><else/><{$SHOP.lao_addr}></notempty>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelAddress">酒店地址(英文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[eng_addr]" value="<notempty name="hotel.eng_addr"><{$hotel.eng_addr}><else/><{$SHOP.eng_addr}></notempty>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelGrade">酒店级别：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <select name="data[cate_id]" id="cate_id" class="tuanfabu_int tuanfabu_intw2">
+                                <option value="" set-lan="html:n-choose">=选择=</option>
+                                <volist name="cates" id="val">
+                                    <option value="<{$i}>" <if condition="$hotel['cate_id'] eq $i">selected="selected"</if>  ><{$val}></option>
+                                </volist>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:q-Isitfavorable">是否折扣：</p></td>
+                    <td><div class="tuanfabu_nr">
+                        <foreach name="rebate" item="var">
+                            <label><input style="width: 40px;"  type="radio" name="data[rate]" value="<{$var['id']}>" <eq name="hotel.rate" value="$var.id">checked="checked"</eq> /><span set-lan="html:q-no"><{$var['name']}></span></label>                
+                        </foreach>
+                            <label><input style="width: 40px;"  type="radio" name="data[rate]" value="0" <eq name="hotel.rate" value="0">checked="checked"</eq> /><span set-lan="html:q-no">无折扣</span></label> 
+                    </div></td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-hotelStartPrice">酒店起价：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[price]" value="<{$hotel.price|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-hotelPhone">酒店电话：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[tel]" value="<{$hotel.tel|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-linkman">手机号码：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[areacode]" class="tuanfabu_int tuanfabu_intw2">
+                                <option value="86" <?php echo $hotel['areacode']=='86'?'selected':'' ?> >中国+86</option>
+                                <option value="856" <?php echo $hotel['areacode']=='856'?'selected':'' ?> >老挝+856</option>
+                            </select>
+                            <input type="text" name="data[mobile]" value="<{$hotel.mobile|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelBrand">酒店品牌：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <select name="data[type]" id="cate_id" class="tuanfabu_int tuanfabu_intw2">
+                                <option value="0" set-lan="html:n-choose">=选择=</option>
+                                <volist name="types" id="val">
+                                    <option value="<{$val.type}>" <if condition="$hotel['type'] eq $val['type']">selected="selected"</if> ><{$val.title}></option>
+                                </volist>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelStar">酒店星级：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <select name="data[star]" id="star" class="tuanfabu_int tuanfabu_intw2">
+                                <option value="0" set-lan="html:n-choose">=选择=</option>
+                                <volist name="stars" id="val">
+                                    <option value="<{$i}>" <if condition="$hotel['star'] eq $i">selected="selected"</if> ><{$val}></option>
+                                </volist>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-details">详情(中文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <script type="text/plain" id="data_details" name="data[details]" style="width:800px;height:360px;"><{$hotel.details}></script>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-details">详情(老文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <script type="text/plain" id="lao_data_details" name="data[lao_details]" style="width:800px;height:360px;"><{$hotel.lao_details}></script>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-details">详情(英文)：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <script type="text/plain" id="eng_data_details" name="data[eng_details]" style="width:800px;height:360px;"><{$hotel.eng_details}></script>
+                        </div></td>
+                </tr>
+                <js file='__PUBLIC__/js/uploadify/jquery.uploadify.min.js'/>
+                <link rel="stylesheet" href="__PUBLIC__/js/uploadify/uploadify.css">
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelImg">酒店图片：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <div style="width: 300px;height: 100px; float: left;">
+                                <input type="hidden" name="data[photo]" value="<{$hotel.photo}>" id="data_img" class="tuanfabu_int tuanfabu_intw" />
+                                <input id="logo_file" name="data[photo]" type="data[photo]" multiple="true" value="" />
+                            </div>
+                            <div style="width: 300px;height: 100px; float: left;">
+                                <img id="image_show" width="100" height="80"  src="__ROOT__/attachs/<{$hotel.photo|default='default.jpg'}>" />
+                                <span set-lan="html:n-recommendedSize">建议尺寸:</span><{$CONFIG.attachs.hotel.thumb}>
+                            </div>
+                            <script>
+                                        $("#logo_file").uploadify({
+                                'swf': '__PUBLIC__/js/uploadify/uploadify.swf?t=<{$nowtime}>',
+                                        'uploader': '<{:U("app/upload/uploadify",array("model"=>"hotel"))}>',
+                                        'cancelImg': '__PUBLIC__/js/uploadify/uploadify-cancel.png',
+                                        'buttonText': '上传酒店图片',
+                                        'fileTypeExts': '*.gif;*.jpg;*.png',
+                                        'queueSizeLimit': 1,
+                                        'onUploadSuccess': function (file, data, response) {
+                                        	data = eval(data);
+                                        	$("#data_img").val(data);
+                                            $("#image_show").attr('src', '__ROOT__/attachs/' + data).show();
+                                        }   
+                                });                            </script>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-hotelGroupImg">酒店组图：</p></td>
+                    <td class="rgTdBt">
+                        <div class="tuanfabu_nr">
+                            <div>
+                                <input id="thumb_file" name="logo_file" type="file" multiple="true" value="" />
+                            </div>
+                            <div class="jq_uploads_img">
+                                <foreach  name="thumb" item="item">
+                                    <div style="width:120px;height:90px;display:inline-block;position: relative;">
+                                    	<img width="120" height="90" style="margin-right:10px;" src="__ROOT__/attachs/<{$item.photo}>">
+                                    		<input type="hidden" name="thumb[]" value="<{$item.photo}>" />
+                                    		<a href="javascript:void(0);"style="position:absolute;right:0;top:0;">
+                                    			<button style="width:15px;height:15px;outline: none;border-radius: 50%;border:none;opacity:0.8;text-align:center;line-height:15px;background:red;color:white;">X</button>
+                                    		</a>
+                                    </div>
+                                </foreach>
+                            </div>
+                        </div>
+                        <script>
+                            $("#thumb_file").uploadify({
+                                'swf': '__PUBLIC__/js/uploadify/uploadify.swf?t=<{$nowtime}>',
+                                'uploader': '<{:U("app/upload/uploadify",array("model"=>"hotel"))}>',
+                                'cancelImg': '__PUBLIC__/js/uploadify/uploadify-cancel.png',
+                                'buttonText': '上传图片',
+                                'fileTypeExts': '*.gif;*.jpg;*.png',
+                                'queueSizeLimit': 5,//多选时限制选的图片张数
+                                'onUploadSuccess': function (file, data, response) {
+                                	data = eval(data);
+                                    var str = '<div style="width:125px;height:105px;display:inline-block;position: relative;">  <img width="120" height="90" src="__ROOT__/attachs/' + data + '">  <input type="hidden" name="thumb[]" value="' + data + '" />    <a href="javascript:void(0);" style="position:absolute;right:0;top:-7.5px;"><button style="width:15px;height:15px;outline: none;border-radius: 50%;border:none;opacity:0.8;text-align:center;line-height:15px;background:red;color:white;">X</button></a></div>';
+                                    $(".jq_uploads_img").append(str);
+                                }
+                            });
+
+                            $(document).on("click", ".jq_uploads_img a", function () {
+                                $(this).parent().remove();
+                            });
+
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessManagement">配套设施：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <label><span>wifi：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_wifi]" value="1" <if condition="$hotel['is_wifi'] eq 1">checked="checked"</if> /></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-airconditioner">空调：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_kt]" value="1"  <if condition="$hotel['is_kt'] eq 1">checked="checked"</if> /></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-heatingInstallation">电风扇：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_nq]" value="1"  <if condition="$hotel['is_nq'] eq 1">checked="checked"</if> /></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-washer">洗衣机：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_xyj]" value="1"  <if condition="$hotel['is_xyj'] eq 1">checked="checked"</if> /></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-television">电视机：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_tv]" value="1"  <if condition="$hotel['is_tv'] eq 1">checked="checked"</if>/></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-shower">淋浴：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_ly]" value="1"  <if condition="$hotel['is_ly'] eq 1">checked="checked"</if> /></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-freezer">电冰箱：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_bx]" value="1"  <if condition="$hotel['is_bx'] eq 1">checked="checked"</if> /></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-towelToothbrush">毛巾：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_base]" value="1"  <if condition="$hotel['is_base'] eq 1">checked="checked"</if> /></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-towelToothbrush">牙具：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_tooth]" value="1"  <if condition="$hotel['is_tooth'] eq 1">checked="checked"</if> /></label>
+                            <label><span style="margin-left: 20px;" set-lan="html:n-thermos">热水壶：</span><input style="width: 20px; height: 20px;" type="checkbox" name="data[is_rsh]" value="1"  <if condition="$hotel['is_rsh'] eq 1">checked="checked"</if> /></label>
+                        </div></td>
+                </tr>
+                <link rel="stylesheet" href="__PUBLIC__/umeditor/themes/default/css/umeditor.min.css" type="text/css">
+                <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.config.js"></script>
+                <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.min.js"></script>
+                <script type="text/javascript" src="__PUBLIC__/umeditor/lang/zh-cn/zh-cn.js"></script>
+                <script>
+                    um = UM.getEditor('data_details', {
+                    imageUrl: "<{:U('app/upload/editor')}>",
+                            imagePath: '__ROOT__/attachs/editor/',
+                            lang: 'zh-cn',
+                            langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                            focus: false
+                    });
+                     um = UM.getEditor('lao_data_details', {
+                    imageUrl: "<{:U('app/upload/editor')}>",
+                            imagePath: '__ROOT__/attachs/editor/',
+                            lang: 'zh-cn',
+                            langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                            focus: false
+                    });
+                     um = UM.getEditor('eng_data_details', {
+                    imageUrl: "<{:U('app/upload/editor')}>",
+                            imagePath: '__ROOT__/attachs/editor/',
+                            lang: 'zh-cn',
+                            langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                            focus: false
+                    });                
+                </script>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelCoordinates">酒店坐标：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[lng]" id="lng" value="<{$hotel.lng|default=''}>" class="tuanfabu_int tuanfabu_intw2" /> <span set-lan="html:n-longitude">经度</span>
+                            <input type="text" name="data[lat]" id="lat" value="<{$hotel.lat|default=''}>"  class="tuanfabu_int tuanfabu_intw2" /> <span set-lan="html:n-latitude">纬度</span>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-hotelCheckIn">酒店入住：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[in_time]" value="<{$hotel.in_time|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});" class="tuanfabu_int tuanfabu_intw2" /><span set-lan="html:n-after">以后</span>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-departureTime">离店时间：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[out_time]" value="<{$hotel.out_time|default=''}>" class="tuanfabu_int tuanfabu_intw2" /><span set-lan="html:n-before">以前</span>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessManagement">地图：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <div class="top" style="width:700px; margin-bottom: 20px;">
+                                <div id="g-countryBox" style="height: 30px;">请选择国家：
+                                    <select id="g-country" style="height: 30px;line-height: 30px;">
+                                        <option value="CN">中国</option>
+                                        <option value="LA">老挝</option>
+                                    </select>
+                                </div>
+                                <div id="r-result">请输入:<input type="text" id="suggestId" size="20" style="width:150px;" /></div>      
+                            </div>
+                            <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+                            <div id="allmap" style="width: 600px; height:500px;"></div>
+                            <script type="text/javascript">
+                                var lat,lng;
+                                if ("<{$weidian.lat}>"==""||"<{$weidian.lng}>"=="") {
+                                    lat = parseFloat("<{$SHOP.lat}>");
+                                    lng = parseFloat("<{$SHOP.lng}>");
+                                }else{
+                                    lat = parseFloat("<{$hotel.lat}>");
+                                    lng = parseFloat("<{$hotel.lng}>");
+                                }
+                            
+                            var map = new google.maps.Map(document.getElementById('allmap'),{
+                                zoom:15,
+                                center:{lat:lat,lng:lng},
+                                gestureHandling:'greedy'
+                            });
+                            var pos = {lat:lat,lng:lng};
+                            var marker_S = new google.maps.Marker({
+                                position:pos,
+                                map:map,
+                                animation:google.maps.Animation.DROP
+                            });
+                            map.addListener('click',function(e){
+                                document.getElementById('lat').value = e.latLng.lat();
+                                document.getElementById('lng').value = e.latLng.lng();
+                                marker_S.setPosition(e.latLng);
+                                // console.log(e.latLng.lat(),e.latLng.lng());
+                            });
+                            var ac = new google.maps.places.Autocomplete(
+                                    (document.getElementById('suggestId')),
+                                    {
+                                        // types:['address'],
+                                        componentRestrictions:{country:'CN'}
+                                    }
+                                );
+                            ac.addListener('place_changed',function(){
+                                var place = ac.getPlace();
+                                map.panTo(place.geometry.location);
+                                marker_S.setPosition(place.geometry.location);
+                            });
+                            document.getElementById('g-country').addEventListener('change',function(){
+                                var countryText = document.getElementById('g-country').value;
+                                ac.setComponentRestrictions({'country':countryText});
+                                if (countryText==='LA') {
+                                    marker_S.setPosition({lat:17.97571240175261,lng:102.63320446014404});
+                                    map.setCenter({lat:17.97571240175261,lng:102.63320446014404});
+                                }else if (countryText==='CN') {
+                                    marker_S.setPosition({lat:30.268760105204333,lng:120.2266301214695});
+                                    map.setCenter({lat:30.268760105204333,lng:120.2266301214695});
+                                }
+                                
+                            })
+
+                            </script>
+                        </div></td>
+                </tr>
+
+
+
+            </table>
+            <div class="tuanfabu_an">
+                <input type="submit" class="radius3 sjgl_an tuan_topbt" value="确认保存"  set-lan="value:n-sureConserve"/>
+            </div>
+        </form>
+    </div> 
+</div>
+<include  file='public:footer'/>

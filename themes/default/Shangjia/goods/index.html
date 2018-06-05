@@ -1,0 +1,61 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">购物</a> > <a href="" set-lan="html:n-mall">购物商品</a> > <a set-lan="html:n-mallGoods">商品列表</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('goods/index')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l">
+            <span set-lan="html:n-goodsName">商品名称：</span><input type="text" class="radius3 tuan_topser"  name="keyword" value="<{$keyword}>" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索"/>
+            </div>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('goods/create')}>" set-lan="html:n-publishGoods">发布商品+</a></div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('goods/index')}>" set-lan="html:n-mallGoods">商城商品</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('order/index')}>" set-lan="html:n-saleGoods">卖出商品</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('order/picks2')}>" set-lan="html:n-pickGoods">捡货列表</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-goodsName">商品名称</td>
+            <td>是否支持分期</td>
+            <td set-lan="html:n-productImg">商品图片</td>
+            <td set-lan="html:n-mallPrice">商城价格</td>
+            <td set-lan="html:n-inventory">库存</td>
+            <td set-lan="html:n-saleNumber">售出数量</td>
+            <td set-lan="html:n-pageView">浏览量</td>
+            <td set-lan="html:n-isAudit">是否审核</td>
+            <td set-lan="html:n-createTime">创建时间</td>
+            <td set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.title}><br><{$var.eng_title}><br><{$var.lao_title}><br></td>
+                <td><if condition="$var.is_stage eq 1">支持分期<else/>不支持分期</if></td>
+                <td style="height: 80px;"><img src="__ROOT__/attachs/<{$var.photo}>"  style="width: 80px;  margin: 0px auto;" /></td>
+                <td><{$var.mall_price}></td>
+                <td><{$var.kucun}></td>
+                <td><{$var.sold_num}></td>
+                <td><{$var.views}></td>
+                <td><eq name="var.audit" value="1">正常<else/>等待审核</eq></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                <td>
+                    <a class="radius3 sy_c1an" href="<{:U('goods/format',array('goods_id'=>$var['goods_id']))}>" set-lan="html:n-specification">规格</a>
+                    <a class="radius3 sy_c1an" href="<{:U('goods/edit',array('goods_id'=>$var['goods_id']))}>" set-lan="html:n-edit">编辑</a>
+                    <{:BA('goods/delete',array("goods_id"=>$var["goods_id"]),'删除','act','radius3 sy_c1an')}>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+
+<include  file='public:footer'/>

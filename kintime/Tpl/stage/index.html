@@ -1,0 +1,38 @@
+<include  file='public:header'/>
+<div class="main-jsgl main-sc">
+    <div class="jsglNr">
+        <div class="selectNr" style="margin-top: 0px; border-top:none;">
+            <div class="left">
+                <{:BA('stage/create','','添加分期')}>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="selectNr selectNr2">
+        <div class="clear"></div>
+    </div>
+    <form  target="baocms_frm" method="post">
+        <div class="tableBox">
+            <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                <tr>
+                    <td>分期期数</td>
+                    <td class="w360">操作</td>
+                </tr>
+                <foreach name="list" item="var">
+                    <tr>
+                        <td><{$var.periods}></td>
+                    
+                    <td>                 
+                    <{:BA('stage/edit',array("id"=>$var["id"]),'编辑','','remberBtn')}>
+                    <{:BA('stage/delete',array("id"=>$var["id"]),'删除','','remberBtn')}>
+                    </td>
+                    </tr>
+                </foreach>
+            </table>
+            <{$page}>
+        </div>
+    </form>
+</div>
+</div>
+<include  file='public:footer'/>  
+
+

@@ -1,0 +1,121 @@
+<include file="public:header"/>
+<body id="life_add">
+
+<script type="text/javascript">
+    $(function(){
+            $(".mydate-yuan").each(function(){
+                $(this).click(function(){
+                    $(".mydate-yuan").removeClass("on");
+                    $(".mydate-yuan").children("img").removeClass("tp-img");
+                    $(this).addClass("on");
+                    $(this).children("img").addClass("tp-img");
+                });
+            });
+        });
+</script>
+<?php if(!$is_app){?>
+	<header>
+		<i class="icon-goback" style="cursor:pointer;" onClick="javascript:history.back(-1);"></i>
+		<div class="title">团购点评</div>
+        <i class="icon-menu" style="margin-right:0.05rem;"></i>
+	</header>
+    <?php }?>
+    <form method="post" action="<{:U('tuan/dianping',array('order_id'=>$detail['order_id']))}>" id="sc_form" target="baocms_frm">
+    
+	<div class="page-center-box" style="padding-top: .2rem;">
+		<div class="scroll" style="padding-bottom:0.6rem; overflow-y: scroll;box-shadow: 0 .03rem .1rem 0 rgba(0,0,0,.1);border-radius: .1rem;width: 90%;margin-left: 5%;margin-bottom: .5rem;">
+            <div class="list-have-pic">
+                    <div class="list-box shop-box" style="position: relative;">
+                        <div class="list-img">
+                            <img src="__ROOT__/attachs/<{$tuan['photo']}>"/>
+                        </div>
+                        <div class="list-content">
+                            <p class="shop-title">
+                                <span class="left shop-title-length"><{$tuan.title}></span> 
+                            </p>
+                            <div class="shop-wei"><span>₭<{:round($tuan['tuan_price']/100,2)}></span></div>
+                            <p class="c_h"><{$shop.addr}></p>
+                        </div>
+                    </div>
+            </div>
+            <div class="shop-star-main">
+                <div class="shop-star-num">
+                    <div class="comment" style="padding-top:0.1rem; padding-bottom: 0.1rem;display: flex;display: -webkit-flex;justify-content: center;">
+                       <div>
+							<style>
+                                #jq_star img{ float: left;}
+								input,textarea{border:1px solid #dedede;}
+                            </style>
+                            <span id="jq_star" style="margin-top:2px; margin-left: 5px; display: inline-block;"></span>
+                            <script type="text/javascript" src="__PUBLIC__/js/jquery.raty.min.js"></script>
+                            <script>
+                                $(document).ready(function () {
+            
+                                    $("#jq_star").raty({
+                                        numberMax: 5,
+                                        path: '__PUBLIC__/js/img/',
+                                        starOff: 'star-off.png',
+                                        starOn: 'star-on.png',
+                                        scoreName: 'data[score]'
+                                    });
+            
+                                });
+                            </script>            
+                       </div> 
+                   </div>
+                </div>
+            </div>
+            <div class="shop-Consumption">
+                <textarea  cols="33" rows="5" name="data[contents]" placeholder="还记得这家店吗？写点评记录生活、分享体验" style="width: 100%;box-sizing: border-box;"></textarea>
+            </div>
+        	<div class="Upload-img-box" style="display: flex;display: -webkit-flex;flex-wrap: wrap;">
+                <div class="Upload-img" id="jq_imgs">
+                    <div class="Upload-btn" style="width: 1rem;height: 1rem;background: #efefef url(../../../../themes/default/Mobile/statics/img/ico_3.png) no-repeat center center;border: 1px dashed #eaeaea;padding:0;float: left;">
+                        <input type="file" id="fileToUpload" name="fileToUpload" >
+                    </div>
+                </div>
+            	
+                
+                
+                <script type="text/javascript" src="/themes/default/Mobile/statics/js/ajaxfileupload.js"></script>
+                <script>
+                    function ajaxupload() {
+                        $.ajaxFileUpload({
+                            url: '<{:U("app/upload/upload",array("model"=>"dianping"))}>',
+                            type: 'post',
+                            fileElementId: 'fileToUpload',
+                            dataType: 'text',
+                            secureuri: false, //一般设置为false
+                            success: function (data, status) {
+								var str = '<div class="list-img"><img width="200" height="100" src="__ROOT__/attachs/' + data + '">  <input type="hidden" name="photos[]" value="' + data + '" />  <a href="javascript:void(0);">取消</a></div>';
+                                $("#jq_imgs").prepend(str);
+                                $("#fileToUpload").unbind('change');
+                                $("#fileToUpload").change(function () {
+                                    ajaxupload();
+                                });
+                            }
+                        });
+                    }
+
+                    $(document).ready(function () {
+                        $("#fileToUpload").change(function () {
+                            ajaxupload();
+                        });
+                        $(document).on("click", "#jq_imgs a", function () {
+                            $(this).parent().remove();
+                        });
+                    });
+                </script>
+                
+                
+            </div>
+            <div class="shop-tj">
+                <input id="total_scole" class="aniu" type="submit" value="提交">
+            </div>
+            <!-- <div class="shop-back">宝贝不满意,我要<a href="">申请退款>></a></div> -->
+		</div>
+	</div>
+   
+   </form>
+    
+<include  file='public:footer'/>

@@ -1,0 +1,61 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">设置</li>
+        <li class="li2">分期平台设置</li>
+        <li class="li2 li3">分期列表</li>
+    </ul>
+</div>
+<form  target="baocms_frm" action="<{:U('stager/create')}>" method="post">
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;">
+                <tr>
+                    <td class="lfTdBt">分期平台中文名称：</td>
+                    <td class="rgTdBt"><input type="text" name="data[name]" class="scAddTextName w210" /> 
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">分期平台老文名称：</td>
+                    <td class="rgTdBt"><input type="text" name="data[lao_name]" class="scAddTextName w210" /> 
+                    </td>
+                </tr> 
+                <tr>
+                    <td class="lfTdBt">分期平台英文名称：</td>
+                    <td class="rgTdBt"><input type="text" name="data[eng_name]" class="scAddTextName w210" /> 
+                    </td>
+                </tr> 
+                <tr>
+                    <td class="lfTdBt">分期平台管理者：</td>
+                    <td class="rgTdBt">
+                        <div class="lt">
+                            <input type="hidden" id="user_id" name="data[user_id]" value="<{$detail.user_id|default=''}>" />
+                            <input class="scAddTextName w210 sj" type="text" name="nickname" id="nickname"  value="" />
+                        </div>
+                        <a mini="select"  w="800" h="600" href="<{:U('user/select')}>" class="seleSj">选择用户</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">排序：</td>
+                    <td class="rgTdBt"><input type="text" name="data[orderby]" value="<{$detail.orderby|default='100'}>" class="manageInput" />
+
+                    </td>
+                </tr>    
+                <tr>
+                    <td class="lfTdBt">余额:</td>
+                    <td class="rgTdBt"><input type="text" name="data[money]" class="scAddTextName w210" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">额度:</td>
+                    <td class="rgTdBt"><input type="text" name="data[quota]" class="scAddTextName w210" />
+                    </td>
+                </tr>
+                
+    </table>
+       <input type="submit" value="确认添加" class="smtQrIpt" />
+</div>
+
+</div>
+</form>
+<include  file='public:footer'/>       

@@ -1,0 +1,53 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">系统</li>
+        <li class="li2">返利管理</li>
+        <li class="li2 li3">返利比例</li>
+    </ul>
+</div>
+<div class="main-jsgl">
+    <p class="attention"><span>注意：</span>货币牌价信息，默认超级管理员角色不能删除！</p>
+    <div class="jsglNr">
+        <div class="selectNr">
+            <div class="left">
+                <{:BA('rebate/create','','添加折扣')}>
+            </div>
+        </div>
+        <form target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <!-- <td class="w50">ID</td> -->
+                        <td>商家折扣</td>
+                        <td>用户返利</td>
+                        <td>推荐人返利</td>
+                        <td>平台返利</td>
+                        <td>平台所得折扣</td>
+                        <!-- <td>最后登录时间</td>
+                        <td>最后登录IP</td> --> 
+                        <td>操作</td>  
+                    </tr>
+                    <foreach name="qp" item="var">
+                        <tr>
+                            <td><{$var.name}></td>
+                            <td><{$var.user}>%</td>
+                            <td><{$var.tui_user}>%</td>
+                            <td><{$var.platform}>%</td>
+                            <td><{$var.rebate}>%</td>
+                            <!-- <td><{$var.create_ip}>(<{$var.create_ip_area}>)</td>
+                            <td><{$var.last_time|date="Y-m-d H:i:s",###}></td>
+                            <td><{$var.last_ip}>(<{$var.last_ip_area}>)</td> -->
+                            <td>
+                                <{:BA('rebate/edit',array("id"=>$var["id"]),'编辑','','remberBtn')}>
+                            </td>
+                        </tr>
+                    </foreach>
+
+                </table>
+            </div>
+        </form>
+
+    </div>
+</div>
+<include  file='public:footer'/>       

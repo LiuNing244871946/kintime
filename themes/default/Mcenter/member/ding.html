@@ -1,0 +1,59 @@
+<include  file='public:header'/>    
+<body>
+    <?php if(!$is_app){?>
+    <header> 
+    	<a href="<{:AppLink('mobile/index/index')}>"><i class="icon-goback"></i></a>
+        <div class="title" set-lan="html:m-complete-payment"> 完成支付 </div>
+    </header>
+    <?php }?>
+    <div id="index" class="page-center-box">
+        <div id="scroll">
+            <div class="payFinish">
+                <div class="sh_buy_bt">
+                    <div class="fl"><span set-lan="html:m-order-number">订单编号</span>：<{$order.order_id}></div>
+                    <div class="fr"><span set-lan="html:m-appointment">预约时间</span>：<{$order.date_time}></div>
+                </div>
+                <div class="sh_buy_date" style="border-bottom: none;"><span set-lan="html:m-pay-deposit">支付定金</span>： <{$detail['need_pay']}> ₭ &nbsp;&nbsp; (<if condition="$order['order_status'] eq 1"> <span set-lan="html:m-unconsumed">未消费</span> <elseif condition="$order['order_status'] eq 2"/> <span set-lan="html:m-consumed">已消费</span> <elseif condition="$order['order_status'] eq -1"/> <span set-lan="html:m-refunded">已退款</span> <else/><span set-lan="html:m-unpaid">未支付</if>)</div>
+                <div class="sh_waimai_order_price">
+                    <div class="fl"><span set-lan="html:m-payment-method">支付方式</span>：<if condition="$lang eq 1 "><{$paytype[$detail['code']]['name']}><elseif condition="$lang eq 2" /><{$paytype[$detail['code']]['lao_name']}><elseif condition="$lang eq 3" /><{$paytype[$detail['code']]['eng_name']}></if></div>
+                    <div class="fr"><span set-lan="html:m-settlement-price">结算价格</span>：<span class="main_color">₭ <{$detail['need_pay']}></span></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="sh_waimai_order_price">
+                    <div><span set-lan="html:m-address">地址</span>：<if condition="$lang eq 1 "><{$shop.addr}><elseif condition="$lang eq 2" /><{$shop.lao_addr}><elseif condition="$lang eq 3" /><{$shop.eng_addr}></if><!-- <span style="float: right; display: inline-block;">人数：<{$order.ding_num}></span> --></div>
+                </div>
+                <if condition="$order.ding_type eq 0" >
+                    <div class="sh_waimai_order_price">
+                        <div><span set-lan="html:m-table-number">桌号</span>: <{$order.table_num}> </div>
+                    </div>
+                <elseif condition="$order.ding_type eq 1" />
+                    <div class="sh_waimai_order_price">
+                        <div><span>订餐人数</span>: <{$order.ding_num}> </div>
+                    </div>
+                </if>
+                <if condition="$dingmenu">
+                    <div class="sh_waimai_order_nr">
+                        <div class="wz">
+                            <ul>
+                                <volist name="dingmenu" id="item">
+                                    <li>
+                                        <div class="fl left" style="width: auto;">
+                                            <div class="payFinish_img"><img src="__ROOT__/attachs/<{$menus[$item['menu_id']]['photo']}>" width="60" height="60"></div>
+                                            <p class="payFinish_wz"><if condition="$lang eq 1 "><{$item['menu_name']}><elseif condition="$lang eq 2" /><{$item['lao_menu_name']}><elseif condition="$lang eq 3" /><{$item['eng_menu_name']}></if></p>
+                                        </div>
+                                        <div class="fr"><{$item.num}><span class="ml10">x</span><span class="ml10">₭ <{$menus[$item['menu_id']]['ding_price']}></span><span class="ml10 main_color">=₭ <{$item['price']}></span></div>
+                                        <div class="clear"></div>
+                                    </li>
+                                </volist>
+                            </ul>
+                        </div>
+                    </div>
+                </if>
+            </div>
+        </div>
+    </div>
+    <div class="bfix shop-button" >
+        <a href="<{:AppLink('mcenter/ding/detail',array('order_id'=>$order['order_id']))}>"><span class="shop-pay" set-lan="html:m-shop-pay">查看详情</span></a>
+        <a href="<{:AppLink('mobile/ding/menu',array('shop_id'=>$order['shop_id'],'table_id'=>$order['table_num']))}>"><span class="shop-del" set-lan="html:m-shop-del">继续逛逛</span></a>
+    </div>
+<include  file='public:footer'/>    

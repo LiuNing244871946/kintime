@@ -1,0 +1,68 @@
+
+<link href="__TMPL__statics/css/print.css" rel="stylesheet" type="text/css" />
+<link href="__TMPL__statics/css/print.css" rel="stylesheet" type="text/css" media="print" />
+<div class="print" id="print">
+    <h1 set-lan="html:n-lifeTakeout">#<{$order.order_id}>&nbsp;&nbsp;&nbsp;&nbsp;生活外卖</h1>
+    <div><{$shop.shop_name}></div>
+    <div class="hr"></div>
+    <div set-lan="html:n-orderTime">订单时间:<{$order.create_time|date='m-d H:i:s',###}></div>
+    <notempty name="pl">
+    <div><span set-lan="html:n-payType">支付方式:</span>
+        <eq name="pl.code" value="alipay" set-lan="html:n-Alipay">支付宝</eq>
+        <eq name="pl.code" value="wxpay" set-lan="html:n-WeChatPay">微信支付</eq>
+        <eq name="pl.code" value="tenpay" set-lan="html:n-Tenpay">财付通</eq>
+        <eq name="pl.code" value="money" set-lan="html:n-balancePayment">余额支付</eq>
+        <eq name="pl.code" value="chinapay" set-lan="html:n-unionpay">中国银联</eq>
+        <eq name="pl.code" value="chinabank" set-lan="html:n-internetBankOnline">网银在线</eq>
+        <eq name="pl.code" value="paypal" set-lan="html:n-Paypal">Paypal</eq>
+        <eq name="pl.is_paid" value="1" set-lan="html:n-paid">(已支付)</eq>
+    </div>
+    </notempty>
+    <div class="hr"></div>
+    <div set-lan="html:n-orderDetails">订单详情</div>
+    <volist name="orderp" id="op">
+        <div><span class="fl"><{$ep[$op['product_id']]['product_name']}>X<{$op.num}></span> <span class="fr"><{:round($op['total_price'],2)}>₭</span></div>
+    </volist>
+    <div class="hr"></div>
+    <div>商品费:<{:round($order['total_price'],2)}>₭</div>
+    <div>包装费:<{:round($ele['package_money'],2)}>₭</div>
+    <div>配送费:<{:round($order['delivery_price'],2)}>₭</div>
+    <div set-lan="html:n-total">合计:<{:round($order['need_pay'],2)}>₭</div>
+    <div class="hr"></div>
+    <div set-lan="html:n-customerInfo">顾客信息：</div>
+    <div set-lan="html:n-linkman">联系人:<{$addr.name}></div>
+    <div set-lan="html:n-telphone">电话:<{$addr.mobile}></div>
+    <div set-lan="html:n-address">地址:<{$addr.addr}></div>
+     <div class="hr"></div>
+    <h1 set-lan="html:n-lifeTakeout">#<{$order.order_id}>&nbsp;&nbsp;&nbsp;&nbsp;生活外卖</h1>
+</div>
+
+<input id="num" type="text" name="num" value="1"/>
+<span id="d" set-lan="html:n-printerNow">立即打印</span>
+
+<script>
+    $(document).ready(function() {   
+        $("#d").click(function(){
+			var type = "<{$shopsetting['type']}>";
+			if(type == 1){
+				var url = "<{:U('eleorder/jq_print',array('order_id'=>$order['order_id']))}>";
+                var num = $("#num").val();
+                $.post(url,{num:num},function(data){
+    				if(data.status == 'success'){
+    					layer.msg(data.msg);
+    					window.parent.$('.dialogBox').dialog("close");
+    				}else{
+    					layer.msg(data.msg);
+    					}
+    				},'json')
+			}else{
+                var newstr = document.getElementById('print').innerHTML;
+                var oldstr = document.body.innerHTML;
+                document.body.innerHTML = newstr;
+				window.print();
+                document.body.innerHTML = oldstr;
+			}
+               
+        })   
+    });
+</script>

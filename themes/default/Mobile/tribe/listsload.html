@@ -1,0 +1,13 @@
+<foreach name="list" item="item">
+    <li class="cont-rig_list border_b">
+        <div >
+            <div class="guantu fl"><a href="<{:U('tribe/detail',array('tribe_id'=>$item['tribe_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"/></a></div>
+            <div class="guanzi">
+                <a href="<{:U('tribe/detail',array('tribe_id'=>$item['tribe_id']))}>" class="zitit black3 overflow_clear"><{$item.tribe_name}></a>
+                <p class="duoshao black9 "><span>话题<{$item.posts}></span>&nbsp;<span>关注<{$item.fans}></span></p>
+            </div>
+            <div class="clear "></div>
+        </div>
+        <div ><a href="<{:U('tribe/collect',array('tribe_id'=>$item['tribe_id']))}>" class="zhu"><if condition="$item['collect'] eq 1">取消<else/>关注</if></a></div>
+    </li>
+</foreach>

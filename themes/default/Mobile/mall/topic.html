@@ -1,0 +1,99 @@
+<include  file='public:header'/>    
+<body>
+<?php if(!$is_app){?>
+<header>
+    <a href="#"><i class="icon-goback"></i></a>
+    <div class="title">众筹评论</div>
+    <i class="icon-menu3"></i>
+</header>
+<?php }?>
+<div class="page-center-box">
+    <!--内容-->
+	<div class="crowdTopic_box">
+        <ul>
+            <li class="crowdTopic_list">
+            	<div class="name"><img src="" />zlover</div>
+                <div class="topic_nr mt10">
+                	<P>话题内容话题内容话题内容话题内容话题内容话题内容话题内容</P>
+                    <div class="btn_box mt10">
+                    	<span class="left time black9"><em class="ico"></em>4小时前</span>
+                        <a href="javascript:;" class="right btn maincl"><em class="ico"></em>评论</a>
+                    </div>
+                </div>
+                <div class="evlt_nr">
+                    <ul>
+                        <li class="list">
+                        	<p class="name black9">v***n</p>
+                            <div class="nr">
+                            	<p>评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容评价内容</p>
+                                <p class="time txt_right">1小时前</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="crowdTopic_list">
+            	<div class="name"><img src="" />zlover</div>
+                <div class="topic_nr mt10">
+                	<P>话题内容话题内容话题内容话题内容话题内容话题内容话题内容</P>
+                    <div class="btn_box mt10">
+                    	<span class="left time black9"><em class="ico"></em>4小时前</span>
+                        <a href="javascript:;" class="right btn maincl"><em class="ico"></em>评论</a>
+                    </div>
+                </div>
+                <div class="evlt_nr">
+                    
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!--内容结束-->
+</div>
+<footer class="footer-cart">
+    <div class="btn-long fabu" style="margin-top:0.07rem;">发起话题</div>
+</footer>
+<!--发布与评论弹出层-->
+<div class="publish_mask mall_crowdDetl_evlt_mask">
+    <div class="cont"> 
+        <textarea name="contents" class="jq_contents" placeholder="写点什么吧"></textarea>
+        <div class="btn_box">
+            <input type="button" class="btn bggrey cancel left" value="取消">
+            <input type="button" class="btn right" value="评价">
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+    $(".crowdTopic_list .btn").click(function(){
+		$(".mall_crowdDetl_evlt_mask").show();
+	});
+	$(".mall_crowdDetl_evlt_mask .cancel").click(function(){
+		$(".mall_crowdDetl_evlt_mask").hide();
+	});
+});
+</script>
+<!--发布与评论弹出层end-->
+<!--发布与评论弹出层-->
+<div class="publish_mask mall_crowdDetl_fabu_mask">
+    <div class="cont"> 
+        <textarea name="contents" class="jq_contents" placeholder="写点什么吧"></textarea>
+        <div class="btn_box">
+            <input type="button" class="btn bggrey cancel left" value="取消">
+            <input type="button" class="btn right" value="提 交">
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+    $(".fabu").click(function(){
+		$(".mall_crowdDetl_fabu_mask").show();
+	});
+	$(".mall_crowdDetl_fabu_mask .cancel").click(function(){
+		$(".mall_crowdDetl_fabu_mask").hide();
+	});
+});
+</script>
+<!--发布与评论弹出层end-->
+
+
+

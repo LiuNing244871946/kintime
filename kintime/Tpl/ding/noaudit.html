@@ -1,0 +1,82 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">美食电子菜单</li>
+        <li class="li2">待审核列表</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <p class="attention"><span></span></p>
+    <div class="jsglNr">
+        <div class="selectNr" style="margin-top: 0px; border-top:none;">
+            <div class="left">
+                <{:BA('ding/create','','添加电子菜单商家')}>
+            </div>
+            <div class="right">
+                <form class="search_form" method="post" action="<{:U('ding/noaudit')}>">
+                    <div class="seleHidden" id="seleHidden">
+                        <span>关键字(电话或商户名称)</span>
+                        <input type="text" name="keyword" value="<{$keyword}>" class="inptText" /><input type="submit" value="   搜索"  class="inptButton" />
+                    </div> 
+                </form>
+            </div>
+        </div>
+    <form  target="baocms_frm" method="post">
+        <div class="tableBox">
+            <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                <tr>
+                    <td class="w50"><input type="checkbox" class="checkAll" rel="shop_id" /></td>
+                    <td class="w50">ID</td>
+                    <td>商家名称</td>
+                    <td>商家图片</td>
+                    <td>商家电话</td>
+                    <td>商家地址</td>
+                    <td>平均消费</td>
+                    <td>桌数</td>	
+                    <td>状态</td>
+                    <td>入住时间</td>
+                    <td class="w360">操作</td>
+                </tr>
+                <foreach name="list" item="var">
+                    <tr>
+                        <td><input class="child_shop_id" type="checkbox" name="shop_id[]" value="<{$var.shop_id}>" /></td>
+                        <td><{$var.shop_id}></td>
+                        <td>
+                            <{$shops[$var['shop_id']]['shop_name']}><br/><{$shops[$var['shop_id']]['lao_shop_name']}><br/><{$shops[$var['shop_id']]['eng_shop_name']}>
+                        </td>
+                        <td><img src="__ROOT__/attachs/<{$shops[$var['shop_id']]['logo']}>" class="w80" /></td>
+                        <td>
+                            <{$shops[$var['shop_id']]['tel']}><br/><{$shops[$var['shop_id']]['mobile']}>
+                        </td>
+                        <td>
+                            <{$citys[$shops[$var['shop_id']]['city_id']]['name']}>-<{$areas[$shops[$var['shop_id']]['area_id']]['area_name']}>-<{$business[$shops[$var['shop_id']]['business_id']]['business_name']}><br/>
+                            <{$citys[$shops[$var['shop_id']]['city_id']]['lao_name']}>-<{$areas[$shops[$var['shop_id']]['area_id']]['lao_area_name']}>-<{$business[$shops[$var['shop_id']]['business_id']]['lao_business_name']}><br/>
+                            <{$citys[$shops[$var['shop_id']]['city_id']]['eng_name']}>-<{$areas[$shops[$var['shop_id']]['area_id']]['eng_area_name']}>-<{$business[$shops[$var['shop_id']]['business_id']]['eng_business_name']}>
+                        </td>
+                        <td><{$var.price}></td>
+                        <td><{$var.table_num}></td>
+                        <td><if condition="$var.audit eq 0">未审核<elseif condition="$var.audit eq 2"/><font style="color: red;">已拒绝</font></if></td>
+                        <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                        <td>
+                        <{:BA('ding/audit',array("shop_id"=>$var["shop_id"]),'审核','act','remberBtn')}>
+                        <if condition="$var.audit neq 2"><{:BA('ding/refuse',array("shop_id"=>$var["shop_id"]),'拒绝','act','remberBtn',400,250)}></if>
+                        <{:BA('ding/edit',array("shop_id"=>$var["shop_id"]),'编辑','','remberBtn')}>
+                        <{:BA('ding/delete',array("shop_id"=>$var["shop_id"]),'删除','act','remberBtn')}>
+                        </td>
+                    </tr>
+                </foreach>
+            </table>
+            <{$page}>
+        </div>
+        <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+            <div class="left">
+                <{:BA('ding/delete','','批量删除','list',' a2')}>
+                <{:BA('ding/audit','','批量审核','list',' remberBtn')}>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+<include  file='public:footer'/>  
+
+

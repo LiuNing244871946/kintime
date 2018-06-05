@@ -1,0 +1,89 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">外卖管理</li>
+        <li class="li2">外卖商家</li>
+        <li class="li2 li3">新增</li>
+    </ul>
+</div>
+<div class="mainScAdd ">
+    <div class="tableBox">
+        <form  target="baocms_frm" action="<{:U('ele/create')}>" method="post">
+            <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+                <tr>
+                    <td  width="150" class="lfTdBt">选择美食商家：</td>
+                    <td class="rgTdBt">
+                        <div class="lt">
+                            <input type="hidden" id="shop_id" name="data[shop_id]" value="<{$detail.shop_id|default=''}>"/>  
+                            <input type="text" id="shop_name" name="shop_name" value="" class="manageInput w200" />
+                            <input type="text" id="lao_shop_name" name="lao_shop_name" value="" class="manageInput w200" />
+                            <input type="text" id="eng_shop_name" name="eng_shop_name" value="" class="manageInput w200" />
+                        </div>
+                        <a mini="select"  w="1000" h="600" href="<{:U('shop/select')}>" class="seleSj">选择美食商家</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">状态审核：</td>
+                    <td  class="rgTdBt">
+                        <label> <input type="radio" name="data[audit]" value="0" <eq name="detail.audit" value="0">checked="checked"</eq>  />审核中 </label>
+                        <label> <input type="radio" name="data[audit]" value="1"  <eq name="detail.audit" value="1">checked="checked"</eq> /> 通过</label>
+                        <label> <input type="radio" name="data[audit]" value="2"  <eq name="detail.audit" value="2">checked="checked"</eq> /> 拒绝</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">是否打洋：</td>
+                    <td class="rgTdBt">
+                        <label> <input type="radio" name="data[is_open]" value="1" <eq name="detail.is_open" value="1">checked="checked"</eq>  />营业中 </label>
+                        <label> <input type="radio" name="data[is_open]" value="0"  <eq name="detail.is_open" value="0">checked="checked"</eq> /> 打烊</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">分类：</td>
+                    <td class="rgTdBt"> 
+                            <foreach name="getEleCate" item="var" key="index">
+                                <label style="margin-right: 10px;"><input type="checkbox" name="cate[]" value="<{$index}>"/><{$var}></label>
+                            </foreach>   
+                    </td> 
+                </tr>
+                <tr>
+                    <td class="lfTdBt">包装费：</td>
+                    <td class="rgTdBt"><input type="text" name="data[package_money]" value="<{:round($detail['logistics'],2)}>" class="manageInput" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">起送价：</td>
+                    <td class="rgTdBt"><input type="text" name="data[since_money]" value="<{:round($detail['since_money'],2)}>" class="manageInput" />
+                        <code>满多少钱才能下单！</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">中文说明：</td>
+                    <td class="rgTdBt"><textarea  name="data[intro]" cols="50" rows="10" ><{$detail.intro|default=''}></textarea>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">老文说明：</td>
+                    <td class="rgTdBt"><textarea  name="data[lao_intro]" cols="50" rows="10" ><{$detail.lao_intro|default=''}></textarea>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">英文说明：</td>
+                    <td class="rgTdBt"><textarea  name="data[eng_intro]" cols="50" rows="10" ><{$detail.eng_intro|default=''}></textarea>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">排序：</td>
+                    <td class="rgTdBt"><input type="text" name="data[orderby]" value="<{$detail.orderby|default='100'}>" class="manageInput" />
+
+                    </td>
+                </tr>
+            </table>
+            <div class="smtQr"><input type="submit" value="确认添加" class="smtQrIpt" /></div>
+        </form>
+    </div>
+</div>
+<include  file='public:footer'/>       

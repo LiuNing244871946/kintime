@@ -1,0 +1,33 @@
+<foreach name="list" item="item">
+    <li class="reping-box pad10 ">
+        <div class="smalltu fl "><img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']|default='default.jpg'}>"></div>
+        <div class="youzi font_line24">
+            <p class="black3 overflow_clear"><{$users[$item['user_id']]['nickname']}></p>
+            <p class="black3 rem14 "><{$item['contents']}></p>
+            <ul class="img_list">
+                <volist name="item.pics" id="pic">
+                    <li><img src="__ROOT__/attachs/<{$pic.photo}>" width="250" height="160"></li>
+                </volist>
+            </ul>
+            <p class="black9 huifu"><span><{$item.create_time|formatt}></span><span class="youlef "><if condition="$item['user_id'] neq $MEMBER['user_id']"><a href="<{:U('tribe/reply',array('post_id'=>$item['post_id'],'comment_id'=>$item['comment_id']))}>">回复</a></if></span></p>
+
+        </div>
+        <div class="clear "></div>
+        <div>
+            <volist name="item.replys" id="var">
+                <div class="tribeEvlt_reply">
+                    <img src="__ROOT__/attachs/<{$var.users.face|default='default.jpg'}>" width="70" height="70" class="left img">
+                    <div class="pub_wz">
+                        <p><span class="maincl"><{$var.users.nickname}>：</span><{$var.contents}></p>
+                        <ul class="img_list">
+                            <volist name="var.pics" id="p">
+                                <li><img src="__ROOT__/attachs/<{$p.photo}>" width="215" height="130"></li>
+                            </volist>
+                        </ul>
+                        <p class="txt_right graycl"><{$var.create_time|date='Y-m-d H:i',###}><span class="ml10">评论</span></p>
+                    </div>
+                </div>
+            </volist>
+        </div>
+    </li>
+</foreach>

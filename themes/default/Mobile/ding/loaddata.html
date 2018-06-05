@@ -1,0 +1,15 @@
+<foreach name="list" item="item">
+<li class="seat_list">
+    <div class="pub_img fl"><a href="<{:AppLink('ding/detail',array('shop_id'=>$item['shop_id']))}>"><img src="__ROOT__/attachs/<{$item['photo']}>" /></a></div>
+    <div class="pub_wz">
+    	<h3 class="overflow_clear"><a href="<{:AppLink('ding/detail',array('shop_id'=>$item['shop_id']))}>"><{$item.shop_name}></a></h3>
+        <div class="star_box">
+        	<p class="fontcl2 fl"><span class="spxq_qgpstarBg"><span class="spxq_qgpstar" style="width:<{:round($item['score']*20,1)}>%;"></span></span></p>
+            <p class="black9 fr"><{$item.comments}>人评价</p>
+        </div>
+        <p class="price black9">人均：￥<big class="fontcl1"><{$item['price']}></big><span class="fr"><span class="fontcl2"><{$item.d}></span></span></p>
+    </div>
+    <div class="clear"></div>
+</li>
+</foreach>
+

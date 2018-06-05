@@ -1,0 +1,88 @@
+<include  file='public:header'/>   
+<body>
+
+    <header>
+        <a href="/mcenter/member/"><i class="icon-goback"></i></a>
+        <div class="title">云购记录</div>
+        <i class=" icon-more"></i>
+    </header>
+    <!-- 筛选TAB -->
+    <div class="shop-lie">
+        <ul>
+            <li <eq name="st" value="999">class="on"</eq>><a href="<{:LinkTo('cloud/index',array('st'=>999))}>"><span >全部</span></a></li>
+            <li <eq name="st" value="0">class="on"</eq>><a href="<{:U('cloud/index',array('st'=>0))}>"><span>进行中</span></a></li>
+            <li <eq name="st" value="1">class="on"</eq>><a href="<{:LinkTo('cloud/index',array('st'=>1))}>"><span>已揭晓</span></a></li>
+        </ul>
+    </div>
+    <div id="" class="page-center-box" style="top:0.9rem;">
+        <div id="scroll">
+            <div>
+                <ul>
+                    <foreach name="list" item="item">
+                        <li class="mine_yiyuan_list">
+                            <div class="img fl"><img src="__ROOT__/attachs/<{$item.photo}>" /></div>
+                            <div class="wz">
+                                <p class="bt"><{$item.title}></p>
+                                <p class="black9">总需<{$item.price}>人次</p>
+                                <if condition="$item['status'] eq 1">
+                                    <p class="black9">获得者:<span class="maincl"><{$users[$item['win_user_id']]['nickname']}></span>（本期共参与<{$item.sum2}>人次）</p>
+                                    <p class="black9">幸运号码:<span class="fontcl1"><{$item.win_number}></span></p>
+                                    <p class="black9">揭晓时间：<{$item.lottery_time|date='Y-m-d H:i:s',###}>.000</p>
+                                    <else/>
+                                    <php>$lefts = $item['price'] - $item['join']; $tt = round($item['join']/$item['price']*100,2);</php>
+                                    <div class="join_num">
+                                        <div class="yiyuan_progres"><span class="yiyuan_progres_bar" style="width:<{$tt}>%;"></span></div>
+                                        <div><p class="fl black9"><{$item.join}>已参与</p><p class="fr black9">剩余 <span class="maincl"><{$lefts}>次</span></p></div>
+                                    </div>
+                                </if>
+                                <p class="black9">本期参与：<span class="fontcl1"><{$item.sum}></span>人次<a href="javascript:void(0);" rel="mine_yiyuan_allnum_mask_<{$item.goods_id}>" class="mine_yiyuan_btn maincl">查看我的号码</a></p>
+                            </div>
+                        </li>
+                    </foreach>
+                </ul>
+            </div>
+        </div>
+    </div>
+<foreach name="list" item="item">
+    <div class="mine_yiyuan_allnum_mask mine_yiyuan_allnum_mask_<{$item.goods_id}>">
+        <div class="cont">
+            <a href="javascript:void(0);" rel="mine_yiyuan_allnum_mask_<{$item.goods_id}>" class="closs">×</a>
+            <div class="title"><{$item.title}></div>
+            <p>参与<span class="fontcl1"><{$item.sum}></span>人次，夺宝号码：</p>
+            <div class="num">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <php>$i=1;</php>
+                    <php>foreach($item['mlist'] as $aa=>$var){</php>
+                    <if condition="$i%3 eq 1">
+                        <tr>
+                            <td <if condition="$item['win_number'] eq $var['number']">style="color:red;"</if> ><{$var.number}></td>
+                        <elseif condition="$i%3 eq 0"/>
+                        <td <if condition="$item['win_number'] eq $var['number']">style="color:red;"</if> ><{$var.number}></td>
+                        </tr>
+                        <else/>
+                        <td <if condition="$item['win_number'] eq $var['number']">style="color:red;"</if> ><{$var.number}></td>
+                    </if>
+                    <php>$i++;}</php>
+                </table>
+            </div>
+            <input type="button" value="确定" rel="mine_yiyuan_allnum_mask_<{$item.goods_id}>"  class="btn" >
+        </div>
+    </div>
+</foreach>
+<script>
+    $(document).ready(function () {
+        /*一元抢购查看所有号码*/
+        $(".mine_yiyuan_btn").click(function () {
+            $("."+$(this).attr('rel')).show();
+        });
+        $(".mine_yiyuan_allnum_mask").find(".closs").click(function () {
+            $("."+$(this).attr('rel')).hide();
+        });
+        $(".mine_yiyuan_allnum_mask").find(".btn").click(function () {
+            $("."+$(this).attr('rel')).hide();
+        });
+        /*一元抢购查看所有号码*/
+
+    });
+</script>
+<include  file='public:footer'/>

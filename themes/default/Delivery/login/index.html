@@ -1,0 +1,52 @@
+<include  file='public:header'/> 
+<body style="background-color: #efe8cb;">
+    <?php if($is_app&&!$is_android){?><div style="height: 0.2rem; width: 100%; background: #2FBDAA; position: fixed; top: 0rem;"></div><?php }?> 
+	<div class="wl_login">
+		<a href="<{:U('mobile/index/index')}>" style="display:inline-block;margin-top:20px;"><span class="icon-goback" style="padding:0.13rem 0.13rem 0;"></span></a>
+		<div class="bg"></div>
+        <div class="login_content">
+        	<div class="login_title">
+            	<img src="__TMPL__statics/img/login_t.png" width="180" height="">
+            </div>
+            <div class="login_input_box">
+   
+                	<input type="text"  placeholder="账户" value=""  name="username" id="username" onBlur="if (!value) { value = defaultValue; this.style.color = '#999' }" onClick="if (value == defaultValue) { value = ''; this.style.color = '#000' }">
+                    <input type="password"  placeholder="密码" value=""  name="password" id="password" onBlur="if (!value) { value = defaultValue; this.style.color = '#999' }" onClick="if (value == defaultValue) { value = ''; this.style.color = '#000' }">
+ 
+            </div>
+            <div class="login_input_btn">
+                <input type="button" value="登 录" id="btn">
+            </div>
+        </div>
+        
+        
+        <script type="text/javascript" language="javascript">
+        
+			$(document).ready(function(){
+				$('#btn').click(function(){
+					var username = $('#username').val();
+					var password = $('#password').val();
+					$.post('<{:U("login/handle")}>',{username:username,password:password},function(result){
+						if(result.status=='success'){
+							layer.msg(result.message,{icon:6});
+							setTimeout(function(){
+								window.location.href='<{:U("index/index")}>';
+							},3000);
+						}else{
+							layer.msg(result.message,{icon:2});
+						}
+					
+					},'json')
+				});
+//				console.log($('.wl_login #backHome'));
+//				$('.wl_login #backHome').click(function(){
+//					console.log(1);
+//					window.location.href = "/mobile/index/index";
+//				})
+			})
+		
+        </script>
+        
+	</div>
+</body>
+</html>

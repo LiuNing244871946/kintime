@@ -1,0 +1,60 @@
+<include  file='public:header'/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:q-Businessmanagement">美食电子菜单</a> > <a href="" set-lan="html:q-Reservation">订单列表</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('shopding/index')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l">
+            <span set-lan="html:q-starttime">开始时间</span>：<input type="text" class="radius3 tuan_topser"  name="bg_date" value="<{$bg_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'});"/>
+            <span set-lan="html:q-endtime">结束时间</span>：<input type="text" class="radius3 tuan_topser"  name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'});"/>
+            <span set-lan="html:q-Keyword">关键字</span>：<input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" set-lan="val:q-search" value="搜 索"/>
+            </div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('shopding/index')}>" set-lan="html:q-Reservationorders">订单列表</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:q-orderid">订单ID</td>
+            <td>订座数量/桌号</td>
+            <td set-lan="html:q-Orderamount">订单金额</td>
+            <td>联系人</td>
+            <td>预约时间</td>
+            <td set-lan="html:q-Orderstatus">订单状态</td>
+            <td set-lan="html:q-Singletime">下单时间</td>
+            <td>类型</td>
+            <td set-lan="html:q-operation">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.order_id}></td>
+                <td><if condition="$var['ding_type'] eq 1 "><{$var.ding_num}>(数量)<else /><{$var.table_num}>(桌号)</if></td>
+                <td>₭<{$var['amount']}></td>
+                <td><if condition="$var['ding_type'] eq 1 "><{$var.name}>(<{$var.mobile}>)<else />店内点餐</if></td>
+                <td><if condition="$var['ding_type'] eq 1 "><{$var.ding_date}>&nbsp;<{$var.ding_time}><else/>店内点餐</if></td>
+                <td><if condition="$var['order_status'] eq -1"><font style="color:red;" set-lan="html:q-canceled">已取消</font><elseif condition="$var['order_status'] eq 2"/><font style="color:green;" set-lan="html:q-Alreadyconsumed">已消费</font><elseif condition="$var['order_status'] eq 1"/><span set-lan="html:q-Alreadypaid">已付款</span><else/><span set-lan="html:q-Tobetreated">未付款</span></if></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                <td><if condition="$var['ding_type'] eq 1 ">网上订座<else />店内点餐</if></td>
+                <td>
+                    <a class="radius3 sy_c1an" href="<{:U('shopding/detail',array('order_id'=>$var['order_id']))}>" set-lan="html:q-see">查看</a>
+                    <if condition="$var['order_status'] eq 1"><a class="radius3 sy_c1an" mini="confirm" href="<{:U('shopding/complete',array('order_id'=>$var['order_id']))}>" set-lan="html:q-Confirmationofconsumption">确认消费</a></if>
+                    <if condition="$var['order_status'] neq -1"><a class="radius3 sy_c1an" mini="confirm" href="<{:U('shopding/cancel',array('order_id'=>$var['order_id']))}>" set-lan="html:q-Cancellationoforder">取消订单</a></if>
+                    <if condition="$var['order_status'] eq -1"><if condition="$var['closed'] eq 0"><a class="radius3 sy_c1an" mini="confirm" href="<{:U('shopding/delete',array('order_id'=>$var['order_id']))}>" set-lan="html:q-Deleteorder">删除订单</a></if></if>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+
+<include  file='public:footer'/>

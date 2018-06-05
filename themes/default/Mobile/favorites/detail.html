@@ -1,0 +1,188 @@
+<include  file='public:header'/>   
+
+<body id="my_attention">
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('favorites/index')}>"><i class="icon-goback"></i></a>
+        <div class="title"><{$detail.shop_name}></div>
+        <a href="#" id="cancelFocus"> <i class="icon-menu" id="foucsIco"></i></a>
+    </header>
+<?php }?>
+
+    <div id="seat" class="page-center-box">
+        <div id="scroll" style="box-sizing:border-box;padding-top:0.1rem;padding-bottom: 0;">
+            <foreach name="list" item="item">
+                    <if condition="$item['send'] eq 1">
+                        <div class="speak_box" style="padding: .1rem 0;">
+                            <div class="dish_face fl">
+                                <img src="__ROOT__/attachs/<{$from['face']|default='default.png'}>" class="fl" style="width: 48px;height: 48px;"/>
+                            </div>
+                            <div class="dish_speak fl">
+                                <p style="color: #999;font-size: 12px;"><{$from['nickname']}>(<{$item.create_time|date='Y-m-d H:i',###}>)</p>
+                                <div class="fl">
+                                    <{$item.content}>
+                                    <span class="posl" style="top: 6px;"></span>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    <else/>
+                        <div class="speak_box" style="padding: .1rem 0;"> 
+                            <div class="dish_face fr">
+                                <img src="__ROOT__/attachs/<{$user['face']|default='default.png'}>" class="fr"  style="width: 48px;height: 48px;"/>
+                            </div> 
+                            <div class="dish_speak fr">
+                                <p style="color: #999;font-size: 12px;text-align: right;">(<{$item.create_time|date='Y-m-d H:i',###}>)</p>
+                                <div class="dish_speak_background fr">
+                                    <{$item.content}>
+                                    <span class="posr" style="top: 6px;"></span>
+                                </div> 
+                            </div>  
+                            <div class="clear"></div>
+                        </div>
+                    </if>
+            </foreach>
+        </div>
+
+    </div>
+    <!-- 弹窗 -->
+    <div id="mask"></div>
+    <div id="PopUpBox">
+        <span class="cancelWord">是否取消关注</span>
+        <div class="popupBtn">
+            <button class="isFalse isBtn">取消</button>
+            <button class="isTrue isBtn">确定</button>
+        </div>
+    </div>
+    <footer class="footer-switch footer-cart">
+        <div class="fl left"><span class="switch-btn"></span></div>
+        <div class="fl right">
+            <script>
+                $(function () {
+                    var scrolly = $('#scroll').height() - $('#seat').height();
+                    $("#seat").animate({scrollTop: scrolly},200);
+                    $(".footer-switch .switch-btn").click(function () {
+                        if ($(".footer-switch .menu").css("display") == 'block') {
+                            $(".footer-switch .menu").hide();
+                            $(".footer-switch .input-box").show(200);
+                        }
+                        else {
+                            $(".footer-switch .menu").show();
+                            $(".footer-switch .input-box").hide(200);
+                        }
+                    });
+                    $(".footer-switch .menu-list").click(function () {
+                        if ($(this).find(".menu-pull").css("display") == 'block') {
+                            $(".footer-switch .menu-pull").hide();
+                            $(this).find(".menu-pull").hide();
+                        }
+                        else {
+                            $(".footer-switch .menu-pull").hide();
+                            $(this).find(".menu-pull").show();
+                        }
+                    });
+
+                    var t = 6000;
+                    setInterval(function () {
+                        var url = "<{:U('favorites/reply')}>";
+                        var shop_id = "<{$detail.shop_id}>";
+                        var type = "<{$type}>";
+                        $.post(url, {shop_id: shop_id, t: t,type: type}, function (result) {
+                            if (result.status == 'success') {
+                                var str = '';
+                                var logo = result.logo;
+                                if(result.res){
+                                    $.each(result.res, function (n, value) {
+                                        str += '<div class="speak_box" style="padding: .1rem 0;">';
+                                        str += '<div class="dish_face fl"><img src="__ROOT__/attachs/' + logo +'" class="fl"  style="width: 48px;height: 48px;"/></div>';
+                                        str += '<div class="dish_speak fl">';
+                                        str += '<p style="color: #999;font-size: 12px;"><{$from["nickname"]}>('+value.create_time+')</p>';
+                                        str += '<div class="fl">'+value.content+'<span class="posl" style="top: 6px;"></span></div>';
+                                        str += '</div><div class="clear"></div></div>';
+                                    });
+                                    $("#scroll").append(str);
+                                }
+                            }
+                            var scrolly = $('#scroll').height() - $('#seat').height();
+                            $("#seat").animate({scrollTop: scrolly},200);
+                        }, 'json');
+                    }, t)
+
+                    $("#jq_send").click(function () {
+                        if ($("#word").val() != '') {
+                            var word = $("#word").val();
+                            var str = '<div class="speak_box" style="padding: .1rem 0;"> <div class="dish_face fr"><img src="__ROOT__/attachs/<{$MEMBER.face|default="default.jpg"}>" class="fr"   style="width: 48px;height: 48px;"/></div> <div class="dish_speak fr"><div class="dish_speak_background fr">' + word + '<span class="posr" style="top: 6px;"></span></div> </div>  <div class="clear"></div></div>';
+                            $("#scroll").append(str);
+                            $("#word").val('');
+                            $("html,body").animate({scrollTop: document.body.clientHeight}, 200);
+                            $.post('<{:U("favorites/send",array("shop_id"=>$detail["shop_id"],"type"=>$type))}>', "word=" + word, function (data) {
+                                if(data.status == 'error'){
+                                    layer.msg(data.msg);
+                                }else if (data.status == 'success') {}{
+                                    if (data.ret == 1) {
+                                        switch (data.type) {
+                                            case 'text':
+                                                var str = '<div class="speak_box"> <div class="dish_face fl"><img src="' + data.face + '" class="fl" /></div> <div class="dish_speak fl"><div class="fl"><span class="posl"></span>' + data.contents + '</div></div> <div class="clear"></div> </div>';
+                                                $("#scroll").append(str);
+                                                break;
+                                            case  'news':
+                                                var str = '  <div class="dish_detailBox">';
+                                                str += '<div class="dish_detail">';
+                                                str += ' <a href="' + data.url + '"><div class="img"><img src="' + data.photo + '"  /></div>';
+                                                str += ' <p> <b class="black3">' + data.title + '</b> </p>';
+                                                str += '<p class="rem14" style="font-size:0.14rem;">' + data.intro;
+                                                str += '</p> </a> </div></div>';
+                                                $("#scroll").append(str);
+                                                break;
+
+                                        }
+                                    }
+                                }
+                                
+
+                                var scrolly = $('#scroll').height() - $('#seat').height();
+                                $("#seat").animate({scrollTop: scrolly},200);
+                            }, 'json');
+                        }
+                    });
+                    $('#cancelFocus').click(function(){
+                        $('#mask').css("display","block");
+                        $('#PopUpBox').css("display","block");
+                    });
+                    $('.isTrue').click(function(){
+                        $('#mask').css("display","");
+                        $('#PopUpBox').css("display","");
+                        window.location.href = "<{:AppLink('favorites/cancle',array('shop_id'=>$detail['shop_id'],'type'=>$type))}>";
+                    });
+                    $('.isFalse').click(function(){
+                        $('#mask').css("display","");
+                        $('#PopUpBox').css("display","");
+                    })
+                });
+            </script>
+            <div class="menu">
+                <ul>
+                    <button style="width:100%;height:0.5rem;background:#2FBDAA;line-height:0.5rem;text-align:center;border:none;outline:none;">
+                        <if condition="$type eq 1 ">
+                            <a href="<{:AppLink('shop/detail',array('shop_id'=>$detail['shop_id']))}>" style="display: block;font-size:0.18rem;color:white;">进入店铺</a>
+                        <elseif condition="$type eq 2" />
+                            <a href="<{:AppLink('hotel/detail',array('hotel_id'=>$detail['shop_id']))}>" style="display: block; font-size:0.18rem;color:white;">进入店铺</a>
+                        </if>
+                        
+                    </button>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+            <div class="input-box" style="display:none;">
+
+                <input name="word" id="word" type="text" class="text black3" style="text-align: left;" />
+                <input type="button" id="jq_send" class="submit" value="发送" />
+
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </footer>
+
+</body>
+</html>

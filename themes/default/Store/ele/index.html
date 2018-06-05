@@ -1,0 +1,115 @@
+<include  file='public:header'/>
+<header> 
+	<i class="left"><a href="<{:U('store/index/index')}>" id="icon_goback"></a></i>
+    <div class="title">外卖订单管理</div>
+    <!-- <i class="right icon-menu" id="ico_1"></i> -->
+</header>
+<!-- <script>
+    $(document).ready(function(){
+        $("header .icon-menu").click(function(){
+            //alert(11111111);
+            if($(".header_pull_box").css("display")="none"){
+               $(".header_pull_box").show();
+            }else{
+               $(".header_pull_box").hide();
+            }
+            
+        });
+    })
+    </script> -->
+    <style>
+      .header_pull_box{ display: none;}  
+    </style>
+   <!--  <div class="header_pull_box">
+    	<em></em>
+        <div class="header_pull_list">
+            <ul>
+            	<li><a href="<{:U('ele/elecate')}>">分类管理</a></li>
+                <li><a href="<{:U('ele/Eleproduct')}>">菜单管理</a></li>
+            </ul>
+        </div>
+    </div> -->
+<section>
+	<div class="sh_search_box">
+        <script>
+			$(function(){
+				$(".sh_search_more_int .center").click(function(){
+                                    $(this).find(".sh_search_more_pull").toggle();
+				});
+				$(".sh_search_more_pull li").click(function(){
+                                    $(".sh_search_more_int .center input").val($(this).html());
+				});
+			});
+		</script>
+        <form method="post" action="<{:U('ele/index')}>">
+        <div class="sh_search_more">
+            <div class="sh_search_more_time mb10">
+                <div class="fl left"><input type="text" name="bg_date" value="<{$bg_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"" placeholder="开始时间" onBlur="if (!value) { value = defaultValue; this.style.color = '#999' }" onClick="if (value == defaultValue) { value = ''; this.style.color = '#000' }"></div>
+                <div class="fr right"><input type="text" name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});" placeholder="结束时间" onBlur="if (!value) { value = defaultValue; this.style.color = '#999' }" onClick="if (value == defaultValue) { value = ''; this.style.color = '#000' }"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="sh_search_more_int">
+                <div class="fl left"><input type="text"" placeholder="订单编号" name="keyword" value="<{$keyword}>" onBlur="if (!value) { value = defaultValue; this.style.color = '#999' }" onClick="if (value == defaultValue) { value = ''; this.style.color = '#000' }"></div>
+                <div class="fl center">
+                	<input type="text" value="状态"> <input value="" name="st" id="st" type="hidden" />
+                    <div class="sh_search_more_pull" style="display:none;">
+                        <ul>
+                            <li v="1">等待发货</li>
+                            <li v="3">已完成</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fr right"><input class="btn" type="submit" value="搜索"></div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        </form>
+    </div>
+    
+
+    <div class="sh_infor_tab mb10">
+        <ul>
+            <li <empty name="status">class="on"</empty><eq name="status" value="1">class="on"</eq>><a href="<{:U('ele/index',array('status'=>1))}>" >待接单</a></li>
+            <li <eq name="status" value="2">class="on"</eq>><a href="<{:U('ele/index',array('status'=>2))}>">待配送</a></li>
+            <li <eq name="status" value="3">class="on"</eq>><a href="<{:U('ele/index',array('status'=>3))}>">已完成</a></li>
+            <div class="clear"></div>
+        </ul>
+    </div>
+    
+     <php>
+        $eop = D('EleOrderProduct');
+        $ep = D('EleProduct');
+     </php>
+    
+    <foreach name="list" item="var">
+    <div class="sh_waimai_order_list mb10">
+            <div class="wz">
+            	<div class="fl">
+                    <a href="<{:U('ele/detail',array('order_id'=>$var['order_id']))}>">
+                        <p class="user"><{$addrs[$var['addr_id']]['name']}>  <span class="fontcl1"><{$addrs[$var['addr_id']]['mobile']}></span></p>
+                        <p class="xinxi"><em class="ico ico_1"></em><{$var.order_id}></p>
+                        <p class="xinxi"><em class="ico ico_2"></em><{$var.create_time|date='Y-m-d H:i:s',###}>下单</p>
+                        <p class="xinxi"><em class="ico ico_3"></em><{$addrs[$var['addr_id']]['addr']}></p>
+                    </a>
+                </div>
+                <div class="fr">
+                    <a class="tel" href="tel:<{$addrs[$var['addr_id']]['mobile']}>"></a>
+                    <p class="range overflow_clear fontcl1"></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="btn_box">
+                <eq name="var.status" value="1"><p class="fontcl1 fl">等待接单</p><a href="<{:U('ele/status',array('o'=>$var['order_id'],'s'=>2))}>"  class="btn fr">接单</a></eq>
+                <eq name="var.status" value="2"><p class="fontcl1 fl">等待骑手配送</p><!-- <a class="btn fr" href="<{:U('ele/status',array('o'=>$var['order_id'],'s'=>4))}>" >确定配送</a> --></eq>
+                <eq name="var.status" value="8">已完成</eq>
+            </div>
+        </div>
+    </foreach> 
+    
+    
+   
+    <div class="jobNr_span"><{$page}></span>
+   
+</section>
+</body>
+</html>

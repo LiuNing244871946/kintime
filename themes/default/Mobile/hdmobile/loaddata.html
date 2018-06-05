@@ -1,0 +1,42 @@
+<foreach name="list" item="item">
+    <li class="appointList">
+        <div class="infor">
+            <div class="fl">
+                <img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']}>" />
+                <p class="overflow_clear"><a href="javascript:void(0);"><{$users[$item['user_id']]['nickname']}></a></p>
+                <php>
+                    if(!empty($ex[$item['user_id']]['born_year'])){
+                        $by = $y - $ex[$item['user_id']]['born_year'];
+                    }else{
+                        $by = '未知';
+                    }
+                </php>
+                <p class="tag">
+                    <span class="bg_1"><if condition="$ex[$item['user_id']]['sex'] eq 1"><em class="sex"></em><else/><em class="sex nv"></em></if><{$by}></span>
+                    <span class="bg_2"><{$ex[$item['user_id']]['job']}></span>
+                </p>
+            </div>
+            <div class="fr">
+                <p class="black9 rang"><{$item.d}></p>
+                <if condition="$item['sign'] eq 0"><a href="<{:AppLink('hdmobile/sign',array('huodong_id'=>$item['huodong_id']))}>" class="btn">我买单</a><elseif condition="$item['sign'] eq 1"/><a href="javascript:void(0);" class="btn">已报名</a><else/><a href="javascript:void(0);" class="btn">已约满</a></if>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="hdnr">
+            <div class="fl">
+                <p class="bt"><em class="ico_<{$item.cate_id}>"></em><{$item.title}></p>
+                <p class="overflow_clear black9 liIco"><{$item.intro}></p>
+                <p class="overflow_clear black9 liIco"><{$item.addr}></p>
+            </div>
+            <div class="fr"><a href="<{:AppLink('hdmobile/detail',array('huodong_id'=>$item['huodong_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>" /></a></div>
+            <div class="clear"></div>
+        </div>
+        <div class="attention">
+            <div class="fl">
+                <p class="black9"><span><{$item.views}>人看过</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span><{$item.ping_num}>条评论</span></p>
+            </div>
+            <div class="fr black9"><{$item.sign_num}>人报名</div>
+            <div class="clear"></div>
+        </div>
+    </li>
+</foreach>

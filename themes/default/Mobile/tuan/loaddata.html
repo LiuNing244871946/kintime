@@ -1,0 +1,35 @@
+<foreach name="shops" item="var">
+
+    <div class=" rush-box">
+        <div>
+            <div class="rush-title" style="border-bottom: none 0;">
+                <span class="fl"><a title="<{$var.shop_name}>" href="<{:AppLink('shop/detail',array('shop_id'=>$var['shop_id']))}>"><if condition="$lang eq 1 "><{$var.shop_name}><elseif condition="$lang eq 2" /><{$var.lao_shop_name}><elseif condition="$lang eq 3" /><{$var.eng_shop_name}></if></a></span>
+                <span class="fr rush-long"><{$var.d}></span>
+                <div class="clear"></div>
+            </div>
+            <div id="index">
+                <div class="limit_buy mb10">
+                    <ul class="list_box">
+                        <foreach name="list" item="item">
+                            <eq name="item.shop_id" value="$var['shop_id']">
+                            <li>
+                                <a href="<{:AppLink('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                                    <div class="fl">
+                                        <div class="img"><img src="__ROOT__/attachs/<{$item.photo}>"></div>
+                                        <p class="bt overflow_clear"><if condition="$lang eq 1 "><{$item.title}><elseif condition="$lang eq 2" /><{$item.lao_title}><elseif condition="$lang eq 3" /><{$item.eng_title}></if></p>
+                                        <p><if condition="$lang eq 1 "><{$item.intro}><elseif condition="$lang eq 2" /><{$item.lao_intro}><elseif condition="$lang eq 3" /><{$item.eng_intro}></if></p>
+                                        <p>已售<{$item.sold_num}><span class="price">₭<b><{:round($item['tuan_price'],2)}></b></span>
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
+                            </eq>
+                        </foreach>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</foreach>

@@ -1,0 +1,49 @@
+<div class="listBox clfx">
+    <div class="menuManage">
+        <form  target="baocms_frm" action="<{:U('delivery/check1')}>" method="post">
+            <div class="mainScAdd">
+                <div class="tableBox">
+                    <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+						<tr>
+						<td class="lfTdBt">城市：
+						<td>
+						<select id="data[city_id]" name="city_id" class="rgTdBt" style="background: #FFF;line-height: 28px; height:28px;width:80%;border: 1px solid #dbdbdb;display: inline-block; margin-bottom:10px;margin-left:5px;">
+                            <option value="0">请选择...</option>
+                            <foreach name="citys" item="var">
+                                <option value="<{$var.city_id}>"  <eq name="var.city_id" value="$detail.city_id">selected="selected"</eq> ><{$var.name}></option>                
+                            </foreach>
+                        </select>
+						</td>
+						<input type="hidden" name="id" value="<{$detail.id}>"/>
+						</tr>
+                        <tr>
+                            <td class="lfTdBt">帐号：</td>
+                            <td class="rgTdBt"><input type="text" name="username" value="<{$detail.username|default=''}>" class="scAddTextName w200" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lfTdBt">姓名：</td>
+                            <td class="rgTdBt"><input type="text" name="name" value="<{$detail.name|default=''}>" class="scAddTextName w200" />
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lfTdBt">手机：</td>
+                            <td class="rgTdBt"><input type="text" name="mobile" value="<{$detail.mobile|default=''}>" class="scAddTextName w200" />
+
+                            </td>
+                        </tr>
+
+                        </tr>
+                    </table>
+                </div>
+                <div class="smtQr"><input type="submit" value="确认修改" class="smtQrIpt" /></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+

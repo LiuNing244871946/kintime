@@ -1,0 +1,30 @@
+<include  file='public:header'/>  
+<body>
+    <?php if(!$is_app){?>
+<header> 
+    <a href="<{:AppLink('member/index')}>"><i class="icon-goback"></i></a>
+    <div class="title">我的美食券</div>
+    <i class=" icon-more"></i> </header>
+    <?php }?>
+<!-- 筛选TAB -->
+<div class="shop-lie coupon_nav" id="app_nav">
+    <ul>
+        <li <php>if($aready ==null){echo 'class=on';}</php>><a href="<{:LinkTo('tuancode/index')}>"><span>全部</span></a></li>
+        <li <eq name="aready" value="1">class="on"</eq>><a href="<{:LinkTo('tuancode/index',array('aready'=>1))}>"><span>未使用</span></a></li>
+        <li <eq name="aready" value="2">class="on"</eq>><a href="<{:LinkTo('tuancode/index',array('aready'=>2))}>"><span>已使用</span></a></li>
+    </ul>
+</div>
+<div id="personal-coupon" class="page-center-box" <?php if($is_app){?>style='top:0.4rem !important;'<?php }?> >
+    <div id="scroll"> 
+        
+    </div>
+</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		loaddata('<{:U("/mcenter/tuancode/codeloading",array("p"=>"0000","aready"=>$aready))}>',$("#scroll"),true);
+	});
+</script>
+
+<include  file='public:footer'/>

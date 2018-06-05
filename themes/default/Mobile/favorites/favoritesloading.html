@@ -1,0 +1,37 @@
+
+    <foreach  name="shops" item="var">
+    <li>
+        <div class="li_left"><a title="<{$var.shop_name}>" href="<{:AppLink('favorites/detail',array('shop_id'=>$var['shop_id'],'type'=>1))}>"><img src="__ROOT__/attachs/<{$var.logo}>" width="90" height="90" /></a></div>
+        <div class="li_right">
+            <p class="mt15">
+              <a href="<{:AppLink('favorites/detail',array('shop_id'=>$var['shop_id'],'type'=>1))}>">
+                  <em class="fl overflow_clear"><if condition="$lang eq 1 "><{:msubstr($var['shop_name'],0,6,'utf-8',false)}><elseif condition="$lang eq 2" /><{:msubstr($var['lao_shop_name'],0,6,'utf-8',false)}><elseif condition="$lang eq 3" /><{:msubstr($var['eng_shop_name'],0,6,'utf-8',false)}></if></em>
+                  <span class="f_bq">团</span>
+              </a>
+            </p>
+              <p class="favo-ms overflow_clear">
+             粉丝数：<{$var['fans_num']}>
+              </p>
+        </div>
+    </li>
+    <div class="clear"></div>
+   </foreach>
+
+   <foreach  name="hotels" item="var">
+    <li>
+        <div class="li_left"><a title="<{$var.hotel_name}>" href="<{:AppLink('favorites/detail',array('shop_id'=>$var['hotel_id'],'type'=>2))}>"><img src="__ROOT__/attachs/<{$var.photo}>" width="90" height="90" /></a></div>
+        <div class="li_right">
+            <p class="mt15">
+              <a href="<{:AppLink('favorites/detail',array('shop_id'=>$var['hotel_id'],'type'=>2))}>">
+                  <em class="fl overflow_clear"><if condition="$lang eq 1 "><{:msubstr($var['hotel_name'],0,6,'utf-8',false)}><elseif condition="$lang eq 2" /><{:msubstr($var['lao_hotel_name'],0,6,'utf-8',false)}><elseif condition="$lang eq 3" /><{:msubstr($var['eng_hotel_name'],0,6,'utf-8',false)}></if></em>
+                  <span class="f_bq">房</span>
+              </a>
+            </p>
+            
+              <p class="favo-ms overflow_clear">
+             粉丝数：<{$var['fans_num']}>
+              </p>
+        </div>
+    </li>
+    <div class="clear"></div>
+   </foreach>

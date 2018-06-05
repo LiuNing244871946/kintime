@@ -1,0 +1,79 @@
+<include  file='public:header'/>
+
+<body id="life_add">
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('express/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">快递信息发布</div>
+    </header>
+    <?php }?>
+    <div class="page-center-box">
+        <iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
+        <form method="post" target="baocms_frm" action="<{:U('express/create')}>">
+            <div class="scroll">
+                <div class="pb50">
+                    <div id="login-input">
+                        <input data-role="none" type="text" name="data[title]" value="<{$detail.title|default=''}>"  placeholder="请输入标题"/>
+                    </div>
+                <div class="wap-form">
+                                <ul>
+                                   
+                                    <li><input type="text" placeholder="寄件人姓名" name="data[from_name]"/></li>
+                                    <li><input type="text" placeholder="寄件人地址" name="data[from_addr]"/></li>
+                                    <li><input type="text" placeholder="寄件人手机"  name="data[from_mobile]"/></li>
+                                </ul>
+                            </div>
+                    
+                
+                    <div id="login-input" style="margin-top: 0rem;">
+                        <div class="life-infor-float" >
+                            <p class="life-infor-p" style="text-indent: 0.1rem;">所在坐标</p>
+                            <div id="login-input" class="life-infor-float">
+                                <div class="left"><span>经度：</span><input type="text" name="data[lng]" id="data_lng"/></div>
+                                <div class="right"><span>纬度：</span><input type="text" name="data[lat]" id="data_lat"/></div>
+                            </div>
+                            <div class="life-infor-float" >
+                                <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7b92b3afff29988b6d4dbf9a00698ed8"></script>
+                                <div id="allmap" style="width: 100%; height:300px;"></div>
+                                <script type="text/javascript">
+
+                                // 百度地图API功能
+                                var map = new BMap.Map("allmap");
+                                map.centerAndZoom(new BMap.Point("<{$city['lng']}>", "<{$city['lat']}>"), 16);
+                                function selectCallBack(id, name, v1, v2) {
+                                    $("#" + id).val(v1);
+                                    $("#" + name).val(v2);
+                                    var point = new BMap.Point(v1, v2);
+                                    var marker = new BMap.Marker(point);  // 创建标注
+                                    map.clearOverlays();
+                                    map.addOverlay(marker);              // 将标注添加到地图中
+
+                                }
+                                function showInfo(e) {
+                                    selectCallBack('data_lng', 'data_lat', e.point.lng, e.point.lat);
+                                }
+                                map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+                                map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}));  //右上角，仅包含平移和缩放按钮
+                                map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT, type: BMAP_NAVIGATION_CONTROL_PAN}));  //左下角，仅包含平移按钮
+                                map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, type: BMAP_NAVIGATION_CONTROL_ZOOM}));  //右下角，仅包含缩放按钮
+                                map.addEventListener("click", showInfo);
+                                </script>
+                            </div>
+                            <div class="wap-form">
+                                <ul>
+                                    <li><input type="text" placeholder="收件人姓名" name="data[to_name]"/></li>
+                                    <li><input type="text" placeholder="收件人地址" name="data[to_addr]"/></li>
+                                    <li><input type="text" placeholder="收件人手机"  name="data[to_mobile]"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="footer-cart">
+                    <input class="btn-long" data-role="none" type="submit" value="立即发布" name="submitBtn" />
+                </footer>
+        </form>
+
+
+</body>
+</html>

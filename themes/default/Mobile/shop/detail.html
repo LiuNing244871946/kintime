@@ -1,0 +1,114 @@
+<include file="public:header"/>
+<script>
+    $(function () {
+        if ($('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            $('#shangjia_tab li').width(100 / $('#shangjia_tab li').length + '%');
+            $('.page-center-box').css('top', '0.9rem');
+        }//头部切换tab结束
+
+    });
+</script>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('/mobile/index/index')}>"><i class="icon-goback"></i></a>
+        <div class="title"><if condition="$lang eq 1 "><{$detail.shop_name}><elseif condition="$lang eq 2" /><{$detail.lao_shop_name}><elseif condition="$lang eq 3" /><{$detail.eng_shop_name}></if></div>
+    </header>
+    <?php }?>
+    <ul id="shangjia_tab">
+        <li><a href="<{:AppLink('shop/detail',array('shop_id'=>$detail['shop_id']))}>" class="on">首页</a></li>
+        <li><a href="<{:U('shop/tuan',array('shop_id'=>$detail['shop_id']))}>">优惠</a></li>
+        <li><a href="<{:U('ele/shop',array('shop_id'=>$detail['shop_id']))}>">外卖</a></li>
+        <li><a href="<{:U('ding/detail',array('shop_id'=>$detail['shop_id']))}>">订座</a></li>
+        <li><a href="<{:U('shop/dianping',array('shop_id'=>$detail['shop_id']))}>">评价</a></li>
+    </ul>
+<php>
+    if(!empty($detail['tel'])){
+    $tel = $detail['tel'];
+    }else{
+    $tel = $detail['mobile'];
+    }
+</php>
+
+<div id="shangjia" class="app_shangjia page-center-box">
+    <div id="scroll" style="padding-bottom:0;">
+        <div class="banner"><img src="__ROOT__/attachs/<{$detail.photo}>" width="100%"></div>
+        <!--商家首页infor部分开始-->
+        <div class="infor mb10">
+            <div class="inforOne">
+                <div class="fl">
+                    <img src="__ROOT__/attachs/<{$detail.logo}>" width="50" height="50">
+                    <a href="<{:U('shop/dianping',array('shop_id'=>$detail['shop_id']))}>"><h3 class="overflow_clear"><if condition="$lang eq 1 "><{$detail.shop_name}><elseif condition="$lang eq 2" /><{$detail.lao_shop_name}><elseif condition="$lang eq 3" /><{$detail.eng_shop_name}></if></h3>
+                        <p class="black9"><span class="spxq_qgpstarBg"><span class="spxq_qgpstar spxq_qgpstar<{$detail.score}>"></span></span><b class="fontcl1"><{$detail.score_num}></b>人评价</p></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- 地址 -->
+            <div class="order-adress mb10">
+                <div class="order-shop">
+                    <div class="wz">
+                        <p class="big black9"><i class="ico_1"></i>地址：<if condition="$lang eq 1 "><{$detail.addr}><elseif condition="$lang eq 2" /><{$detail.lao_addr}><elseif condition="$lang eq 3" /><{$detail.eng_addr}></if></p>
+                        <p class="big black9"><i class="ico_2"></i>电话：<{$tel}></p>
+                    </div>
+                    <a class="tel" href="tel:<{$tel}>"></a>
+                </div>
+                <div class="mall-our">	                
+                    <a class="mall-fen" href="<{:U('shop/gps',array('shop_id'=>$detail['shop_id']))}>"><em class="ico ico_1"></em>到这去</a></span> 
+                    
+                    <a class="mall-fen" href="<{:AppLink('shop/favorites/',array('shop_id'=>$detail['shop_id']))}>" ><em <if condition="$detail['zhu'] eq 0"> class="ico ico_2"<else/>class="ico ico_3"</if>></em>关注商家</a>
+                </div>
+            </div>
+
+        </div>
+
+        <eq name="detail.is_ele" value="1">
+        <div class="hdList mb10">
+            <a  href="<{:AppLink('ele/shop',array('shop_id'=>$ele['shop_id']))}>">
+                <div>
+                    <div class="fl hdList_bq"><span class="listBox_tag bg_2">外</span></div>
+                    <div class="hdList_wz">
+                        <p class="bt">外卖</p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="linkIco_nr black9"><em class="linkIco"></em></div>
+            </a>
+        </div>
+        </eq>
+        <if condition="!empty($tuans)">
+            <div class="hdList">
+                <volist name="tuans" id="t">
+                    <div class="hdList_nr_border">
+                        <a  href="<{:AppLink('tuan/detail',array('tuan_id'=>$t['tuan_id']))}>">
+                            <div class="fl hdList_bq"><eq name="i" value="1"><span class="listBox_tag bg_1">团</span></eq></div>
+                            <div class="hdList_wz">
+                                <div class="img fl"><img src="__ROOT__/attachs/<{$t.photo}>" width="90" height="80"></div>
+                                <div class="wz">
+                                    <p class="bt overflow_clear"><if condition="$lang eq 1 "><{$t['title']}><elseif condition="$lang eq 2" /><{$t['lao_title']}><elseif condition="$lang eq 3" /><{$t['eng_title']}></if></span></p>
+                                    <p class="black9"><span class="price fontcl1">₭<{:round($t['tuan_price'],2)}></span><span style="float: right;line-height: .34rem;">已售<{$t.sold_num}></span></p>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </a>
+                    </div>
+                </volist>
+            </div>
+            <a href="<{:AppLink('tuan/index')}>" class="hdList_more black9 mb10">更多<em class="linkIco"></em></a>
+        </if>
+        <div class="hdList mb10">
+            <div>
+                <div class="fl hdList_bq"><span class="listBox_tag bg_4">详</span></div>
+                <div class="hdList_wz">
+                    <p class="bt">营业时间：<{$ex.business_time}></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <p class="black9"></p>
+            <!-- <div class="linkIco_nr black9"><em class="linkIco"></em></div> -->
+        </div>
+        <!--商家活动列表结束-->
+    </div>
+</div>
+</body>
+</html>

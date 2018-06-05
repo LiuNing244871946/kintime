@@ -1,0 +1,91 @@
+<include  file='public:header'/>  
+
+<body style="background:#fafafa none; font-size:0.12rem;">
+    <?php if(!$is_app){?>
+	<header>
+		<a href="<{:AppLink('mobile/index/index')}>"><i class="icon-goback"></i></a>
+		<div class="title">更多服务</div>
+		<i class="icon-menu"></i>
+	</header>
+    <?php }?>
+	<div class="page-center-box">
+		<div id="scroll">
+        	<div class="more_cate_box">
+            	<h3 class="title">抢购</h3>
+                <ul class="cate mb10">
+                      
+           		<php>$aa=0;</php>
+
+                <volist name="tuancates" id="item">
+                     <eq name="item.parent_id" value="0">
+                    <php>$aa++;</php>
+                    <li>
+                    <a title="<{$item.cate_name}>"  href="<{:AppLink('tuan/index',array('cat'=>$item['cate_id']))}>"><img src="__TMPL__statics/img/flIco/flIco<{$aa}>.png">
+                    <!--<div class="icon ico_<{$aa}>"></div>-->
+                            <p><{:bao_msubstr($item['cate_name'],0,2,false)}></p></a>
+                    </li>
+                    </eq>
+                     </volist>
+                </ul>
+                <h3 class="title">其他服务</h3>
+                <ul class="cate mb10">
+                	<li>
+                        <a href="<{:AppLink('mart/index')}>"><img src="__TMPL__statics/img/flIco/flIco11.png">
+                            <p>微店</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('mall/index')}>"><img src="__TMPL__statics/img/flIco/flIco12.png">
+                            <p>购物</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('housekeeping/main')}>"><img src="__TMPL__statics/img/flIco/flIco13.png">
+                            <p>生活服务</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('hdmobile/index')}>"><img src="__TMPL__statics/img/flIco/flIco14.png">
+                            <p>约会</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('community/index')}>"><img src="__TMPL__statics/img/flIco/flIco15.png">
+                            <p>我家</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('market/index')}>"><img src="__TMPL__statics/img/flIco/flIco16.png">
+                            <p>逛街</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('jifen/index')}>"><img src="__TMPL__statics/img/flIco/flIco17.png">
+                            <p>积分商城</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('extend/index')}>"><img src="__TMPL__statics/img/flIco/flIco18.png">
+                            <p>全民推广</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('huodong/index')}>"><img src="__TMPL__statics/img/flIco/flIco19.png">
+                            <p>活动</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('billboard/index')}>"><img src="__TMPL__statics/img/flIco/flIco20.png">
+                            <p>榜单</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('nearwork/index')}>"><img src="__TMPL__statics/img/flIco/flIco21.png">
+                            <p>附近工作</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('life/index')}>"><img src="__TMPL__statics/img/flIco/flIco22.png">
+                            <p>生活信息</p></a>
+                    </li>
+                    <li>
+                        <a href="<{:AppLink('shop/index')}>"><img src="__TMPL__statics/img/flIco/flIco23.png">
+                            <p>商家服务</p></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+	</div>
+<include file="public:footer"/>
+
+
+

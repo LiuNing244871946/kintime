@@ -1,0 +1,12 @@
+<div class="list-have-pic" style="margin-top: 0.4rem;">
+<foreach name="list" item="item">
+    <div class="list-box">
+        <a href="<{:AppLink('express/detail',array('express_id'=>$item['express_id']))}>">
+            <div class="left title overflow_clear"><{$item.title}></div>
+            <div class="left name"><{$item.to_name}>(收)</div>
+            <div style="width: auto;" class="right state"><if condition="$item.status eq 0">未处理<elseif condition="$item.status eq 1"/>配送中<elseif condition="$item.status eq 2"/>已完成<else/>已拒收</if></div>
+            <div class="clear"></div>
+        </a>
+    </div>
+</foreach>
+</div>

@@ -1,0 +1,54 @@
+<include  file='public:header'/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('community/newslist',array('community_id'=>$community['community_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title">物业通知详情</div>		
+    </header>
+    <?php }?>
+    <div id="commu-wuye" class="page-center-box">
+        <div id="scroll">
+            <div class="commu-ye">
+                <p class="wuye-title"><{$detail.title}></p>
+                <p><{$detail.details}></p>
+                <p><a href="javascript:void(0);" class="share"><img src="__TMPL__statics/img/tp9.png" class="fl wuye-img2"></a><span class="fr">发布者：<{$community.property}></span></p>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bdcolor">
+        <div class="bdcolor_bg"></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_weixin" data-cmd="weixin">微信</a>
+            <a class="bds_qzone" data-cmd="qzone" href="#">QQ空间</a>
+            <a class="bds_sqq" data-cmd="sqq">腾讯QQ</a>
+            <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+            <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+            <div class="bd-share-popup-footer">
+                <a class="bd-share-popup-close" onClick="$('.bdcolor').hide();" href="javascript:void(0);">取消</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".share").click(function () {
+                $(".bdcolor").show();
+            });
+        });
+        window._bd_share_config = {
+            common: {
+                bdText: '<{$detail.title}>',
+                bdDesc: '<{$detail.title}>',
+                bdUrl: location.href,
+                bdPic: 'http://<{$Think.SERVER.HTTP_HOST}>__ROOT__/attachs/<{$detail.photo|default='default.jpg'}>'
+            },
+            share: [{
+                    "bdSize": 32,
+                }],
+        }
+        with (document)
+            0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+    </script>
+</body>
+</html>

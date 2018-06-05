@@ -1,0 +1,148 @@
+<include  file='public:header'/>    
+<body>
+    <?php if(!$is_app){?>
+    <header>
+		<a href="<{:AppLink('ele/cart')}>"><i class="icon-goback"></i></a>
+		<div class="title" set-lan="html:m-payment-order>支付订单</div>
+		<i class="icon-menu"></i>
+	</header>    
+    <?php }?>
+    
+    <div id="seat" class="page-center-box">
+    	<form action="<{:U('ele/pay2',array('order_id'=>$order['order_id']))}>" method="post">
+		<div id="scroll" class="pay">
+			<div class="order-content">
+                <ul class="list">                
+                	<if condition="!empty($useraddr)">
+                        <li><div class="left" set-lan="html:m-select-address">请选择收货地址</div><div class="right"><a href="<{:AppLink('mcenter/addrs/create')}>" id="add_addr" style="color:#ff0000;" set-lan="html:m-new-address">新增收货地址</a></div><div class="clear"></div></li>
+                        <if condition="empty($near)">
+                            <a href="<{:AppLink('mcenter/addrs/create')}>" id="add_addr" style="color:#ff0000;" set-lan="html:m-new-address">完善当前地址11</a>
+                        <else />
+                            <li>
+                            <div style="width:100%">
+                                <label>
+                                     <input style="margin-top:0.04rem; float: left;" type="radio"  name="addr_id" id="addr_id" value="<{$near['addr_id']}>" checked="checked" />
+                                    <p class="fl pay-dz"><{$near.name}>,<{$near.mobile}>,<{$near.addr}></p>
+                                    <p>邮费 ₭<{$near.delivery_money}></p>
+                                </label>
+                            </div>
+                            <div style="font-size:0.14rem;padding-left:0.17rem;">
+                                <eq name="near.is_default" value="0"><a href="<{:AppLink('mobile/addr/update_addr',array('addr_id'=>$near['addr_id']))}>" style="color:#f56c08;" set-lan="html:m-set-default">设为默认</a></eq>
+                                <a href="<{:U('mcenter/addrs/edit',array('addr_id'=>$near['addr_id']))}>" style="color:#2fbdaa;" class="edit_addr" set-lan="html:m-set-default">修改地址</a>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                                   
+                            
+                        </if>
+                        <foreach name="useraddr" item="item">
+                        <li>
+                            <div style="width:100%">
+                            	<label>
+                                    <!-- <input style="margin-top:0.04rem; float: left;" type="radio"  name="addr_id" id="addr_id" value="<{$item['addr_id']}>" <if condition="$item['addr_id'] eq $order['addr_id']">checked="checked"<else/><eq name="item.is_default" value="1">checked="checked"</eq></if> /> -->
+                                    <input style="margin-top:0.04rem; float: left;" type="radio"  name="addr_id" id="addr_id" value="<{$item['addr_id']}>" />
+	                            	<p class="fl pay-dz"><{$item.name}>,<{$item.mobile}>,<{$item.addr}></p>
+                                    <p>邮费 ₭<{$item.delivery_money}></p>
+                            	</label>
+                        	</div>
+
+                            <div style="font-size:0.14rem;padding-left:0.17rem;">
+                            	<eq name="item.is_default" value="0"><a href="<{:AppLink('mobile/addr/update_addr',array('addr_id'=>$item['addr_id']))}>" style="color:#f56c08;" set-lan="html:m-set-default">设为默认</a></eq>
+                                <a href="<{:U('mcenter/addrs/edit',array('addr_id'=>$item['addr_id']))}>" style="color:#2fbdaa;" class="edit_addr" set-lan="html:m-set-default">修改地址</a>
+                            </div>
+							<div class="clear"></div>
+                        </li>
+                        </foreach>
+                        <else/>
+                        <li><span set-lan="html:m-no-address">您还没有设置收货地址！这就去</span><a style="color: #ff3333;" href="<{:AppLink('mcenter/addrs/create')}>" set-lan="html:m-add-address">添加收货地址</a></li>
+                    </if>
+                    
+	            	
+            	</ul>
+            </div>
+                    <?php  if(!$is_app){ ?>
+                <div class="wap-form">
+                    <?php if($is_android){ ?>
+  
+                    <ul>
+                        <li>支付方式</li>
+                        <foreach name="payment" item="var">
+                            <li class="pay-li i-<{$var.payment_id}>">
+                                <label>  <input type="radio"  name="code" value="<{$var.code}>" > <{$var.name}></label>
+                            </li>
+                        </foreach>
+                        <li class="integral pay-li i-8">  <label> <input name="code" value="wait" type="radio"><span set-lan="html:m-cash-on-delivery">货到付款</span></label></li>
+
+
+                    </ul>
+
+                    <?php }else{?>
+                    <script>
+                        $(function () {
+                            $(".seat-check input").click(function () {
+                                $(".seat-check").find("label").removeClass("on");
+                                $(this).parent("label").addClass("on");
+                            });
+                        });
+                    </script>
+                    <ul>
+                        <li set-lan="html:m-payment-method">支付方式</li>
+
+                        <foreach name="payment" item="var">
+                            <li class="pay-li i-<{$var.payment_id}>">
+                                <{$var.name}><p><span set-lan="html:m-recommended-installed">推荐已安装</span><{$var.name}><{$var.id}><span set-lan="html:m-client-use">客户端的用户使用</span></p><div class="seat-check"><label><input type="radio" class="ui-radio" name="code" value="<{$var.code}>" ></label></div>
+                            </li>
+                        </foreach>
+                        <!-- <li class="integral pay-li i-8"><span set-lan="html:m-cash-on-delivery">货到付款</span><p set-lan="html:m-to-pay">如果您没有网银，可以到店付</p><div class="seat-check"><label><input name="code" value="wait" type="radio"></label></div></li> -->
+
+
+                    </ul>
+                    <?php  }?>
+                </div>
+                    <?php }?>
+                    <?php if($is_app){ ?>
+                    <div class="sure-pay-but">
+                        <div class="sure-pay right"><input type="button" id="app_pay" class="aniu" value="立即支付" style="border:none;background:none;font-size:0.16rem;width:100%;color:#FFFFFF;"  set-lan="value:m-pay-immediately">
+                        </div>
+                    </div>
+                    <?php }else{ ?>
+			<div class="sure-pay-but">
+            	<div class="sure-pay right"><input type="submit" class="aniu" value="确认支付" style="border:none;background:none;font-size:0.16rem;width:100%;color:#FFFFFF;"  set-lan="value:m-surePay"></div>
+            </div>
+                    <?php } ?>
+		</div>
+        </form>
+	</div>
+    <script>
+        $(document).ready(function(){
+            $("#app_pay").click(function(){
+                var is_app = "<{$is_app}>";
+                var url = "<{:U('ele/app_pay',array('order_id'=>$order['order_id']))}>";
+                var addr_id = $("#addr_id").val();
+                var index =layer.load(1, {shade: [0.1,'#fff']});
+                $.post(url,{addr_id:addr_id},function(ret){
+                    if (ret.status == 'login') {
+                        setTimeout(function () {
+                            if (!is_app) {
+                                window.location.href = "<{:U('mobile/passport/login')}>";
+                            } else {
+                                <?php if ($is_android){?>
+                                window.jsObj.goLogin();
+                                <?php }else{?>
+                                 goload();
+                                <?php }?>
+                            }
+                        }, 1000)
+                    } else  if(ret.status == 'success'){
+                        layer.close(index);   
+                        layer.msg(ret.message);
+                        payment_app(ret.log_id);
+                    }else{
+                        layer.msg(ret.message);
+                    }
+                },'json')
+            })
+        })
+    </script>    
+    
+<include  file='public:footer'/>       

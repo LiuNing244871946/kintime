@@ -1,0 +1,25 @@
+<include  file='public:header'/>
+
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('community/detail',array('community_id'=>$detail['community_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title">入驻小区</div>
+    </header>
+    <?php }?>
+    <iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
+    <form action="<{:U('community/owner',array('community_id'=>$detail['community_id']))}>" method="post" target="baocms_frm">
+        <div id="login" class="page-center-box">
+            <div id="scroll">
+                <div id="login-input">
+                    <input type="text" name="location"  placeholder="输入您的具体地址,例如13栋1号楼204" />            
+                </div>
+                <div id="login-input">
+                    <input type="text" name="name"  placeholder="输入您的称呼" />            
+                </div>
+                <input type="submit" class="submit" value="提交申请" />
+            </div>
+        </div>
+    </form>
+</body>
+</html>

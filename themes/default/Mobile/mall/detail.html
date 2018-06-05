@@ -1,0 +1,90 @@
+
+<include file="public:header"/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('mall/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">商品详情</div>
+    </header>
+    <?php }?>
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <div class="goodsDetail_intro mb10">
+                <div class="img" style="border-bottom:0.01rem solid #dedede;"><img src="__ROOT__/attachs/<{$detail.photo}>" /></div>
+                <div class="bt">
+                    <p class="fl"><{$detail.title}></p>
+                </div>
+                <div class="jiadetail">
+                    <div class="fl">
+                    	<span class="price"><small>₭</small><{:round($detail['mall_price'],2)}>
+                    </div>
+                    <div class="fr sale_num">
+                        <span class="fr black9 time">销量<{$detail.sold_num}>件</span>
+                        <span class="fr black9 time" style="margin-right: 10px;">库存:<{$detail['kucun']}></span>
+                        <span class="fr black9 time" style="margin-right: 10px;">重量:<{$detail['weight']}>Kg</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <!--选框-->
+                <div class="">
+                	<foreach name='format_list' item='item'>
+                        <div class="xuankuan_box">
+                            <span class="tit"><{$item.name}></span>
+                            <div class="mall_goods_guige">
+                                <foreach name="item[values]" item="val">
+                                <?php if($val['checked']){ ?> 
+                                <a href="javascript:;" class="current"><{$val.name}><i></i></a>
+                                <?php }else if(isset($val['vid'])){?>                            
+                                <a href="<{:U('mall/detail', array('goods_id'=>$detail['goods_id'],'vid'=>$val['vid']))}>"><{$val.name}><i></i></a>
+                                <?php }else{ ?>
+                                <a href="javascript:;" class="no"><{$val.name}><i></i></a>
+                                <?php } ?>
+                                </foreach>
+                            </div>
+                        </div>
+                    </foreach>
+                </div>
+                <!--选框end-->
+            </div>
+            <div>
+                <ul>
+                    <li class="goodsDetail_shop mb10">
+                        <div class="fl img"><a href="<{:AppLink('mart/lists',array('id'=>$detail['weidian_id']))}>"><img src="__ROOT__/attachs/<{$weidian.pic}>" /></a></div>
+                        <div class="wz">
+                            <p class="bt"><a href="<{:AppLink('mart/lists',array('id'=>$weidian['id']))}>"><{$weidian.weidian_name}></a></p>
+                            <p>地址：<{$weidian.addr}></p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="goodsDetail_infor mb10">
+                <h1>商品详情</h1>
+                <div class="nr">
+                    <{$detail.details}><!--商品详情和购买须知内容反了-->
+                </div>
+            </div>
+            <div class="goodsDetail_infor mb10">
+                <h1>购买须知</h1>
+                <div class="nr">
+                 <{$detail.instructions}>  
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <footer>
+        <div class="goodsDetail_foot">
+            <div class="fl">
+                <a class="cart" href="<{:AppLink('mall/cart')}>"><span class="cart-num"><{$cartnum}></span></a>
+            </div>
+            <div class="fr">
+                <a class="cartadd2 btn btn1" href="<{:AppLink('mall/stage',array('goods_id'=>$detail['goods_id'], 'vid'=>$goods_vid))}>">分期购买</a>
+                <a class="cartadd2 btn btn1" href="<{:AppLink('mall/cartadd2',array('goods_id'=>$detail['goods_id'], 'vid'=>$goods_vid))}>">加入购物车</a>
+                <a href="<{:AppLink('mall/buy',array('goods_id'=>$detail['goods_id'], 'vid'=>$goods_vid))}>" class="btn">立即购买</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </footer>
+</body>
+</html>

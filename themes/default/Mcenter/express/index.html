@@ -1,0 +1,27 @@
+<include  file='public:header'/>  
+<body>
+    <?php if(!$is_app){?>
+    <header> <a href="<{:AppLink('member/index')}>"><i class="icon-goback"></i></a>
+    <div class="title">我的快递</div>
+    <i class="icon-menu" style="margin-right:0.30rem;"><a href="<{:AppLink('express/create')}>">发布</i><i class="icon-menu" id="ico_6"></i></a>
+    </header>
+    <?php }?>
+<!-- 筛选TAB -->
+<div class="shop-lie" id="app_nav">
+    <ul>
+        <li <php>if($status ==null){echo 'class=on';}</php>><a href="<{:LinkTo('express/index')}>"><span>全部</span></a></li>
+        <li <eq name="status" value="1">class="on"</eq>><a href="<{:LinkTo('express/index',array('status'=>1))}>"><span>未完成</span></a></li>
+        <li <eq name="status" value="2">class="on"</eq>><a href="<{:LinkTo('express/index',array('status'=>2))}>"><span>已完成</span></a></li>
+    </ul>
+</div>
+<div id="express" class="page-center-box">
+    <div id="scroll">
+    </div>
+    <script>
+        $(document).ready(function () {
+            loaddata('<{:U("mcenter/express/loaddata",array("t"=>$nowtime,"p"=>"0000","status"=>$status))}>', $("#scroll"), true);
+        });
+    </script>
+</div>
+</div>
+<include  file='public:footer'/>

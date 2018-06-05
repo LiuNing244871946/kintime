@@ -1,0 +1,71 @@
+<include  file='public:header'/>  
+<img src="__TMPL__statics/images/bdBg.png" style="position:fixed; z-index:0; width:auto; min-width:100%; height:auto; min-height:100%; left:50%; margin-left:-50%; top:0;" />
+<div class="areaSearch_box">
+    <div class="areaSearch_nr">
+        <h1><img src="__TMPL__statics/images/sqbt.png" /></h1>
+        <div class="cont1">
+            <div class="Search_box">
+                <form method="post" action="<{:U('post/index')}>">
+                    <input type="text" id="community_name" name="name" value="" placeholder="请您输入您的小区名称" />
+                    <input type="submit" class="btn" value="搜索" />
+                </form>
+            </div>
+            <div class="Search_list">
+                <h3>热门区域：</h3>
+                <ul class="community_list">
+                </ul>
+            </div>
+        </div>
+        <ul class="process">
+            <li>
+                <em class="ico_1"></em>
+                <p>写地址</p>
+                输入您你要的小区                               
+            </li>
+            <li>
+                <em class="ico_2"></em>
+                <p>选贴吧</p>
+                浏览小区贴吧                               
+            </li>
+            <li>
+                <em class="ico_3"></em>
+                <p>发帖吧</p>
+                记录你的小区生活                               
+            </li>
+        </ul>
+    </div>
+</div>
+<!--main end-->
+<script>
+    $(document).ready(function () {
+        var url = "<{:U('post/main')}>";
+        $.post(url, function (data) {
+            if (data.status == 'success') {
+                var str = '';
+                var res = data.list;
+
+                $.each(res, function (n, value) {
+                    str += '<li><a class="jq_li" href="javascript:void(0);">' + value.name + '</a></li>';
+                });
+                $('.community_list').html(str);
+            }
+        }, 'json');
+        $(".community_list").on('click', '.jq_li', function () {
+            $("#community_name").val($(this).html());
+        });
+        $("#community_name").keyup(function(){
+            var jq_name = $(this).val();
+            $(".jq_li").each(function () {
+                var jq_lis = $(this).html();
+                if(jq_lis.indexOf(jq_name) == -1){
+                    $(this).css('display','none');
+                }else{
+                    $(this).css('display','block');
+                }
+            });
+        })
+
+    })
+</script>
+</body>
+</html>

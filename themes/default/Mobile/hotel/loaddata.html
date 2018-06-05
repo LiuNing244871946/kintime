@@ -1,0 +1,20 @@
+<foreach name="list" item="item">
+    <li class="hotel_list">
+        <div class="pub_img left"><a href="<{:U('hotel/detail',array('hotel_id'=>$item['hotel_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"></a></div>
+        <div class="pub_wz">
+                <h3 class="overflow_clear"><a href="<{:U('hotel/detail',array('hotel_id'=>$item['hotel_id']))}>"><if condition="$lang eq 1 "><{$item.hotel_name}><elseif condition="$lang eq 2" /><{$item.lao_hotel_name}><elseif condition="$lang eq 3" /><{$item.eng_hotel_name}></if></a>
+                    <span class="range fr" style="font-size: 0.12rem; color: #2fbdaa;"><{$item.d}></span></h3>
+            <div class="box">
+                <php>$s = round($item['score']/$item['comments'],1);$sc = $s*20;</php>
+                <div class="left">
+                        <p class="black9" set-lan="html:q-minutes"><{$s}>分</p>
+                    <p class="black9"><{$cates[$item['cate_id']]}></p>
+                </div>
+                <div class="right">
+                        <p class="black9" set-lan="html:q-qian">₭<big class="fontcl2"><{$item.price}></big><span set-lan="html:q-rise">起</span></p>
+                </div>
+            </div>
+            <P class="overflow_clear black9"><span class="addr" style="margin-left: 0;"><if condition="$lang eq 1 "><{$item.addr}><elseif condition="$lang eq 2" /><{$item.lao_addr}><elseif condition="$lang eq 3" /><{$item.eng_addr}></if></span></P>
+        </div>
+    </li>
+</foreach>

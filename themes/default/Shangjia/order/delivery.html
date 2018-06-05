@@ -1,0 +1,95 @@
+<include  file='public:header'/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">商家管理</a> > <a href="" set-lan="html:n-mall">商城</a> > <a set-lan="html:n-paidOrder">付款订单</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('order/delivery')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l">
+            <span set-lan="html:n-startTime">开始时间：</span><input type="text" class="radius3 tuan_topser"  name="bg_date" value="<{$bg_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+            <span set-lan="html:n-endTime">结束时间：</span><input type="text" class="radius3 tuan_topser"  name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+            <span set-lan="html:n-orderNumber">订单编号：</span><input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索" set-lan="value:n-search"/>
+            </div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli"><a href="<{:U('goods/index')}>" set-lan="html:n-mallGoods">商城商品</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('order/index')}>" set-lan="html:n-saleGoods">卖出商品</a></li>
+            <li class="tuanfabu_tabli "><a href="<{:U('order/wait')}>" set-lan="html:n-paidOrder">付款订单</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('order/wait2')}>" set-lan="html:n-cashDelivery">货到付款</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('order/picks2')}>" set-lan="html:n-pickGoods">捡货列表</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('order/picks')}>" set-lan="html:n-pickGoods">捡货单</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('order/delivery2')}>" set-lan="html:n-deliveryManagement">捡货管理</a></li>
+            <li class="tuanfabu_tabli on"><a href="<{:U('order/delivery')}>" set-lan="html:n-deliveryManagement">订单管理</a></li>
+
+        </ul>
+    </div> 
+        <form  target="baocms_frm" method="post">
+
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+       
+        <foreach name="list" item="order">
+        <tr style="background-color:#f7e9d7;">
+            <td colspan="5">
+            	<div class="mallorder_tBox">
+                    <span class="mallorder_t"><span set-lan="html:n-orderId">订单ID：</span><span class="mallorder_jg"><{$order.order_id}></span></span>
+                    <span class="mallorder_t"><span set-lan="html:n-salesTime">交易时间：</span><span class="mallorder_jg"><{$order.create_time|date='Y-m-d H:i:s',###}></span></span>
+                    <span class="mallorder_t"><span set-lan="html:n-buyer">买家：</span><span class="mallorder_jg"><{$users[$order['user_id']]['account']}></span></span>
+                    <span class="mallorder_t"><span set-lan="html:n-allValue">总价值：</span><span class="mallorder_jg"><{:round($order['total_price']/100,2)}></span></span>
+                    <span class="mallorder_t"><span set-lan="html:n-shippingAddress">收货地址：</span><span class="mallorder_jg">
+                    <{$areas[$addrs[$order['addr_id']]['area_id']]['area_name']}>、
+                    <{$business[$addrs[$order['addr_id']]['business_id']]['business_name']}>、
+                    <{$addrs[$order['addr_id']]['addr']}>
+                    <{$addrs[$order['addr_id']]['name']}>
+                    <{$addrs[$order['addr_id']]['mobile']}>
+                    </span></span>
+                    <span class="mallorder_t"><span set-lan="html:n-state">状态：</span><span class="mallorder_jg">
+                    <eq name="order.is_daofu" value="1" set-lan="html:n-cashDelivery">货到付款 ---</eq>
+                    <if condition="$order['status'] eq 8">
+                        <span set-lan="html:n-waitClientSure">订单已完成</span>
+                    <elseif condition="$order['status'] eq 4" />
+                        <span set-lan="html:n-waitClientSure">骑手已接单</span>
+                    <elseif condition="$order['status'] eq 2" />
+                        <span set-lan="html:n-waitClientSure">捡货中</span>
+                    <elseif condition="$order['status'] eq 6"  />
+                        <a class="radius3 btn" mini='confirm' href="<{:U('order/distribution',array('order_id'=>$order['order_id']))}>" set-lan="html:n-ordreHaveCompleted">完成订单</a>
+                    <elseif condition="$order['status'] eq 3" />
+                        <span set-lan="html:n-waitClientSure">骑手已送达</span>
+                    <elseif condition="$order['status'] eq 5" />
+                        <span set-lan="html:n-waitClientSure">捡货完成</span>
+                    </if>
+                    </span></span>
+             	</div>
+            </td>
+        </tr>
+        <foreach name="goods" item="good">
+        <eq name="good.order_id" value="$order.order_id">
+        <tr>
+            <td>
+            	<div class="mallorder_xq"><img width="80" src="__ROOT__/attachs/<{$products[$good['goods_id']]['photo']}>" /><p><{$products[$good['goods_id']]['title']}></p></div>
+            </td>
+            <td><span class="mallorder_jg">₭<{:round($good['price']/100,2)}></span></td>
+            <td><{$good['num']}></td>
+            <td><span class="mallorder_jg">₭<{:round($good['total_price']/100,2)}></span></td>
+            <td><span class="mallorder_jg">
+            <if condition="$order['status'] neq 0  && $order['is_daofu'] neq 0">
+			<{$goodtypes[$good['status']]}>
+            </if>
+            </span></td>
+        </tr>
+        </eq>
+        </foreach>
+        </foreach>
+    </table>
+     
+        </form>
+</div>
+
+<include  file='public:footer'/>

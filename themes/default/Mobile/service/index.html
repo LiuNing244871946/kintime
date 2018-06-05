@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+        <title>服务中心</title>
+        <link rel="stylesheet" href="__TMPL__statics/css/reset.css?v=20160105"/>
+        <link rel="stylesheet" href="__TMPL__statics/css/css_1.css?v=20160105"/>
+        <link rel="stylesheet" href="__TMPL__statics/css/style.css?v=20160105"/>
+        <script> var BAO_PUBLIC = '__PUBLIC__';
+            var BAO_ROOT = '__ROOT__';</script>
+        <?php if($is_app){?>
+        <style>
+            .page-center-box{top: 0rem !important;}
+        </style>
+        <?php }?>
+    </head>
+    
+    <body>
+        <?php if(!$is_app){?>
+        <header>
+            <i class="left"><a href="<{:AppLink('mcenter/member/index')}>" class="gobackIco"></a></i>
+            <div class="title">
+                服务中心
+            </div>
+            <i class="right"></i>
+        </header>
+        <?php }?>
+        <section  class="page_center_box" <?php if(!$is_app){?>style="margin-top:0.5rem;"<?php }?> >
+            <div class="serve_center_page">
+                <div class="serve_center mb10"> 
+                    <a href="javascript:void(0);"><img src="__TMPL__statics/img/kf_img.png"><p>联系客服</p></a>
+                </div>
+                <ul class="form_list_box">
+                    <calldata mdl="Service" where="" limit="0,10" cache="86400" key='index' order="orderby asc">
+                        <li class="mineHome_list">
+                            <a href="<{:AppLink('service/detail',array('service_id'=>$item['service_id']))}>">
+                                <p class="fl"><{$item.title}></p>
+                                <div class="fr"><em class="linkIco"></em></div>
+                                <div class="clear"></div>
+                            </a>
+                        </li>
+                    </calldata>
+                </ul>
+            </div>
+        </section>
+    </body>
+</html>

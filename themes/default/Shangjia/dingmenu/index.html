@@ -1,0 +1,60 @@
+<include file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-others">其他</a> > <a href="" set-lan="html:n-beverageSetting">餐饮设置</a> > <a set-lan="html:n-menuManagement">菜单管理</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('eleproduct/index')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <span set-lan="html:n-dishesName">菜品名称：</span><input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索" set-lan="value:n-search"/>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('dingmenu/create')}>" set-lan="html:n-addDishes">添加菜品+</a></div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('dingcate/index')}>" set-lan="html:n-dishesClassify">菜品分类</a></li>
+            <li class="tuanfabu_tabli tabli_change on"><a href="<{:U('dingmenu/index')}>" set-lan="html:n-dishesSetting">菜品设置</a></li>
+        </ul>
+    </div>
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-dishesTitle">菜名</td>
+            <td set-lan="html:n-classify">分类</td>
+            <td set-lan="html:n-thumbnail">缩略图</td>
+            <td set-lan="html:n-price">价格</td>
+            <td set-lan="html:n-couponPrice">优惠价</td>
+            <td set-lan="html:n-isNew">是否新品</td>
+            <td set-lan="html:n-isCoupon">是否优惠</td>
+            <td set-lan="html:n-isRecommend">是否推荐</td>
+            <td set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.menu_name}></td>
+                <td><{$dingcates[$var['cate_id']]['cate_name']}></td>
+                <td><img style="margin: 10px auto; width: 120px;" src="__ROOT__/attachs/<{$var.photo}>" /></td>
+                <td><{:round($var['price']/100,2)}></td>
+                <td><{:round($var['ding_price']/100,2)}></td>
+                <td><eq name="var.is_new" value="1"><span set-lan="html:n-newGoods">新品</span><else/><span set-lan="html:n-haveNot">无</span></eq></td>
+            <td>
+            <eq name="var.is_sale" value="1"><span set-lan="html:n-youHui">优惠</span><else/><span set-lan="html:n-haveNot">无</span></eq>
+            </td>
+            <td>
+            <eq name="var.is_tuijian" value="1"><span set-lan="html:n-recommend">推荐</span><else/><span set-lan="html:n-haveNot">无</span></eq>
+            </td>
+            <td>
+                <a href="<{:U('dingmenu/edit',array('menu_id'=>$var['menu_id']))}>" set-lan="html:n-edit">编辑</a>
+                <a mini='confirm' href="<{:U('dingmenu/delete',array('menu_id'=>$var['menu_id']))}>" set-lan="html:n-delete">删除</a>
+            </td>
+            </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+<include file='public:footer'/>

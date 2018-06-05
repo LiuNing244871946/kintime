@@ -1,0 +1,52 @@
+<include  file='public:header'/>    
+
+<body>
+    <?php if(!$is_app){?>
+    <header> 
+    	<a href="<{:AppLink('mobile/index/index')}>"><i class="icon-goback"></i></a>
+        <div class="title" set-lan="html:q-Completionofpayment"> 完成支付</div>
+    </header>
+    <?php }?>
+    <div id="index" class="page-center-box">
+        <div id="scroll">
+            <div class="payFinish">
+                <div class="sh_buy_bt">
+                    <div class="fl"><span set-lan="html:q-Ordernumber">订单编号</span>：<{$detail.order_id}></div>
+                    <div class="fr"><span set-lan="html:q-Timeofpayment">付款时间</span>：<{$detail.create_time|date='Y-m-d H:i',###}></div>
+                </div>
+                <div class="sh_waimai_order_nr">
+                    <div class="wz">
+                        <ul>
+                            <li>
+                                <div class="fl left">
+                                    <div class="payFinish_img"><img src="__ROOT__/attachs/<{$room['photo']}>" width="60" height="60"></div>
+                                    <p class="payFinish_wz"><if condition="$lang eq 1 "><{$room['title']}><elseif condition="$lang eq 2" /><{$room['lao_title']}><elseif condition="$lang eq 3" /><{$room['eng_title']}></if></p>
+                                </div>
+                                <div class="fr"><{$order.num}><span set-lan="html:q-room">间</span><span class="ml10"></span><{$order.night_num}><span set-lan="html:q-night">晚</span><span class="ml10"></span><span class="ml10"><span set-lan="html:q-qian">₭</span><{$order.price}>/间/晚</span></div>
+                                <div class="clear"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="sh_waimai_order_price">
+                    <div class="fl" set-lan="html:q-Predeterminedtime">预订时间：</div>
+                    <div class="fr"><{$order.stime}>--<{$order.ltime}></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="sh_waimai_order_price">
+                    <div class="fl"><span set-lan="html:q-Paymentmethod">付款方式</span>：<if condition="$lang eq 1 "><{$paytype[$detail['code']]['name']}><elseif condition="$lang eq 2" /><{$paytype[$detail['code']]['lao_name']}><elseif condition="$lang eq 3" /><{$paytype[$detail['code']]['eng_name']}></if></div>
+                    <div class="fr"><span set-lan="html:q-Totalorder">订单总额</span>：<span class="main_color"><span set-lan="html:q-qian">￥</span><{$order['amount']}></span></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="sh_waimai_order_price">
+                    <div><span set-lan="html:q-address">地址</span>：<if condition="$lang eq 1 "><{$hotel['addr']}><elseif condition="$lang eq 2" /><{$hotel['lao_addr']}><elseif condition="$lang eq 3" /><{$hotel['eng_addr']}></if></div>
+                </div>
+                <div class="sh_buy_date"><span set-lan="html:q-Singletime">下单时间</span>：<{$detail.single_time|date='Y-m-d H:i',###}></div>
+            </div>
+        </div>
+    </div>
+    <div class="bfix shop-button" >
+        <a href="<{:AppLink('mcenter/hotel/detail',array('order_id'=>$order['order_id']))}>"><span class="shop-pay" set-lan="html:q-details">查看详情</span></a>
+        <a href="<{:AppLink('mobile/hotel/index')}>"><span class="shop-del" set-lan="html:q-looking">继续逛逛</span></a>
+    </div>
+<include  file='public:footer'/>    

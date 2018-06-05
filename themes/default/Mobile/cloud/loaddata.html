@@ -1,0 +1,21 @@
+<foreach name="list" item="item">
+    <li class="list">
+        <div class="fl">
+            <eq name="item.type" value="1"><div class="tag"></div></eq>
+            <div class="img fl"><img src="__ROOT__/attachs/<{$item.photo}>" width="60" height="60"/></div>
+            <div class="wz">
+                <p class="bt"><{$item.title}></p>
+                <php>$left = $item['price'] - $item['join']; $tt = round($item['join']/$item['price']*100,2);</php>
+                <div class="yiyuan_progres"><span class="yiyuan_progres_bar" style="width:<{$tt}>%;"></span></div>
+                <div>
+                    <p class="fl black9"><{$item.join}>已参与</p>
+                    <p class="fr black9">剩余 <span class="maincl"><{$left}>次</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="fr">
+            <a href="<{:U('cloud/detail',array('goods_id'=>$item['goods_id']))}>" class="btn">立即夺宝</a>
+        </div>
+        <div class="clear"></div>
+    </li>
+</foreach>

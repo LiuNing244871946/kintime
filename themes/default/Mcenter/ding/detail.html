@@ -1,0 +1,111 @@
+<include file="public:header"/>
+<body>
+<?php if(!$is_app){?>
+<header>
+    <div class="header_color">
+        <a href="<{:AppLink('ding/index')}>"><i class="icon-goback"></i></a>
+        <div class="title" set-lan="html:m-order-details">订单详情</div>
+    </div>
+</header>
+<?php }?>
+<div class="page-center-box">
+	<!--头部状态-->
+    <div class="seatOrd_state mb10">
+        <div class="state"><em class="ico ico_1 fl"></em>
+            <div class="pub_wz">
+                <if condition="$detail['order_status'] eq 0">
+                <p class="font_size14 font_line24"><span set-lan="html:m-order-created">订单已创建</span></p>
+                <elseif condition="$detail['order_status'] eq 1"/>
+                <p class="font_size14 font_line24"><span set-lan="html:m-order-paid">订单已支付</span></p>
+                <elseif condition="$detail['order_status'] eq 2"/>
+                <p class="font_size14 font_line24"><span set-lan="html:m-order-completed">订单已完成</span></p>
+                <else/>
+                <p class="font_size14 font_line24"><span set-lan="html:m-order-cancelled">订单已取消</span></p>
+                </if>
+            </div>
+        </div>
+        <div class="progress">
+            <ul>
+                <li class="list on">
+                	<em class="ico"></em>
+                	<p class="font_size14" set-lan="html:m-submitted-successfully">提交成功</p>
+                        <p><{$detail.create_time|date='m-d H:i',###}></p>
+                </li>
+                <if condition="$log['is_paid'] eq 1">
+                <li class="list on">
+                	<em class="ico"></em>
+                	<p class="font_size14" set-lan="html:m-payment-successfully">支付成功</p>
+                        <p><{$log.pay_time|date='m-d H:i',###}></p>
+                </li>
+                </if>
+                <if condition="$detail['order_status'] eq 2">
+                <li class="list on">
+                	<em class="ico"></em>
+                	<p class="font_size14" set-lan="html:m-order-completed">订单完成</p>
+                        <p><{$detail.update_time|date='m-d H:i',###}></p>
+                </li>
+                </if>
+                <if condition="$detail['order_status'] eq -1">
+                <li class="list on">
+                	<em class="ico"></em>
+                	<p class="font_size14" set-lan="html:m-order-cancel">订单取消</p>
+                        <p><{$detail.update_time|date='m-d H:i',###}></p>
+                </li>
+                </if>
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!--头部状态end-->
+    <!--订单详情-->
+    <div class="seatOrd_detl border_b">
+    	<div class="title border_t border_b"><if condition="$lang eq 1 "><{$shopinfo.shop_name}><elseif condition="$lang eq 2" /><{$shopinfo.lao_shop_name}><elseif condition="$lang eq 3" /><{$shopinfo.eng_shop_name}></if></div>
+        <div class="nr">
+            <if condition="$detail['ding_type'] eq 0">
+                <p><span set-lan="html:m-table-number">桌号</span>  &nbsp;<{$detail.table_num}></p>
+            <elseif condition="$detail['ding_type'] eq 1" />
+                <p>就餐人数  <span style="color:#2fbdaa"><{$detail.ding_num}></span></p>
+                <p>点餐情况  <span style="color:#2fbdaa"><if condition="$detail['menu_amount'] eq 0">未点餐<else/>已点餐</if></span></p>
+                <p>联系人  <span style="color:#2fbdaa"><{$detail.name}></span>&nbsp;&nbsp;<if condition="$detail['sex'] eq 1">先生<else/>女士</if></p>
+                <p>手机号  <span style="color:#2fbdaa"><{$detail.mobile}></span></p>
+            </if>
+            
+            
+            <p><span set-lan="html:m-already-paid">已付款</span>  <span style="color: red;">₭ <{$detail['amount']}></span>(<if condition="$detail['order_status'] eq 1"> <span set-lan="html:m-unconsumed">未消费</span> <elseif condition="$detail['order_status'] eq 2"/> <span set-lan="html:m-consumed">已消费</span> <elseif condition="$detail['order_status'] eq -1"/> <span set-lan="html:m-cancelled">已取消</span> <else/><span set-lan="html:m-unpaid">未支付</span></if>)</p>
+        </div>
+    </div>
+    <!--订单详情end-->
+    <if condition="$list">
+        <div class="seatYuyue_menu border_b mt10 mb10">
+            <div class="title border_t border_b" set-lan="html:m-menu">菜单</div>
+            <ul>
+                <volist name="list" id="item">
+                    <li class="list"><span class="name"><if condition="$lang eq 1 "><{$menus[$item['menu_id']]['menu_name']}><elseif condition="$lang eq 2" /><{$menus[$item['menu_id']]['lao_menu_name']}><elseif condition="$lang eq 3" /><{$menus[$item['menu_id']]['eng_menu_name']}></if></span><span class="num black9">x<{$item.num}></span><span class="black9 right">₭ <{$item['price']}></span></li>
+                </volist>                
+            </ul>
+        </div>
+    </if>
+</div> 
+<footer>
+    <div class="seatOrd_btn_box" style="width:auto; padding:0.05rem 0.1rem; float:none; background:#fff; margin:0; text-align:right;">
+        <if condition="$detail['order_status'] eq 0 and $detail['amount'] gt 0">
+            <a class="pub_btn bgcl1" href="<{:AppLink('mobile/ding/pay',array('order_id'=>$detail['order_id']))}>" target="_blank" set-lan="html:m-to-pay">去付款</a>
+            <a class="pub_btn bgcl1" href="<{:AppLink('ding/cancel',array('order_id'=>$detail['order_id']))}>">取消订单</a>
+        <elseif condition="$detail['order_status'] eq 1" />
+            <span class=" mt10"><a href="javascript:void(0);" class="pub_btn bgcl1" >已付款</a></span>
+            <a class="pub_btn bgcl1" href="<{:AppLink('ding/cancel',array('order_id'=>$detail['order_id']))}>" set-lan="html:m-cancel-order">取消订单</a>
+        <elseif condition="$detail['order_status'] eq 2" />
+            <span class=" mt10"><a href="javascript:void(0);" class="pub_btn bgcl1" set-lan="html:m-consumed">已消费</a></span> 
+            <eq name="detail.comment_status" value="0">
+                <a href="<{:AppLink('ding/comment',array('order_id'=>$detail['order_id']))}>" class="pub_btn bgcl1" set-lan="html:m-to-review">去点评</a>
+            <else/>
+                <a href="javascript:void(0);" class="pub_btn graybg" set-lan="html:m-reviewed">已点评</a>
+            </eq>
+        <elseif condition="$detail['order_status'] eq -1" />
+            <a href="javascript:void(0);" class="pub_btn graybg" set-lan="html:m-cancelled">已取消</a>  
+        </if>
+    </div>
+</footer>
+<iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
+</body>
+</html>

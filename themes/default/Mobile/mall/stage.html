@@ -1,0 +1,98 @@
+
+<include file="public:header"/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('mall/detail',array('goods_id'=>$detail['goods_id'], 'vid'=>$vid))}>"><i class="icon-goback"></i></a>
+        <div class="title">选择分期</div>
+    </header>
+    <?php }?>
+    <div id="life" style="padding: 0 15px;width: 100%;box-sizing: border-box;background-color: #fff;">
+        <div id="stage_header">
+            <div id="stage_imgwrap">
+                <img src="__ROOT__/attachs/<{$detail.photo}>">
+            </div>
+            <div id="stage_main">
+                <div id="stage_price">₭<{$detail.mall_price}></div>
+                <div>库存<{$detail.kucun}>件</div>
+                <div>销量<{$detail.sold_num}>件</div>
+                <div>重量<{$detail.weight}>Kg</div>
+            </div>
+        </div>
+        <if condition="count($sstages) neq 0">
+            <h2 class="stage_h2">商家分期</h2>
+            <div class="stage_con">
+                <foreach name="sstages" item="item" key="key">
+                    <label data-key="<{$item.id}>">
+                        <span style="display: block;">分期<{$item.periods}>(含手续费)</span>
+                        <span>
+                            <em>₭</em><{$item.money}>/期
+                        </span>
+                    </label>
+                </foreach>
+            </div>
+        </if>
+        
+        <if condition="count($kstages) neq 0">
+            <h2 class="stage_h2">kin宝分期</h2>
+            <div class="stage_con">
+                <foreach name="kstages" item="item" key="key">
+                    <label data-key="<{$item.id}>">
+                        <span style="display: block;">分期<{$item.periods}>(含手续费)</span>
+                        <span>
+                            <em>₭</em><{$item.money}>/期
+                        </span>
+                    </label>
+                </foreach>
+            </div>
+        </if>
+        
+        <script type="text/javascript">
+            $('label').click(function(){
+                $('label').removeClass('checked');
+                $(this).addClass('checked');
+            })
+        </script>
+        
+    </div>
+    <footer class="footer-cart">
+        <a href="javascript:void(0);" onClick="determine();" id="stage_det">确定</a>
+    </footer>
+    <script type="text/javascript">
+        var uid = "<{$MEMBER['user_id']}>"; 
+        function determine(){
+            if(uid == "undefined"||uid =="" ||uid==0){
+                <?php if(!$is_app){
+                    echo  'location.href="'.U("passport/login").'"';
+                } else if ($is_android){?>
+                    window.jsObj.goLogin();
+                <?php }else if($is_app){?>
+                     goload();
+                <?php }else{?>
+                     window.location.href="<{:U('mobile/passport/login')}>";
+                <?php }?>
+            }else{
+                var data={};
+                data.goods_id = "<{$detail['goods_id']}>";
+                data.vid = "<{$vid}>";         
+                data.interest_id = $('label.checked').data('key');
+                $.post("<{:U('mall/cartadd')}>",data,function(data){
+                    if(data.ret ==0){
+                        layer.msg(data.msg);
+                        setTimeout(function(){
+                            <?php if(IS_APP){ ?>
+                                getNewWebView(data.url);
+                            <?php }else{?>                      
+                                location.href=data.url;                          
+                            <?php }?>
+                        },2000);
+                        
+                    }else{
+                        layer.msg(data.msg);
+                    }                        
+                },'json');                    
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<include file="public:header"/>
+
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('market/index')}>"><i class="icon-goback"></i></a>
+        <div class="title"><{$detail.market_name}></div>
+    </header>
+    <?php }?>
+    <div class="bdcolor">
+        <div class="bdcolor_bg"></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_weixin" data-cmd="weixin">微信</a>
+            <a class="bds_qzone" data-cmd="qzone" href="#">QQ空间</a>
+            <a class="bds_sqq" data-cmd="sqq">腾讯QQ</a>
+            <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+            <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+            <div class="bd-share-popup-footer">
+                <a class="bd-share-popup-close" onClick="$('.bdcolor').hide();" href="javascript:void(0);">取消</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".share").click(function () {
+                $(".bdcolor").show();
+            });
+        });
+        window._bd_share_config = {
+            common: {
+                bdText: '<{$detail.addr}>',
+                bdDesc: '<{$detail.addr}>',
+                bdUrl: location.href,
+                bdPic: 'http://<{$Think.SERVER.HTTP_HOST}>__ROOT__/attachs/<{$detail.photo|default='default.jpg'}>'
+            },
+            share: [{
+                    "bdSize": 32,
+                }],
+        }
+        with (document)
+            0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+    </script>
+    <div id="sell" class="page-center-box">
+        <div id="scroll">
+            <!-- BANNER图 -->
+            <div id="index" class="page_center_box">
+                <div class="dist_intro_box">
+                    <img src="__ROOT__/attachs/<{$detail.photo}>">
+                    <div class="dist_intro">
+                        <div class="fl">
+                            <img src="__ROOT__/attachs/<{$detail.logo}>">
+                            <p class="title"><{$detail.market_name}></p>
+                            <php>
+                                $tags = $detail['tags'];
+                                $tagsarray = array();
+                                if(!empty($tags)){
+                                    $tagsarray = explode(',',$tags);
+                                }
+                            </php>
+                            <p><{$detail.fans_num}>粉丝
+                                <php>$aa=0;</php>
+                                <volist name="tagsarray" id="item">
+                                	<php>$aa++;</php>
+                                         <a href="javascript:void(0);" class="cl_<{$aa}>"><{$item}></a>
+                                </volist>
+                            </p> 
+                        </div>
+                        <div class="fr">
+                            <if condition="$detail['favo'] eq 0"><a href="<{:AppLink('market/favorites',array('market_id'=>$detail['market_id']))}>" class="btn">+关注</a><else/><a href="javascript:void(0);" class="btn">已关注</a></if>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 评分 -->
+            <div class="point city_stores_details_point">
+                <div class="point-left">
+                    <p><{$detail['addr']}></p>
+                </div>
+                <div class="point-right">
+                    <a href="<{:U('market/gps',array('market_id'=>$detail['market_id']))}>" class="btn">到这去</a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- 地址 -->
+            <div class="order-adress">
+                <div class="mall-our">
+                    <script>
+                        $(function () {
+                            $(".share_btn").click(function () {
+                                $(".share_item").show();
+                                $(".share_item").find(".quit").click(function () {
+                                    $(".share_item").hide();
+                                });
+                            });
+                        });
+                    </script>	                
+                    <span class="mall-fen share_btn share"><a><img src="__TMPL__statics/img/tp9.png"><span>分享</span></a></span>  
+                    <a href="<{:AppLink('market/favorites',array('market_id'=>$detail['market_id']))}>">
+                        <span class="mall-fen">
+                            <img src="__TMPL__statics/img/icon-sc.png"><span>收藏</span>
+                        </span>    
+                    </a>
+                </div>
+            </div>
+
+            <div class="spread-intro">
+                <ul>
+                    <li class="spread-tui">商场详情</li>
+                    <li>
+                        <p><{$ex.details}></p>
+                        <p>营业时间：<{$ex.business_time}></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="spread-intro">
+                <ul>
+                    <li class="spread-tui">最新活动</li>
+                    <volist name="huodong" id="item" key="index">
+                        <li class="city_stores_details_li">
+                            <a href="<{:AppLink('market/eventdetail',array('id'=>$item['id']))}>">
+                                <div class="left">
+                                    <p class="overflow_clear"><{$item.title}></p>
+                                    <p>浏览：<{$item.views}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <{$item.create_time|date="Y-m-d",###}></p>
+                                </div>
+                                <span class="right">&gt;</span>
+                                <div class="clear"></div>
+                            </a>
+                        </li>
+                    </volist>
+                </ul>
+            </div>
+
+            <div class="spread-intro">
+                <ul>
+                    <li class="spread-tui">商场位置</li>
+                    <li class="city_stores_details_li">
+                        <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7b92b3afff29988b6d4dbf9a00698ed8"></script>
+                        <div id="allmap" style="width:100%; height:275px; text-align: center"></div>
+                        <script type="text/javascript">
+                    // 百度地图API功能
+                    var map = new BMap.Map("allmap");
+                    map.centerAndZoom(new BMap.Point("<{$detail.lng}>", "<{$detail.lat}>"), 15);
+                    var point = new BMap.Point("<{$detail.lng}>", "<{$detail.lat}>");
+                    map.centerAndZoom(point, 15);
+                    var marker = new BMap.Marker(point); // 创建标注
+                    map.clearOverlays();
+                    map.addOverlay(marker); // 将标注添加到地图中
+                    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    map.addControl(new BMap.NavigationControl()); //添加默认缩放平移控件
+                        </script>
+                    </li>
+                </ul>
+            </div>
+            <div class="spread-intro">
+                <ul>
+                    <li class="spread-tui">附近商场</li>
+                    <li>
+                    <volist name="markets" id="item" key='index'>
+                        <div class="city_stores_details_float fl mb15">
+                            <a title="<{$item.market_name}>" href="<{:AppLink('market/detail',array('market_id'=>$item['market_id']))}>">
+                                <img src="__ROOT__/attachs/<{$item.photo|default='default.jpg'}>">
+                                <p>
+                                    <span class="overflow_clear fl"><{:bao_msubstr($item['market_name'],0,6)}></span>
+                                    <span class="fr"><{$item.d}></span>
+                                </p>
+                            </a>
+                        </div>
+                    </volist>
+                    <div class="clear"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+<include file="public:footer"/>

@@ -1,0 +1,132 @@
+
+<include file="public:header"/>
+<script src = "__TMPL__statics/js/elecart.js?v=20150822" ></script>
+<body>
+    <?php if(!$is_app){?>
+	<header>
+		<a href="<{:AppLink('ding/menu',array('shop_id'=>$shop_id,'table_id'=>$table_id))}>"><i class="icon-goback"></i></a>
+		<div class="title" set-lan="html:m-shopping-cart">购物车</div>
+		<i class="icon-menu"></i>
+	</header>
+    <?php }?>
+    
+    <form method="post" id="bao_buy_form"  action="<{:U('ding/order')}>">
+	<div id="life" class="page-center-box">
+		<div id="scroll">
+			<!-- 列表 -->
+			<div class="list-have-pic list-have-pic-btn">
+            	<foreach name="cartgoods" item="item">
+                
+
+				<div class="list-box list-box-integral">
+					<div class="list-img">
+						<img src="__ROOT__/attachs/<{$item.photo}>" />
+					</div>
+					<div class="list-content">
+						<p class="h15"><if condition="$lang eq 1 "><{$item.menu_name}><elseif condition="$lang eq 2" /><{$item.lao_menu_name}><elseif condition="$lang eq 3" /><{$item.eng_menu_name}></if></p>
+						<p class="c_h"><span class="mr20" set-lan="html:m-unit-price">单价：₭ <{$item['ding_price']}></span> <span set-lan="html:m-total">合计</span>：<span id="jq_total_<{$item.menu_id}>" class="price">₭ <{$item['ding_price'] *  $item['cart_num']}></span></p>
+						<div class="num-input changeNum2" rel="<{$item.menu_id}>">
+							<div class="btn jq_jian" data="<{$item.menu_id}>">-</div>
+							
+                            <div class="input">
+                                <input rel="<{$item['ding_price']}>" value="<{$item['cart_num']}>" name="num[<{$item['menu_id']}>]" id="jq_num" class="ordernum" type="text" readonly="readonly"/>
+                            </div>
+							
+                            <div class="btn active jq_jia" data="<{$item.menu_id}>"  >+</div>
+						</div>
+						<div class="icon-del" onClick="removeby(<{$item['menu_id']}>)"></div>
+					</div>
+				</div>
+                <input type="hidden" name="shop_id" value="<{$shop_id}>">
+                <input type="hidden" name="table_id" value="<{$table_id}>">
+                <input type="hidden" name="order_id" value="<{$order_id}>">
+                
+                </foreach>
+                
+                
+       <script>
+        function changetotal(obj) {
+            var money = obj.parent().find('.ordernum').attr('rel');
+            var num = obj.parent().find('.ordernum').val();
+            var total = money * num;
+            $("#jq_total_" + obj.attr('data')).html('₭ ' + total);
+            changealltotal();
+            var rel = obj.parent().attr('rel');
+            var link = '<{:U("ele/changenum",array("product_id"=>"0000","num"=>1111))}>';
+            var url = link.replace('0000',rel);
+                url = url.replace('1111',num);
+                $.get(url,function(){},'html');
+        }
+
+        function changealltotal() {
+            var total_price = 0;
+            var total_num = 0;
+            $(".ordernum").each(function () {
+                total_price += $(this).val() * $(this).attr('rel');
+                total_num += parseInt($(this).val()) ;
+            });
+
+            $("#jq_total").html('（总金额：₭ ' + total_price+')');
+            $(".cart-num").html(total_num);
+            
+        }
+        function removeby(pid){
+               if(window.elemenu.removeby(pid)){
+                   layer.msg("删除商品成功");
+                    window.location.reload();
+                }else{
+                    alert('删除商品失败！');
+                }
+            }
+        $(document).ready(function (e) {
+            $(".jq_jian").click(function () {
+                var v = $(this).parent().find(".ordernum").val();
+                var shop_id = "<{$shop_id}>";
+                var product_id = $(this).attr('data');
+                if (v > 1) {
+                    v--;
+                    $(this).parent().find(".ordernum").val(v);
+                    window.elemenu.dec(shop_id,product_id);
+                }
+
+                changetotal($(this));
+            });
+            $(".jq_jia").click(function () {
+                var shop_id = "<{$shop_id}>";
+                var product_id = $(this).attr('data');
+                var v = $(this).parent().find(".ordernum").val();
+                if (v < 99) {
+                    v++;
+                    $(this).parent().find(".ordernum").val(v);
+                    
+                    // console.log(product_id);
+                    window.elemenu.inc(shop_id,product_id);
+                }
+                changetotal($(this));
+            });
+            $(".ordernum").change(function () {
+                if ($(this).val() < 1) {
+                    $(this).val('1');
+                }
+                if ($(this).val() > 99) {
+                    $(this).val('99');
+                }
+                changetotal($(this));
+            });
+        });
+    </script>
+
+                
+                
+                
+			</div>
+		</div>
+	</div>
+	<footer class="footer-cart">
+		<div class="cart">
+			<div class="cart-num"><{$total['num']}></div>
+		</div>
+		<div class="price" style="width:55%"><span  id="jq_total">（<span set-lan="html:m-total-amount">总金额</span>:₭ <{$total['money']}>）</span></div>
+		<div class="btn"><a href="javascript:void(0);" onClick="$('#bao_buy_form').submit();" style="color:#FFFFFF;" set-lan="html:m-clearing">结算</a></div>
+	</footer>
+</form>

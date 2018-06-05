@@ -1,0 +1,52 @@
+<include  file='public:header'/>  
+<body>
+   <header> 
+       <a href="<{:U('tuancode/index')}>"><i class="icon-goback"></i></a>
+    <div class="title">我的抢购券</div>
+    <i class=" icon-more"></i> </header>
+ <div id="seat" class="page-center-box">
+    <div id="scroll">
+        <div class="content" style="font-size: 0.16rem; line-height: 0.24rem; padding: 0.1rem; color:#666; ">
+			<if condition="$detail['is_used'] eq 0">
+				<img width="100%" src="__ROOT__/attachs/<{$file}>" />
+			<else/>
+				该团购券已消费
+			</if>
+            <neq name="detail.price" value="0">
+            	<p style="text-indent: 10px;">抢购券详情:</p>
+				<p style="text-indent: 10px;">用户：<{$detail['user']}></p>
+            	<p style="text-indent: 10px;">商家：<if condition="$lang eq 1 "><{$detail['shop']}><elseif condition="$lang eq 2" /><{$detail['lao_shop']}><elseif condition="$lang eq 3" /><{$detail['eng_shop']}></if></p>
+            	<p style="text-indent: 10px;">商品：<if condition="$lang eq 1 "><{$detail['tuan_title']}><elseif condition="$lang eq 2" /><{$detail['lao_tuan_title']}><elseif condition="$lang eq 3" /><{$detail['eng_tuan_title']}></if></p>
+            	<p style="text-indent: 10px;">数量：<{$detail['num']}></p>
+            	<p style="text-indent: 10px;">团购价：<{:round($detail['settlement_price']/100,2)}></p>
+            	<p style="text-indent: 10px;">原价：<{:round($detail['price']/100,2)}></p>
+            <else />
+            	<p style="text-indent: 10px;">
+            		该抢购券为到付券！需要额外到店支付相关费用才可以进行消费！
+            	</p>
+            </neq>
+        </div>
+
+		<style>
+			.submit {
+			  font-size: 0.18rem;
+			  color: #fff;
+			  height: 0.4rem;
+			  width: 90%;
+			  line-height: 0.4rem;
+			  background-color: #e74c3c;
+			  border-radius: 0.05rem;
+			  border: none 0px;
+			  margin: 0.1rem auto;
+			  display: block;
+			}
+		</style>
+
+		<input type="button" class="submit" value="返回用户中心首页" onClick="javascript:window.location.href='<{:U('mcenter/member/index')}>';">
+
+    </div>
+</div>
+
+
+</body>
+</html>

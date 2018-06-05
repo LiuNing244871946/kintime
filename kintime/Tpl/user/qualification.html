@@ -1,0 +1,34 @@
+<div class="listBox clfx">
+    <div class="menuManage">
+        <form  target="baocms_frm" action="<{:U('user/qualification',array('user_id'=>$user_id))}>" method="post">
+            <div class="mainScAdd">
+                <div class="tableBox">
+                    <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+                        <tr>
+                            <td class="lfTdBt">分期资质：</td>
+                            <td class="rgTdBt">
+                                <label> <input type="radio" name="qualification" value="1" <eq name="detail.qualification" value="1">checked="checked"</eq>  /> 开通</label>
+                                <label> <input type="radio" name="qualification" value="0"  <eq name="detail.qualification" value="0">checked="checked"</eq> /> 不开通</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lfTdBt">初始额度：</td>
+                            <td class="rgTdBt">
+                                <input name="initial" type="text" class="scAddTextName w150" value="<{$detail.initial}>" <eq name="detail.qualification" value="1">readonly="readonly"</eq> />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lfTdBt">可用额度：</td>
+                            <td class="rgTdBt" name="available"><{$detail.available}></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="smtQr"><input type="submit" value="确定保存" class="smtQrIpt" /></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+

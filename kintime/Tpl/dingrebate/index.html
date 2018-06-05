@@ -1,0 +1,97 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">电子菜单管理</li>
+        <li class="li2">菜单管理</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <div class="jsglNr">
+        <div class="selectNr" style="border-top: none; margin-top: 0px;">
+            <div class="left">
+                <{:BA('dingrebate/create','','添加电子菜单商品')}>  
+            </div>
+            <div class="right">
+                <form method="post" action="<{:U('dingrebate/index')}>">
+                    <div class="seleHidden" id="seleHidden">
+                        <div class="seleK">
+                            <label>
+                                <input type="hidden" id="shop_id" name="shop_id" value="<{$shop_id|default=''}>"/>
+                                <input type="text"   id="shop_name" name="shop_name" value="<{$shop_name}>" class="text w200" />
+                                <a mini="select"  w="1000" h="600" href="<{:U('shop/select')}>" class="sumit">选择商家</a>
+                            </label>
+                            <label>
+                                <span>  关键字：</span>   <input type="text" name="keyword" value="<{$keyword|default=''}>" class="inptText" /><input type="submit" class="inptButton" value="   搜索" /></label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <form  target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <td class="w50"><input type="checkbox" class="checkAll" rel="menu_id" /></td>
+                        <td class="w50">ID</td>
+                        <td>菜名</td>
+                        <td>商家</td>
+                        <td>分类</td>
+                        <td>缩略图</td>
+                        <td>价格</td>
+                        <td>是否新品</td>
+                        <td>是否热门</td>
+                        <td>是否推荐</td>
+                        <td>平台折扣</td>
+                        <td>操作</td>
+                    </tr>
+                    <foreach name="list" item="var">
+                        <tr>
+                            <td>
+                                <input class="child_menu_id" type="checkbox" name="menu_id[]" value="<{$var.menu_id}>" />
+                            </td>
+                            <td><{$var.menu_id}></td>
+                            <td>
+                                <{$var.menu_name}><br/><{$var.lao_menu_name}><br/><{$var.eng_menu_name}>
+                            </td>
+                            <td>
+                                <{$shops[$var['shop_id']]['shop_name']}><br/><{$shops[$var['shop_id']]['lao_shop_name']}><br/><{$shops[$var['shop_id']]['eng_shop_name']}>
+                            </td>
+                            <td>
+                                <{$cates[$var['cate_id']]['cate_name']}><br/><{$cates[$var['cate_id']]['lao_cate_name']}><br/><{$cates[$var['cate_id']]['eng_cate_name']}>
+                            </td>
+                            <td>
+                                <img src="__ROOT__/attachs/<{$var.photo}>" class="w80" style="width:150px;height:150px" />
+                            </td>
+                            <td><{$var['ding_price']}></td>
+                            <td><eq name="var.is_new" value="1">新品<else/>无</eq></td>
+                            <td>
+                            <eq name="var.is_sale" value="1">优惠<else/>无</eq>
+                            </td>
+                            <td>
+                            <eq name="var.is_tuijian" value="1">推荐<else/>无</eq>
+                            </td>
+                            <td>
+                                <if condition="empty($rate[$var['shop_id']['rate']])">无折扣<else /><{$rate[$var['shop_id']['rate']]['name']}></if>  
+                            </td>
+                            <td>
+                                <{:BA('dingrebate/edit',array("menu_id"=>$var["menu_id"]),'编辑','','remberBtn')}>
+                                <{:BA('dingrebate/delete',array("menu_id"=>$var["menu_id"]),'删除','act','remberBtn')}>
+                                <eq name="var.audit" value="0"> <{:BA('dingrebate/audit',array("menu_id"=>$var["menu_id"]),'审核','act','remberBtn')}> </eq>
+                            </td>
+                        </tr>
+                    </foreach>
+                </table>
+                <{$page}>
+            </div>
+            <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+                <div class="left">
+                    <{:BA('dingrebate/delete','','批量删除','list','a2')}>
+                    
+                        <{:BA('dingrebate/audit','','批量审核','list','a1')}>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<include  file='public:footer'/>       

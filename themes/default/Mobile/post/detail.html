@@ -1,0 +1,148 @@
+<include  file='public:header'/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('post/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">
+            帖子详情 
+        </div>
+        <i class="icon-menu" id=""></i>
+    </header>
+    <?php }?>
+    <script>
+        $(document).ready(function () {
+            $(".reply").click(function () {
+                $(".comment_mask").toggle();
+            });
+        })
+    </script>
+    <div class="publish_mask comment_mask">
+        <div class="cont"> 
+            <textarea name="contents" class="jq_contents" placeholder="写点什么吧"></textarea>
+            <input type="button" id="reply" class="btn" value="提 交">
+        </div>
+    </div>
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <div class="luntanDetails_box">
+                <div class="luntanList_nr mb10">
+                    <div class="fl img"><img src="__ROOT__/attachs/<{$user.face|default='default.jpg'}>" /></div>
+                    <div class="wz">
+                        <div class="from">
+                            <div class="fl">
+                                <p class="name"><{$user.nickname}></p>
+                                <span class="floor bg_1">楼主</span>
+                            </div>
+                            <div class="fr black9 date"><{$detail.create_time|date='Y-m-d H:i'}></div>
+                        </div>
+                        <p class="nr"><{$detail.title}></p>
+                        <if condition="!empty($pics)">
+                            <div class="imgList">
+                                <foreach name="pics" item="item">
+                                    <img src="__ROOT__/attachs/<{$item.pic}>" />
+                                </foreach>
+                            </div>
+                        </if>
+                        <div class="luntanList_state"><a href="javascript:void(0);" class="state">赞<em class="ico_1"></em></a><a class="state"><{$detail.zan_num}></a></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="luntanComment mb10">
+                    <h2>评论（<{$a}>条）</h2>
+                    <ul class="list_box">
+                        <foreach name="list" item="item">
+                            <li class="list">
+                                <div class="luntanList_nr">
+                                    <div class="fl img"><img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']|default='default.jpg'}>" /></div>
+                                    <div class="wz">
+                                        <div class="from">
+                                            <div class="fl">
+                                                <p class="name"><{$users[$item['user_id']]['nickname']}></p>
+                                                <span class="floor"><{$item.floor}>楼</span>
+                                            </div>
+                                            <div class="fr black9 date"><{$item.create_time|date='Y-m-d H:i'}></div>
+                                        </div>
+                                        <p class="nr"><{$item.contents}></p>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </li>
+                        </foreach>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--底部按钮部分开始-->
+    <footer>
+            <div class="luntanFoot">
+                <div class="fl"><a href="javascript:void(0);" class="reply btn">回复帖子<em class="ico_1"></em></a></div>
+                <div class="fr"><eq name="detail.is_zan" value="1"><a href="javascript:void(0);" class="btn">已赞<em class="ico_2"></em></a><else/><a href="javascript:void(0);" class="zan btn">赞一个<em class="ico_2"></em></a></eq></div>
+                <div class="clear"></div>
+            </div>
+    </footer>
+            <!--底部按钮部分结束-->
+    <script>
+        $(document).ready(function () {
+            var is_app = "<{$is_app}>";
+            $("#reply").click(function () { //点评
+                var contents = $(".jq_contents").val();
+                var post_id = "<{$detail.post_id}>";
+                if (contents == "" || contents == null || contents == undefined) {
+                    layer.msg('请填写回复内容');
+                    return false;
+                }
+                var url = "<{:U('mobile/post/reply')}>";
+                $.post(url, {post_id: post_id, contents: contents}, function (data) {
+                    if (data.status == 'login') {
+                        layer.msg(data.msg, function () {
+                            setTimeout(function () {
+                                if (!is_app) {
+                                    window.location.href = "<{:U('mobile/passport/login')}>";
+                                } else {
+                                     <?php if ($is_android){?>
+                                    window.jsObj.goLogin();
+                                    <?php }else{?>
+                                     goload();
+                                    <?php }?>
+                                }
+                            }, 1000)
+                        });
+                    } else if (data.status == 'success') {
+                        layer.msg(data.msg, function () {
+                            setTimeout(function () {
+                                if (!is_app) {
+                                    window.location.reload(true);
+                                }else{
+                                    getNewWebView("<{:U('post/index')}>","<{:U('post/index')}>");
+                                }
+                            }, 1000)
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }, 'json')
+            });
+            
+            $(".zan").click(function () { //点评
+                var post_id = "<{$detail.post_id}>";
+                var url = "<{:U('mobile/post/zan')}>";
+                $.post(url, {post_id: post_id}, function (data) {
+                    if (data.status == 'success') {
+                        layer.msg(data.msg, function () {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000)
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }, 'json')
+            });
+            
+        })
+    </script>
+
+</body>
+</html>
+

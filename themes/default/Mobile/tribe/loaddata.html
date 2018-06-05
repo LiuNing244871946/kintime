@@ -1,0 +1,66 @@
+<foreach name="list" item="item">
+    <li class="wenzibl-list mb10">
+        <div class="wenzibl-list1">
+            <div class="zhuangtu fl"><img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']|default='default.jpg'}>"/></div>
+            <div class="zhuangtxt black9 font_line24 fl ml10">
+                <p class="biaoti overflow_clear"> <span class="shenlan"><{$users[$item['user_id']]['nickname']}></span>&nbsp;&nbsp;<{$tribes[$item['tribe_id']]['tribe_name']}>部落 <a class="you-jt " href="#"></a> </p>
+                <p class="tim"><{$item.create_time|date='Y-m-d H:i',###}>
+				<php>$dd = time()-$item['create_time'];</php>
+				<if condition="$dd lt 2000">
+				<span class="gang">刚刚</span> 
+				<elseif condition ="$dd lt 4000"/>
+				<span class="gang">1小时前</span>
+				<else/>
+				
+				</if>
+				</p>
+            </div>
+            <div class="clear "></div>
+        </div>
+        <div class="wenzibl-list2 ">
+            <a href="<{:U('tribe/postdetail',array('post_id'=>$item['post_id']))}>">
+            <p class="black3 timu overflow_clear"><{$item.title}></p>
+            <p class="black9 duan" style="height: 0.24rem;line-height: 0.24rem;overflow: hidden;"><{:cleanhtml($item['details'])}></p>
+            <div class="img-box">
+                <ul>
+                    <volist name="item.pics" id="pic">
+                        <php>if($key<3){</php>
+                        <li class="fl img-list <if condition='$key eq 0'>imgli</if>"><img src="__ROOT__/attachs/<{$pic}>" height="75"/></li>
+                        <php>}</php>
+                    </volist>
+                    <div class="clear "></div>
+                </ul>
+            </div>
+        </a>
+        </div>
+        <div class="wenzibl-list3  border_t border_b">
+            <ul>
+                <li class="dianjin-list fl"> <a href="<{:U('tribe/reply',array('post_id'=>$item['post_id']))}>" class="black9">
+                    <p class="jin"><em class="tubiao2"></em><span><{$item.reply_num}></span></p>
+                    </a> </li>
+                <li class="dianjin-list fl"> <a href="javascript:void(0);"  zan="<{$item.post_id}>" class="zan_btn black9">
+                    <p class="jin"><em class="tubiao3"></em><span id="zan<{$item.post_id}>"><{$item.zan_num}></span></p>
+                    </a> </li>
+                <div class="clear "></div>
+            </ul>
+        </div>
+    </li>
+</foreach>
+<script>
+    $(document).ready(function(){
+        $(".zan_btn").click(function(){
+            var post_id = $(this).attr('zan');
+            var id = 'zan'+post_id;
+            var url = "<{:U('tribe/zan')}>";
+            var zan = Number($('#'+id).html()) + 1;
+            $.post(url,{post_id:post_id},function(data){
+                if(data.status == 'success'){
+                    layer.msg(data.msg);
+                    $('#'+id).html(zan);
+                }else{
+                    layer.msg(data.msg);
+                }
+            },'json')
+        })
+    })
+</script>

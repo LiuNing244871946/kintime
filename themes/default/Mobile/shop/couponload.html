@@ -1,0 +1,11 @@
+<foreach name="list" item="item">
+    <li>
+        <div class="fl">
+            <div class="img"><a href="<{:AppLink('coupon/detail',array('coupon_id'=>$item['coupon_id']))}>"><img src="__ROOT__/attachs/<{$item.photo}>"></a></div>
+            <h4 class="line2"><a href="<{:AppLink('coupon/detail',array('coupon_id'=>$item['coupon_id']))}>"><{$item.title}></a></h4>
+            <p class="black9">有效期：<{$item.expire_date}></p>
+
+        </div>
+        <div class="clear"></div>
+    </li>
+</foreach>

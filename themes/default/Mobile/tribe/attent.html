@@ -1,0 +1,40 @@
+<include file="public:header"/>
+
+<body>
+<header> <a href="<{:AppLink('index/index')}>"><i class="icon-goback"></i></a>
+    <div class="title"> 部落 </div>
+    <i class="icon-menu3"></i> </header>
+<!--头部切换-->
+<ul id="shangjia_tab">
+    <li><a href="<{:U('tribe/index')}>" <if condition="$act eq 'index'">class="on"</if> >推荐</a></li>
+    <li><a href="<{:U('tribe/lists')}>" <if condition="$act eq 'lists'">class="on"</if> >发现</a></li>
+    <li><a href="<{:U('tribe/attent')}>" <if condition="$act eq 'attent'">class="on"</if> >关注</a></li>
+</ul>
+<script>
+    $(function () {
+        if ($('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            $('#shangjia_tab li').width(100 / $('#shangjia_tab li').length + '%');
+            $('.page-center-box').css('top', '0.9rem');
+        }//头部切换tab结束
+
+    });
+</script>
+<!--头部切换end-->
+<div class="page-center-box">
+    <div class="guanzhu_cont border_t mb10">
+    	<ul>
+
+        </ul>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+    loaddata('<{$nextpage}>', $(".guanzhu_cont ul"), true);
+    });
+</script>
+<div id="loading">
+    <div class="bao_loading">正在加载中....</div>
+</div>
+</body>
+</html>

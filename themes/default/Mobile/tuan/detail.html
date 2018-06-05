@@ -1,0 +1,110 @@
+<include file="public:header"/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('/mobile/tuan/index')}>"><i class="icon-goback"></i></a>
+        <div class="title">抢购详情</div>
+        <!-- <i id="commentA"><?php if(!$is_weixin){ ?><span class="share" id="shareIco" ></span><?php } ?></i> -->
+    </header>
+    <php>
+        if(!empty($detail['tel'])){
+        $tel = $detail['tel'];
+        }else{
+        $tel = $detail['mobile'];
+        }
+    </php>
+<?php }?>
+<?php if(!$is_weixin){ ?>
+
+<?php }else{ ?>
+<?php } ?>
+    <div id="sell" class="page-center-box">
+        <div id="scroll">
+            <!-- BANNER图 -->
+            <div class="banner">
+                <a href="<{:AppLink('shop/detail',array('shop_id'=>$detail['shop_id']))}>" target="_blank">
+                    <img src="__ROOT__/attachs/<{$detail.photo}>" width="100%" height="100%" />
+                    <div class="shade"></div>
+                    <div class="shade-content order-ti">
+                        <p><span style="color: #fff;" class="left overflow_clear"><if condition="$lang eq 1 "><{:bao_msubstr($detail['title'],0,18,false)}><elseif condition="$lang eq 2" /><{:bao_msubstr($detail['lao_title'],0,18,false)}><elseif condition="$lang eq 3" /><{:bao_msubstr($detail['eng_title'],0,18,false)}></if></span><span style="color: #fff;" class="right order-font">已售<{$detail.sold_num}></span></p>
+                    </div>
+                </a>
+            </div>
+            <!-- 评分 -->
+            <div class="point">
+                <div class="point-left">
+                    <div>
+                        <span class="mall-price order-money"><small>₭</small><{$detail.tuan_price}></span> 
+                    </div>
+                </div>
+                <div class="point-right">
+                    <a href="<{:AppLink('tuan/buy',array('tuan_id'=>$detail['tuan_id']))}>" class="btn">立即购买</a>
+                </div>
+            </div>
+            <div class="order-style">
+                <ul>
+                    <li><i class="ico_1"></i><p>支持随时退</p></li>
+                    <li class="on"><i class="ico_2"></i><p>过期自动退</p></li>
+                    <li class="on"><i class="ico_3"></i><p>免预约</p></li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+            <!-- 地址 -->
+            <div class="order-adress">
+                <div class="order-shop">
+                    <div class="wz">
+                    	<div>
+                            <a href="<{:AppLink('shop/detail',array('shop_id'=>$detail['shop_id']))}>" class="order-name"><if condition="$lang eq 1 "><{$shop.shop_name}><elseif condition="$lang eq 2" /><{$shop.lao_shop_name}><elseif condition="$lang eq 3" /><{$shop.eng_shop_name}></if></a>
+                            <span class="point-star"><span style="width: 0.7rem;"></span></span>
+                        </div>
+                        <div>
+                        	<a href="" class="fl black6"><if condition="$lang eq 1 "><{:bao_msubstr($shop['addr'],0,20)}><elseif condition="$lang eq 2" /><{:bao_msubstr($shop['lao_addr'],0,20)}><elseif condition="$lang eq 3" /><{:bao_msubstr($shop['eng_addr'],0,20)}></if></a>
+                            <span class="fr black6"><i class="locatIco"></i><{$detail.d}></span>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <a class="tel" href="tel:<{$shop.tel}>"></a>
+                </div>
+                <div class="mall-our">	                
+                    <a class="mall-fen" href="<{:U('shop/gps',array('shop_id'=>$detail['shop_id']))}>"><em class="ico ico_1"></em>到这去</a></span>  
+                    <a class="mall-fen" href="<{:U('shop/favorites/',array('shop_id'=>$detail['shop_id']))}>" ><em class="ico ico_2"></em>关注商家</a>                </div>
+            </div>
+            
+            <div class="spread-intro">
+                <ul>
+                    <li class="spread-tui">抢购详情</li>
+
+                    <li class="li_table">
+                        <p><if condition="$lang eq 1 "><{$tuandetails.details}><elseif condition="$lang eq 2" /><{$tuandetails.lao_details}><elseif condition="$lang eq 3" /><{$tuandetails.engdetails}></if></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="spread-intro">
+                <ul>
+                    <li class="spread-tui">购买须知</li>
+                    <li>
+                        <p><if condition="$lang eq 1 "><{$tuandetails.instructions}><elseif condition="$lang eq 2" /><{$tuandetails.lao_instructions}><elseif condition="$lang eq 3" /><{$tuandetails.eng_instructions}></if></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="spread-intro">
+                <ul>
+                    <li class="spread-tui">本店其他抢购</li>
+
+                    <volist name="tuans" id="item" key="index">
+						<a href="<{:AppLink('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>" title="<{$item.title}>"><li>
+
+                            <div class="left"><span class="order-prices" style="color:#ff4200;">₭<{:round($item['tuan_price'],2)}></span> 
+                                <span style="margin-left:0.5rem;"><if condition="$lang eq 1 "><{:bao_msubstr($item['title'],0,8)}><elseif condition="$lang eq 2" /><{:bao_msubstr($item['lao_title'],0,8)}><elseif condition="$lang eq 3" /><{:bao_msubstr($item['eng_title'],0,8)}></if></span>
+                            </div>
+                            
+                            <span class="right">》</span>
+                            <div class="clear"></div>
+                        </li></a>
+                    </volist>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+<include file="public:footer"/>

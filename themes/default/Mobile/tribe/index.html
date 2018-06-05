@@ -1,0 +1,40 @@
+<include file="public:header"/>
+<body>
+ <?php if(!$is_app){?>
+<header> <a href="<{:AppLink('index/index')}>"><i class="icon-goback"></i></a>
+    <div class="title"> 玩伴 </div>
+    <i class="icon-menu3"></i> 
+</header>
+  <?php }?>
+<!--头部切换-->
+<ul id="shangjia_tab">
+    <li><a href="<{:U('tribe/index')}>" <if condition="$act eq 'index'">class="on"</if> >推荐</a></li>
+    <li><a href="<{:U('tribe/lists')}>" <if condition="$act eq 'lists'">class="on"</if> >发现</a></li>
+    <li><a href="<{:U('tribe/attent')}>" <if condition="$act eq 'attent'">class="on"</if> >关注</a></li>
+</ul>
+<script>
+    $(function () {
+        if ($('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            $('#shangjia_tab li').width(100 / $('#shangjia_tab li').length + '%');
+            $('.page-center-box').css('top', '0.9rem');
+        }//头部切换tab结束
+
+    });
+</script>
+<!--头部切换end-->
+<div class="page-center-box">
+    <div id="scroll">
+        <div  class="shou-tjiancont mt10 border_t">
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+    loaddata('<{$nextpage}>', $(".shou-tjiancont ul"), true);
+    });
+</script>
+<include file="public:footer"/>

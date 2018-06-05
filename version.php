@@ -1,0 +1,1 @@
+<?php return  "KINTIME1.0.2018.018";

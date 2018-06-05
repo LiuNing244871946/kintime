@@ -1,0 +1,101 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">美食电子菜单</li>
+        <li class="li2">订座列表</li>
+        <li class="li2 li3">编辑</li>
+    </ul>
+</div>
+<form  target="baocms_frm" action="<{:U('ding/edit',array('shop_id'=>$detail['shop_id']))}>" method="post">
+    <p class="attention"><span>注意:编辑后需重新进行审核</span></p>
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table  bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+                <tr>
+                    <td class="lfTdBt">选择商家：</td>
+                    <td class="rgTdBt">
+                        <div class="lt">
+                            <input type="hidden" id="shop_id" name="data[shop_id]" value="<{$detail.shop_id|default=''}>"/>
+                            <input type="text" id="shop_name" name="data[shop_name]" value="<{$shops.shop_name|default=''}>" class="manageInput" disabled="disabled" />
+                            <input type="text" id="lao_shop_name" name="data[lao_shop_name]" value="<{$shops.lao_shop_name|default=''}>" class="manageInput"  disabled="disabled" />
+                            <input type="text" id="eng_shop_name" name="data[eng_shop_name]" value="<{$shops.eng_shop_name|default=''}>" class="manageInput"  disabled="disabled" />
+                        </div>
+                    </td>
+                </tr>    
+                <tr>
+                    <td class="lfTdBt">桌数</td>
+                    <td class="rgTdBt"><input type="text" name="data[table_num]" value="<{$detail.table_num|default=''}>" class="scAddTextName w210" />
+
+                    </td>
+                </tr><tr>
+                    <td class="lfTdBt">平均消费：</td>
+                    <td class="rgTdBt"><input type="text" name="data[price]" value="<{$detail.price|default=''}>" class="scAddTextName w210" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">开始营业时间：</td>
+                    <td class="rgTdBt">
+                        <input type="text" name="data[stime]" value="<{$detail.stime|default=''}>" class="scAddTextName w210" />
+                        <code>例如8:00</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">结束营业时间：</td>
+                    <td class="rgTdBt">
+                        <input type="text" name="data[ltime]" value="<{$detail.ltime|default=''}>" class="scAddTextName w210" />
+                        <code>例如22:00</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">中文详情：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="data_details" name="data[details]" style="width:800px;height:360px;"><{$detail.details}></script>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">老文详情：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="lao_data_details" name="data[lao_details]" style="width:800px;height:360px;"><{$detail.lao_details}></script>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">英文详情：</td>
+                    <td class="rgTdBt">
+                        <script type="text/plain" id="eng_data_details" name="data[eng_details]" style="width:800px;height:360px;"><{$detail.eng_details}></script>
+                    </td>
+                </tr>
+                <link rel="stylesheet" href="__PUBLIC__/umeditor/themes/default/css/umeditor.min.css" type="text/css">
+                <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.config.js"></script>
+                <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.min.js"></script>
+                <script type="text/javascript" src="__PUBLIC__/umeditor/lang/zh-cn/zh-cn.js"></script>
+                <script>
+                            um = UM.getEditor('data_details', {
+                                imageUrl: "<{:U('app/upload/editor')}>",
+                                imagePath: '__ROOT__/attachs/editor/',
+                                lang: 'zh-cn',
+                                langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                                focus: false
+                            });
+                            um = UM.getEditor('lao_data_details', {
+                                imageUrl: "<{:U('app/upload/editor')}>",
+                                imagePath: '__ROOT__/attachs/editor/',
+                                lang: 'zh-cn',
+                                langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                                focus: false
+                            });
+                            um = UM.getEditor('eng_data_details', {
+                                imageUrl: "<{:U('app/upload/editor')}>",
+                                imagePath: '__ROOT__/attachs/editor/',
+                                lang: 'zh-cn',
+                                langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                                focus: false
+                            });
+                </script>
+     
+    </table>
+</div>
+<div class="smtQr"><input type="submit" value="确认编辑" class="smtQrIpt" /></div>
+</div>
+</form>
+<include  file='public:footer'/>       

@@ -1,0 +1,26 @@
+<include  file='public:header'/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('community/detail',array('community_id'=>$detail['community_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title">
+            便民电话 
+        </div>
+        <i class="icon-menu2"></i>
+    </header>
+    <?php }?>
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <div class="sqTel_list mt10">
+                <ul>
+                    <foreach name="list" item="item">
+                        <li class="list"><span class="nr"><{$item.name}></span><span class="nr"><{$item.phone}></span><a class="tel_btn" href="tel:<{$item.phone}>"></a></li>
+                    </foreach>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+<include file="public:footer"/>
+

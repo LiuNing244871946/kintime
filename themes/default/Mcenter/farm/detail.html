@@ -1,0 +1,68 @@
+<include file="public:header"/>
+<body>
+<?php if(!$is_app){?>
+<header>
+    <a href="<{:U('mcenter/farm/index',array('st'=>0))}>"><i class="icon-goback"></i></a>
+    <div class="title">
+    	订单详情
+    </div>
+    <i class="icon-menu"><a href="#" class=""></a></i>
+</header>
+<?php }?>
+<div class="page-center-box">
+    <div class="hotelOrd">
+        <p class="fontcl2 ts">
+            
+            <if condition="$detail['order_status'] eq -1">
+                已取消
+                <else/>
+                <if condition="$detail['order_status'] eq 0">
+                    <a style="margin-left: 0;" class="order_detail"  href="<{:U('mobile/farm/pay',array('order_id'=>$detail['order_id']))}>">去付款</a>
+                    <elseif condition="$detail[order_status] eq 1" />
+                    已付款
+                    <elseif condition="$detail[order_status] eq 2" />
+                    已完成
+                    <else/>
+                    <if condition="$detail['comment_status'] eq 1">
+                        <a class="order_detail" href="javascript:void(0);">已点评</a>
+                    </if>
+                    <if condition="$detail['comment_status'] eq 1">
+                        <a class="order_detail" href="<{:U('farm/comment',array('order_id'=>$detail['order_id']))}>">去点评</a>+
+                    </if>
+                </if>
+            </if>
+            
+        </p>
+        <div class="infor">
+        	<h3>订单编号：<{$detail.order_id}></h3>
+        	<h3><{$detail.farm.farm_name}></h3>
+        </div>
+        <div class="box">订单总额：<span class="black9"><{$detail.amount}></span></div>
+        <div class="box">到店时间：<span class="black9"><{$detail.gotime|date='Y-m-d H:i:s',###}></span></div>
+        <div class="box">入住人：<span class="black9"><{$detail.name}></span></div>
+        <div class="box">手机号：<span class="black9"><{$detail.mobile}></span></div>
+        <div class="box">住宿偏好：<span class="black9"><{$detail.note}></span></div>
+	<!--<div class="box mb10">发票收据抬头：<span class="black9">合肥生活宝网络科技有限公司</span></div>-->
+        
+    </div>
+</div>
+
+    <if condition="!$detail['order_status']">
+        <footer>
+                <div class="hotelOrd_footer">
+                <p class="fontcl2 left mt10">在线支付:￥<{$detail.amount}></p>
+                <input type="button" value="立即支付" id="pay_btn" class="btn right">
+            </div>
+        </footer>
+    </if>
+
+<script>
+    $(document).ready(function(){
+        $("#pay_btn").click(function(){
+            var url = "<{:AppLink('mobile/farm/pay',array('order_id'=>$detail['order_id']))}>";
+            window.location.href = url;
+        })
+    })
+</script>
+</body>
+</html>

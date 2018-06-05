@@ -1,0 +1,140 @@
+<include  file='public:header'/>    
+<body>
+<?php if(!$is_app){?>
+<header>
+    <a href="<{:U('mall/crowdList')}>"><i class="icon-goback"></i></a>
+    <div class="title">众筹详情</div>
+    <a class="icon-menu share" href="javascript:void(0);" id="share"><i class="icon-menu" id="shareIco"></i></a>
+</header>
+<?php }?>    
+<div class="bdcolor">
+        <div class="bdcolor_bg"></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_weixin" data-cmd="weixin">微信</a>
+            <a class="bds_qzone" data-cmd="qzone" href="#">QQ空间</a>
+            <a class="bds_sqq" data-cmd="sqq">腾讯QQ</a>
+            <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+            <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+            <div class="bd-share-popup-footer">
+                <a class="bd-share-popup-close" onClick="$('.bdcolor').hide();" href="javascript:void(0);">取消</a>
+            </div>
+        </div>
+    </div>
+    
+ <script>
+        $(document).ready(function () {
+            $(".share").click(function () {
+                $(".bdcolor").show();
+            });
+         });
+    </script>
+
+<div class="page-center-box">
+    <!--banner部分-->
+    <div class="mall_crowdDetl_img">
+        <img src="__ROOT__/attachs/<{$detail.img}>" width="100%" />
+    </div>
+    <!--banner部分结束-->
+    <!--内容-->
+	<div class="crowdSupt_box">
+        <ul>
+        	 <volist name='goodstype' id='item'>
+                    <if condition="$item[have_num] egt $item[max_num]">
+           				 <li class="crowdSupt_list">
+                                <div class="top">
+                                    <img src="__ROOT__/attachs/<{$item.img}>" class="left" />
+                                    <div class="pub_wz">
+                                        <p>支持<{$item['price']/100}>元</p>
+                                         <if condition="$item[choujiang] eq 1">
+                                             <span class="tag">抽奖</span>
+                                         </if>
+                                    </div>
+                                </div>
+                                
+                                <div class="nr mt10">
+                                    <p class="mb10"><{$item[content]}></p>
+                                    <p>配送费用： 
+                                     <if condition="$item[yunfei] gt 0">
+                                      	<{$item[yunfei]/100}>元
+                                      <else/>
+                                      		免运费
+                                      </if>
+                                    </p>
+                                    <p>预计回报发送时间：项目成功结束后<{$item.fahuo}>天内</p>
+                                    <P class="num"><P class="num">限额已满（<{$item[have_num]}> 位支持者）</P>
+                                </div>
+                            </li>
+                    <else/>
+                    
+                    	<li class="crowdSupt_list">
+                                <div class="top">
+                                    <img src="__ROOT__/attachs/<{$item.img}>" class="left" />
+                                    <div class="pub_wz">
+                                        <p>支持<{$item['price']/100}>元</p>
+                                         <if condition="$item[choujiang] eq 1">
+                                             <span class="tag">抽奖</span>
+                                         </if>
+                                    </div>
+                                    <a  onclick="show_from(<{$item['price']}>,<{$item['type_id']}>)" class="pub_btn">去支持</a>
+                                </div>
+                                
+                                <div class="nr mt10">
+                                    <p class="mb10"><{$item[content]}></p>
+                                    <p>配送费用： 
+                                     <if condition="$item[yunfei] gt 0">
+                                      	<{$item[yunfei]/100}>元
+                                      <else/>
+                                      		免运费
+                                      </if>
+                                    </p>
+                                    <p>预计回报发送时间：项目成功结束后<{$item.fahuo}>天内</p>
+                                    <P class="num"><span class="fontcl2"><{$item[have_num]}></span> 位支持者</P>
+                                </div>
+                            </li>
+                    </if>
+                </volist>
+            
+            
+        </ul>
+    </div>
+    <!--内容结束-->
+</div>
+
+<!--去支持弹出层-->
+<div class="publish_mask mall_crowdDetl_fabu_mask" style="bottom:0;">
+    <div class="cont"> 
+    	<form  action="<{:U('mall/buycrowd',array('goods_id'=>$detail['goods_id']))}>" method="post">
+            <div class="pd_box">
+               <input type="text" name="data[name]" placeholder="姓名">
+                <input type="text" name="data[mobile]" placeholder="电话">
+                <input type="text" name="data[addr]" placeholder="收货地址">
+            </div>
+             <input type="hidden" name="data[price]" id='price' value="" />
+            <input type="hidden" name="data[type_id]" id='type_id' value="" />
+            <div class="btn_box">
+                <input type="button" class="btn bggrey cancel" value="取消">
+                <input type="submit" class="btn" value="支付">
+            </div>
+        </form>
+        
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+   
+	$(".mall_crowdDetl_fabu_mask .cancel").click(function(){
+		$(".mall_crowdDetl_fabu_mask").hide();
+	});
+});
+
+function show_from(price,type_id){
+	$('#price').val(price);
+	$('#type_id').val(type_id);
+	$(".mall_crowdDetl_fabu_mask").show();
+	
+}
+</script>
+<!--去支持弹出层end-->
+
+
+

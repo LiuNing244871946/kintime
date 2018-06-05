@@ -1,0 +1,58 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">酒店</a> > <a href="" set-lan="html:n-hotel">酒店房间</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('hotel/room')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l">
+           <span set-lan="html:n-roomName">房间名称：</span><input type="text" class="radius3 tuan_topser"  name="keyword" value="<{$keyword}>" />
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索"/>
+            </div>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('hotel/setroom')}>" set-lan="html:n-addRoom">添加房间+</a></div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('hotel/room')}>" set-lan="html:n-hotelRoom">酒店房间</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-roomName">房间名称(中.老.英)</td>
+            <td set-lan="html:n-roomImg">房间图片</td>
+            <td set-lan="html:n-roomType">房间类型</td>
+            <td set-lan="html:n-roomPrice">房间价格</td>
+            <td set-lan="html:n-roomResidue">房间剩余</td>
+            <td set-lan="html:n-isProvideBreakfast">是否提供早餐</td>
+            <td set-lan="html:n-isHaveBroadband">是否有宽带</td>
+            <td set-lan="html:n-isAbleCancel">是否可以取消</td>
+            <td set-lan="html:n-createTime">创建时间</td>
+            <td set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.title}><br/><{$var.lao_title}><br/><{$var.eng_title}></td>
+                <td style="height: 80px;"><img src="__ROOT__/attachs/<{$var.photo}>"  style="width: 80px;  margin: 0px auto;" /></td>
+                <td><{$roomtype[$var['type']]}></td>
+                <td><{$var.price}></td>
+                <td><{$var.sku}></td>
+                <td><eq name="var.is_zc" value="1"><span set-lan="html:n-provide">提供</span><else/><span set-lan="html:n-notProvide">不提供</span></eq></td>
+                <td><eq name="var.is_kd" value="1"><span set-lan="html:n-notProvide">提供</span><else/><span set-lan="html:n-notProvide">不提供</span></eq></td>
+                <td><eq name="var.is_cancel" value="1"><span set-lan="html:n-can">可以</span><else/><span set-lan="html:n-cannot">不可以</span></eq></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                <td>
+                <a class="radius3 sy_c1an" href="<{:U('hotel/editroom',array('room_id'=>$var['room_id']))}>" set-lan="html:n-edit">编辑</a>
+                <a style="color:red" class="radius3 sy_c1an" href="<{:U('hotel/del',array('room_id'=>$var['room_id']))}>" set-lan="html:n-delete">删除</a>
+            </td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+
+<include  file='public:footer'/>

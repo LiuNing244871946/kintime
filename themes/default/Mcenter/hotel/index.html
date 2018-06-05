@@ -1,0 +1,24 @@
+<include  file='public:header'/>  
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:U('mcenter/member/index')}>"><i class="icon-goback"></i></a>
+        <div class="title" set-lan="html:q-hotelorder">酒店订单</div>
+        <i class="icon-menu"></i>
+    </header>
+    <?php }?>
+    <div id="life" class="page-center-box">
+
+        <div id="scroll">
+            <div class="list-have-pic" id="buy-list" style="margin-top: .1rem;"></div>
+        </div>
+
+
+        <script>
+            $(document).ready(function () {
+                loaddata('<{:U("mcenter/hotel/loaddata/")}>', $(".list-have-pic"), true);
+            });
+        </script>
+
+    </div>
+<include  file='public:footer'/>

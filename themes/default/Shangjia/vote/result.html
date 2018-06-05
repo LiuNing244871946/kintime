@@ -1,0 +1,46 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:q-Pluginunit">插件</a> > <a href="" set-lan="html:q-Votingfunction">投票功能</a> > <a set-lan="html:q-Votingresults">投票结果</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l"> "<{$detail.title}>"<span set-lan="html:q-Votingresults">的投票结果</span></div>
+        </div>
+    </div> 
+<div class="tabnr_change show">
+        <table cellpadding="0"  cellspacing="0" width="800" class="tuanfabu_table">
+              <tr style="background-color:#eee;">
+                  <th style="height: 40px;" set-lan="html:q-option">选项</th>
+                <th set-lan="html:q-Numberofvotes">投票次数</th>
+                <th set-lan="html:q-Proportionoftotal">占总数比例</th>
+            </tr>
+            <volist name="options" id="var" key="i">
+                <tr>
+                    <td width="200"><{$var.title}></td>
+                    <td width="60"><{$var.number}></td>
+                    <php>
+                        $rat = round(($var['number']/$total)*100);
+                        $ratio = ($var['number']/$total)*500;
+                    $ratio = floor($ratio);
+                </php>
+                
+                <script>
+                   
+                    var div<{$i}> = document.getElementById("ratio<{$i}>");//得到这个DIV。
+                    div<{$i}>.style.width=<{$ratio}>+'px';
+
+                    
+                </script>
+                
+                <td><div class="all"><div id="ratio<{$i}>" class="ratio" style="background: #FF0000; height: 24px; line-height: 24px;" ></div><div class="rat"><{$rat}>%</div></div></td>
+                </tr>
+            </volist>
+        </table>
+
+</div>
+
+</body>
+</html>

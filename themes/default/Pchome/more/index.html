@@ -1,0 +1,180 @@
+<include file="public:header" /> 
+<include file="public:top"/>
+<include file="public:nav2"/>
+<!--主体内容-->
+<div class="pagewd allMenuPage">
+	<div class="allMenu_contOne">
+        <ul>
+            <li>
+            	<div class="allMenu_box bg1">
+                    <h2><em class="ico ico_1"></em>商家</h2>
+                    <div class="emptySeat"></div>
+                    <div class="list_box">
+                        <calldata mdl="Shopcate" where="parent_id=0" limit="0,9" cache="21600" order="orderby asc">
+                            <a href="<{:U('shop/index',array('cat'=>$item['cate_id']))}>" class="list"><{$item['cate_name']}></a>
+                        </calldata>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+            	<div class="allMenu_box bg2">
+                    <h2><em class="ico ico_2"></em>抢购</h2>
+                    <div class="emptySeat"></div>
+                    <div class="list_box">
+                        <calldata mdl="Tuancate" where="parent_id=0" limit="0,9" cache="21600" order="orderby asc">
+                            <a href="<{:U('tuan/index',array('cat'=>$item['cate_id']))}>" class="list"><{$item['cate_name']}></a>
+                        </calldata>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+            	<div class="allMenu_box bg3">
+                    <h2><em class="ico ico_3"></em>活动</h2>
+                    <div class="emptySeat"></div>
+                    <div class="list_box">
+                        <calldata mdl="Activitycate" where="parent_id=0" limit="0,9" cache="21600" order="orderby asc">
+                            <a href="<{:U('huodong/index',array('cat'=>$item['cate_id']))}>" class="list"><{$item['cate_name']}></a>
+                        </calldata>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+    <div class="allMenu_contTwo">
+    	<div class="left">
+            <div class="allMenu_box bg4">
+                <h2><em class="ico ico_4"></em>上门服务</h2>
+                <div class="emptySeat"></div>
+                <div class="list_box">
+                    <php>$a =1;</php>
+                    <foreach name="list" item="item">
+                        <php>if($a <=18){</php>
+                            <a href="<{:U('lifeservice/detail',array('id'=>$a))}>" class="list"><{:bao_msubstr($item['t'],0,5,false)}></a>
+                        <php>$a++; }</php>
+                    </foreach>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="allMenu_box bg5">
+                <h2><em class="ico ico_5"></em>外卖</h2>
+                <div class="emptySeat"></div>
+                <div class="list_box">
+                    <?php foreach($elecates as $k=>$val) {?>
+                         <a href="<{:U('ele/index',array('cate'=>$k))}>" class="list"><{$val}></a>
+                    <?php }?>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="allMenu_contThree">
+        <ul>
+            <li>
+            	<div class="allMenu_box">
+                    <h2><em class="ico ico_6"></em>本地商城</h2>
+                    <div class="list_box">
+                        
+                        <calldata mdl="Goodscate" where="parent_id=0" limit="0,9" cache="43200" order="orderby asc">
+                            <a href="<{:U('mall/items',array('cat'=>$item['cate_id']))}>" class="list"><{$item['cate_name']}></a>
+                        </calldata>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+            	<div class="allMenu_box">
+                    <h2><em class="ico ico_7"></em>优惠券</h2>
+                    <div class="list_box">
+                        <calldata mdl="Tuancate" where="parent_id=0" limit="0,9" cache="21600" order="orderby asc">
+                            <a href="<{:U('coupon/index',array('cat'=>$item['cate_id']))}>" class="list"><{$item['cate_name']}></a>
+                        </calldata>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+            	<div class="allMenu_box">
+                    <h2><em class="ico ico_8"></em>同城信息</h2>
+                    <div class="list_box">
+                        <php>$i=1;</php>
+                        <?php foreach($channelmeans as $k=>$val) {?>
+                            <php>if($i<=9){</php>
+                            <a href="<{:U('life/index',array('channel'=>$k))}>" class="list"><{$val}></a>
+                            <php> $i++; }</php>
+                        <?php }?>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+    <div class="allMenu_contFour">
+    	<ul>
+        	<li class="list">
+            	<a href="<{:U('sarticle/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg1.png" />
+                    <p>文章资讯</p>
+                </a>
+            </li>
+            <li class="list">
+            	<a href="<{:U('tribe/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg2.png" />
+                    <p>部落</p>
+                </a>
+            </li>
+            <li class="list">
+            	<a href="<{:U('news/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg3.png" />
+                    <p>商家新闻</p>
+                </a>
+            </li>
+            <li class="list">
+            	<a href="<{:U('billboard/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg4.png" />
+                    <p>商家榜单</p>
+                </a>
+            </li>
+            <li class="list">
+            	<a href="<{:U('ding/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg5.png" />
+                    <p>订座</p>
+                </a>
+            </li>
+            <li class="list">
+            	<a href="<{:U('jifen/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg6.png" />
+                    <p>积分商城</p>
+                </a>
+            </li>
+            <li class="list">
+            	<a href="<{:U('cloud/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg7.png" />
+                    <p>一元云购</p>
+                </a>
+            </li>
+            <li class="list">
+            	<a href="<{:U('farm/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg8.png" />
+                    <p>农家乐</p>
+                </a>
+            </li>
+            <li class="list">
+            	<a href="<{:U('hotel/index')}>">
+                	<img src="__TMPL__statics/images/allMenu/menuImg9.png" />
+                    <p>订酒店</p>
+                </a>
+            </li>
+        </ul>
+    	<div class="clear"></div>
+    </div>
+</div>
+<!--主体内容结束-->
+<include file="public:footer"/>

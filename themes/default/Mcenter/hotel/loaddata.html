@@ -1,0 +1,31 @@
+<foreach name="list" item="item">
+    <!-- 循环 -->
+    <div class="list-box" id="list-box">
+        <div class="list-img">
+            <a href="<{:AppLink('mobile/hotel/detail',array('hotel_id'=>$item['hotel_id']))}>"><img src="__ROOT__/attachs/<{$hotels[$item['hotel_id']]['photo']}>"></a>
+        </div>
+        <div class="buy-content">
+            <p class=""><span class="fl overflow_clear" style="width:60%;height: .25rem;line-height: .25rem;"><a href="<{:AppLink('mobile/hotel/detail',array('hotel_id'=>$item['hotel_id']))}>"><if condition="$lang eq 1 "><{$hotels[$item['hotel_id']]['hotel_name']}><elseif condition="$lang eq 2" /><{$hotels[$item['hotel_id']]['lao_hotel_name']}><elseif condition="$lang eq 3" /><{$hotels[$item['hotel_id']]['eng_hotel_name']}></if></a></span><span class="fr"><a class="order_detail" style="margin-right: 0.15rem;" href="<{:AppLink('mcenter/hotel/detail',array('order_id'=>$item['order_id']))}>" set-lan="html:q-details">详情</a></span></p>
+            <p style="padding-top: 0.03rem;"><span set-lan="html:q-Predeterminedtime">预订时间：<{$item.stime}>--<{$item.ltime}></span></p>
+            <p><span><span set-lan="html:q-Totalorder">订单总额</span>：<span set-lan="html:q-qian">₭</span><{$item.amount}></span>&nbsp;&nbsp;<span set-lan="html:q-Numberofrooms">房间数量：<{$item['num']}></span></p>
+            <p class="spread-for">
+                
+                    <if condition="$item['order_status'] eq 0">
+                        <a style="margin-left: 0;" class="order_detail"  href="<{:U('mobile/hotel/pay',array('order_id'=>$item['order_id']))}>" set-lan="html:q-Gotopayment">去付款</a>
+                    <elseif condition="$item[order_status] eq 1" />
+                        <span set-lan="html:q-Alreadypaid" class="order_title">已付款</span>
+                    <elseif condition="$item[order_status] eq 2" />
+                        <span set-lan="html:q-Checked" class="order_title">已入住</span>
+                        <if condition="$item['comment_status'] eq 1">
+                            <span class="order_title">已点评</span>
+                        <else/>
+                            <a class="order_detail" href="<{:U('hotel/comment',array('order_id'=>$item['order_id']))}>" set-lan="html:q-Toevaluate">去点评</a>
+                        </if>
+                    <else/>
+                            <span set-lan="html:q-canceled" class="order_title">已取消</span>
+                    </if>  
+            </p>
+        </div>
+    </div>
+    <!-- 循环 -->
+</foreach>

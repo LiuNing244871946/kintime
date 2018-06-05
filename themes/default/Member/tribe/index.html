@@ -1,0 +1,33 @@
+<include file="public:header"/>
+<div class="content_right">  
+    <div class="tgdd">
+        <div class="tgdd_nr">
+            <table border="0" cellspacing="0" width="100%"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; text-align:center;">
+                <tr class="tgdd_nrt">
+                    <th>部落图片</th>
+                    <th>部落名称</th>
+                    <th>部落简介</th>
+                    <th>话题数</th>
+                    <th>关注数</th>
+                    <th>操作</th>
+                </tr>
+                <volist name="list" id="item">
+                    <tr class="tgdd_nrt">
+                        <td><div class="favoriteImg"><a class="myInfor_sx" title="<{$tribes[$item['tribe_id']]['tribe_name']}>" target="_blank" href="<{:U('pchome/tribe/detail',array('tribe_id'=>$item['tribe_id']))}>"><img style="margin:10px auto 1px"  width="81" height="50" src="__ROOT__/attachs/<{$tribes[$item['tribe_id']]['photo']|default='default.jpg'}>" /></a></div></td>
+                        <td><a class="myInfor_sx" title="<{$tribes[$item['tribe_id']]['tribe_name']}>" target="_blank" href="<{:U('pchome/tribe/detail',array('tribe_id'=>$item['tribe_id']))}>"><{$tribes[$item['tribe_id']]['tribe_name']}></a></td>
+                        <td><{$tribes[$item['tribe_id']]['intro']}></td>
+                        <td><{$tribes[$item['tribe_id']]['posts']}></td>
+                        <td><{$tribes[$item['tribe_id']]['fans']}></td>
+                        <td>
+                            <a class="myInfor_sx" mini='confirm' href="<{:U('tribe/collect',array('tribe_id'=>$item['tribe_id']))}>">取消关注</a>
+                        </td>
+                    </tr>
+                </volist>
+            </table>
+            <div class="x"><{$page}></div>
+        </div>
+    </div> 
+</div>
+</div>
+<include file="public:footer"/>
+

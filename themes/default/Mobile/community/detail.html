@@ -1,0 +1,147 @@
+<include  file='public:header'/>
+<script src="__TMPL__statics/js/jquery.flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="__TMPL__statics/js/TouchSlide.js" type="text/javascript" charset="utf-8"></script>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('Index/index')}>"><i class="icon-goback"></i></a>
+        <div class="title"><{$detail.name}> 
+            <a style="color:#0073c9; font-size: 14px;" href="<{:AppLink('community/index',array('change'=>1))}>">切换</a> 
+        </div>
+        <a href="<{:AppLink('community/feedback',array('community_id'=>$detail['community_id']))}>"><i class="icon-menu share" id="feedIco"></i></a>
+    </header>
+    <?php }?>
+    <div id="" class="page-center-box">
+        <div id="scroll">
+            <div class="banner">
+                <div class="flexslider"> 
+                    <ul class="slides">
+                        <if condition="!empty($ads)">
+                            <foreach name="ads" item="item">
+                                <li><a href="<{$item.link_url}>"><img style="height:auto;" src="__ROOT__/attachs/<{$item.photo}>" width="100%" height="auto" /></a></li>  
+                            </foreach>
+                            <else/>
+                            <calldata mdl="Ad" where=" closed=0 AND site_id=33 AND city_id IN ({$city_ids}) AND bg_date ELT '{$today}' AND end_date EGT '{$today}' " limit="0,5" cache="43200" order="orderby asc">
+                                <li><a href="<{$item.link_url}>"><img style="height:auto;" src="__ROOT__/attachs/<{$item.photo}>" width="100%" height="auto" /></a></li>  
+                            </calldata>
+                        </if>
+                    </ul>  
+                </div>
+            </div>
+            <!--社区功能开始-->
+            <div class="sqFunction mb10">
+                <ul>
+                    <li class="list"><a href="<{:AppLink('community/tuan',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco1.png"></em><p>小区抢购</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/weidian',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco2.png"></em><p>小区商超</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/ele',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco3.png"></em><p>小区外卖</p></a></li>
+                    <li class="list"><a href="<{:AppLink('housekeeping/main')}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco4.png"></em><p>家政服务</p></a></li>
+                    <li class="list"><a href="<{:AppLink('life/lists',array('cat'=>95))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco5.png"></em><p>装修服务</p></a></li>
+                    <li class="list"><a href="<{:AppLink('life/lists',array('cat'=>92))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco6.png"></em><p>维修服务</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/feedback',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco7.png"></em><p>意见反馈</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/tellist',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco8.png"></em><p>便民电话</p></a></li>
+                    <li class="list"><a href="<{:AppLink('life/channel',array('channel'=>5))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco9.png"></em><p>房屋出租</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/newslist',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco10.png"></em><p>公告通知</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/order',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco11.png"></em><p>物业费</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/order',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco12.png"></em><p>停车费</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/order',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco13.png"></em><p>水费</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/order',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco14.png"></em><p>燃气费</p></a></li>
+                    <li class="list"><a href="<{:AppLink('community/order',array('community_id'=>$detail['community_id']))}>"><em><img src="__TMPL__statics/img/sqFunctIco/sqFunctIco15.png"></em><p>电费</p></a></li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <!--社区功能结束-->
+           
+            <!--社区外卖开始-->
+            <div class="sqWaimai mb10">
+                <div class="title">
+                    <h3 class="fl">热门外卖</h3>
+                    <a href="<{:AppLink('community/ele',array('community_id'=>$detail['community_id']))}>" class="fr more">全部</a>
+                </div>
+                <ul class="list_box">
+                    <foreach name="eles" item="item">
+                        <li>
+                            <div class="hotTag ico_1"></div>
+                            <div class="sqWaimai_nr">
+                                <div class="fl">
+                                    <a href="<{:AppLink('ele/shop',array('shop_id'=>$item['shop_id']))}>">
+                                        <div class="fl img"><img src="__ROOT__/attachs/<{$eshop[$item['shop_id']]['photo']}>"></div>
+                                        <div class="wz">
+                                            <p class="bt overflow_clear"><{$item.shop_name}></p>
+                                            <p><span class="spxq_qgpstarBg"><span class="spxq_qgpstar spxq_qgpstar<{$eshop[$item['shop_id']]['score']}>"></span></span></p>
+                                            <p class="black9">地址：<{$eshop[$item['shop_id']]['addr']}></p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="fr">
+                                    <p class="black6">月售<{$item.month_num}>份</p>
+                                    <p class="black6"><span class="fontcl1 playPrice"><em>¥</em><{:round($item['since_money']/100,2)}></span>起送</p>
+                                    <p class="black6">配送费：¥<{:round($item['logistics']/100,2)}></p>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="sqWaimai_state">
+                                <div class="fl">总售<{$item.sold_num}>份<eq name="item.is_new" value="1"><span class="tag bg_1">减</span></eq><span class="tag bg_2">配</span><eq name="item.is_fan" value="1"><span class="tag bg_3">返</span></eq><eq name="item.is_pay" value="1"><span class="tag bg_4">付</span></eq></div>
+                                <div class="fr"><{$item.d}></div>
+                                <div class="clear"></div>
+                            </div>
+                        </li>
+                    </foreach>
+                </ul>
+            </div>
+            <!--社区外卖结束-->
+            <!--附近商家开始-->
+            <div class="sqWaimai sqSeller mb10">
+                <div class="title">
+                    <h3 class="fl">附近商家</h3>
+                    <a href="<{:AppLink('shop/index')}>" class="fr more">全部<{$count}>家</a>
+                </div>
+                <ul class="list_box">
+                    <foreach name="shops" item="item">
+                        <li>
+                            <div class="sqWaimai_nr sqSeller_nr">
+                                <div class="fl">
+                                    <a href="<{:AppLink('shop/detail',array('shop_id'=>$item['shop_id']))}>">
+                                        <div class="fl img"><img src="__ROOT__/attachs/<{$item.photo}>"></div>
+                                        <div class="wz">
+                                            <p class="bt overflow_clear"><{$item.shop_name}></p>
+                                            <p><span class="spxq_qgpstarBg"><span class="spxq_qgpstar spxq_qgpstar<{$item.score}>"></span></span></p>
+                                            <p class="black9"><{$item.addr}></p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="fr">
+                                    <p class="black9"><{$item.d}></p>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </li>   
+                    </foreach>              
+                </ul>
+            </div>
+            <!--附近商家结束-->
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            /*轮播幻灯图开始*/
+            $('.flexslider').flexslider({
+                directionNav: true,
+                pauseOnAction: false,
+                /*slideshow: false,*/
+                /*touch:true,*/
+            });
+            /*轮播幻灯图结束*/
+
+            /*首页效果图切换效果开始*/
+            TouchSlide({
+                slideCell: "#sqShopCate",
+                effect: "leftLoop",
+            });
+            /*首页效果图切换效果结束*/
+        });
+    </script>
+
+<include file="public:footer"/>
+

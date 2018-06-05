@@ -1,0 +1,61 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:q-Businessmanagement">美食优惠</a> > <a href=""  set-lan="html:q-mall">优惠管理</a> > <a set-lan="html:q-Editorialgrouppurchase">正在优惠</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+	<form method="post" action="<{:U('tuan/index')}>">
+        <div class="radius5 tuan_top">
+            <div class="tuan_top_t">
+                <div class="left tuan_topser_l" set-lan="html:q-Nameofgrouppurchase">优惠名称：<input type="text" class="radius3 tuan_topser"  name="keyword" value="<{$keyword}>"/><input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" set-lan="val:q-search" value="搜 索"/></div>
+                <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('tuan/create')}>" set-lan="html:q-Releasegrouppurchase">发布优惠+</a></div>
+            </div>
+        </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('tuan/index')}>" set-lan="html:q-Groupbuying">正在优惠</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/history')}>" set-lan="html:q-Topanicbuying">往期优惠</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/order')}>" set-lan="html:q-Ordermanagement">订单管理</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/used')}>" set-lan="html:q-Rushordermanagement">优惠券管理</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td width="50" set-lan="html:q-GrouppurchaseID">优惠ID</td>
+            <td width="120" set-lan="html:q-Groupbuyingpictures">优惠图片</td>
+            <td width="130" set-lan="html:q-Nameofgrouppurchase">优惠名称</td>
+            <td width="150" set-lan="html:q-Timeofgrouppurchase">优惠时间</td>
+            <td width="80" set-lan="html:q-Grouppurchaseprice">优惠价格</td>
+            <td width="70" set-lan="html:q-Originalprice">库存</td>
+            <td width="70" set-lan="html:q-Salesvolume">销量</td>
+            <td width="70" set-lan="html:q-Timesofbrowsing">浏览次数</td>
+            <td width="70" set-lan="html:q-state">状态</td>
+            <td width="140" set-lan="html:q-operation">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+        <tr>
+            <tr>
+                <td><{$var.tuan_id}></td>
+                <td><img src="__ROOT__/attachs/<{$var.photo}>"  style="width: 160px; margin: 0px auto;" /></td>
+                <td><{$var.title}><br/><{$var.lao_title}><br/><{$var.eng_title}></td>
+                <td><{$var.bg_date}>--<{$var.end_date}></td>
+                <td style="height: 100px;"><{$var['tuan_price']}></td>
+                <td><{$var['num']}></td>
+                <td><{$var.sold_num}></td>
+                <td><{$var.views}></td>
+                <td><eq name="var.audit" value="0"><span set-lan="html:q-Waitforaudit">等待审核</span><else/><span set-lan="html:q-normal">正常</span></eq></td>
+                <td>
+                    <a href="<{:U('tuan/edit',array('tuan_id'=>$var['tuan_id']))}>" set-lan="html:q-edit">编辑</a>
+                </td>
+            </tr>
+        </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+
+<include  file='public:footer'/>

@@ -1,0 +1,29 @@
+<?php if(!$totalnum){?>
+
+<img src="__ROOT__/attachs/nodianping.png" style="width:60%;margin: 1rem 20% 0 20%">
+
+<?php } else { ?>
+
+<foreach name="list" item="var">
+    <!-- 循环 -->
+    <div class="guest-box">
+        <div class="icon"><img src="__ROOT__/attachs/<{$users[$var['user_id']]['face']|default='default.png'}>"></div>
+        <div class="guest-box-content">
+            <p><{$users[$var['user_id']]['nickname']}><span><{$var.show_date}></span></p>
+            <div class="point-star"><span style="width: 0.<php>$stars= intval(($var['score'])*1.8);if($stars>9)$stars=9;echo $stars</php>rem;"></span></div>
+            <p class="c_h"><{$var.contents}></p>
+            <p class="img">
+            <volist name="pics" id="pic" key="index">
+                <eq name="pic.order_id" value="$var['order_id']">
+                <img src="__ROOT__/attachs/<{$pic.pic|default='default.jpg'}>" style="height: 1rem" >
+                </eq>
+            </volist>
+
+            </p>
+        </div>
+    </div>
+    <!-- 循环 -->
+</foreach>
+
+
+<?php } ?>

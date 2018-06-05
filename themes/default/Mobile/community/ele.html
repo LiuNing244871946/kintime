@@ -1,0 +1,23 @@
+<include file="public:header"/>
+<body>
+    <?php if(!$is_app){?>
+    <header>
+        <a href="<{:AppLink('community/detail',array('community_id'=>$detail['community_id']))}>"><i class="icon-goback"></i></a>
+        <div class="title"><{$detail.name}></div>
+    </header>
+    <?php }?>
+    <!-- 筛选TAB -->
+    <div id="ele" class="page-center-box">
+        <div id="scroll">
+            <!-- 列表 -->
+            <div class="list-have-pic">
+
+            </div>
+            <script>
+                $(document).ready(function () {
+                    loaddata('<{$nextpage}>', $(".list-have-pic"), true);
+                });
+            </script>
+        </div>
+    </div>
+    <include file="public:footer"/>

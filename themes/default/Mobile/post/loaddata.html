@@ -1,0 +1,28 @@
+<foreach name="list" item="item">
+    <div class="luntanList">
+        <div class="luntanList_nr">
+            <div class="fl img"><img src="__ROOT__/attachs/<{$users[$item['user_id']]['face']|default='default.jpg'}>" /></div>
+            <div class="wz">
+                <div class="from">
+                    <div class="fl">
+                        <p class="name"><{$users[$item['user_id']]['nickname']}></p>
+                    </div>
+                    <div class="fr black9 date"><{$item.create_time|date='Y-m-d H:i'}></div>
+                </div>
+                <p class="nr"><a href="<{:AppLink('post/detail',array('post_id'=>$item['post_id']))}>"><{$item.title}></a></p>
+                <{:bao_msubstr($item['details'],0,120,true)}>
+                <if condition="!empty($pics)">
+                    <div class="imgList">
+                        <volist name="pics" id="pic" key="index">
+                            <eq name="pic.post_id" value="$item['post_id']">
+                            <img src="__ROOT__/attachs/<{$pic.pic|default='default.jpg'}>">
+                            </eq>
+                        </volist>
+                    </div>
+                </if>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="luntanList_state"><a class="state"><em class="ico_1"></em><{$item.zan_num}></a><a class="state"><em class="ico_2"></em><{$item.reply_num}></a></div>
+    </div>
+</foreach>

@@ -1,0 +1,80 @@
+<include  file='public:header'/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:q-Businessmanagement">美食优惠</a> > <a href="" set-lan="html:q-Panicbuying">优惠管理</a> > <a set-lan="html:q-Ordermanagement">订单管理</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('tuan/order')}>">
+        <div class="radius5 tuan_top">
+            <div class="tuan_top_t">
+                <div class="left tuan_topser_l">
+                    <span set-lan="html:q-starttime">开始时间</span>：
+                    <input type="text" class="radius3 tuan_topser"  name="bg_date" value="<{$bg_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+                    <span set-lan="html:q-endtime">结束时间</span>：
+                    <input type="text" class="radius3 tuan_topser"  name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+                    <span set-lan="html:q-Ordernumber">订单编号</span>：
+                    <input type="text" name="keyword" value="<{$keyword}>" class="radius3 tuan_topser" />
+                    <span set-lan="html:q-state">状态</span>：
+                    <select name="st" class="manageSelect w80">
+                        <option value="999" set-lan="html:q-Pleaseselect">请选择</option>
+                        <option <eq name="st" value="1" set-lan="html:q-Completed">selected="selected"</eq>  value="1">已完成</option>
+                        <option <eq name="st" value="0" set-lan="html:q-Waitforpayment">selected="selected"</eq>  value="0">等待付款</option>
+                    </select>
+                    <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" set-lan="val:q-search" value="搜 索"/>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/index')}>" set-lan="html:q-Beingsnappedup">正在优惠</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/history')}>" set-lan="html:q-Topanicbuying">往期优惠</a></li>
+            <li class="tuanfabu_tabli on"><a href="<{:U('tuan/order')}>" set-lan="html:q-Ordermanagement">订单管理</a></li>
+            <li class="tuanfabu_tabli"><a href="<{:U('tuan/used')}>" set-lan="html:q-Grouppurchasevouchermanagement">优惠券管理</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td>ID</td>
+            <td set-lan="html:q-Snapuppictures">优惠图片</td>
+            <td set-lan="html:q-Snapupproducts">优惠名称</td>
+            <td set-lan="html:q-Number">数量</td>
+            <td  set-lan="html:q-Orderamount">订单金额</td>
+            <td set-lan="html:q-Creationtime">创建时间</td>
+            <td set-lan="html:q-CreateIP">创建IP</td>
+            <td set-lan="html:q-state">状态</td>
+        </tr>
+
+        <foreach name="list" item="var">
+            
+            <tr>
+                <td><{$var.order_id}></td>
+                <td style="height: 80px;"><img width="120" src="__ROOT__/attachs/<{$tuan[$var['tuan_id']]['photo']}>" style="margin: 0px auto;" /></td>
+                <td><{$tuan[$var['tuan_id']]['title']}><br/><{$tuan[$var['tuan_id']]['lao_title']}><br/><{$tuan[$var['tuan_id']]['eng_title']}></td>
+                <td><{$var.num}></td>
+                <td><{:round($var['total_price'],2)}></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                <td><{$var.create_ip}></td>
+                <td><if condition="$var['status'] eq 0">
+                         <span set-lan="html:q-Waitforpayment">等待付款</span>            
+                    <elseif condition="$var['status'] eq -1"/>                     
+                         <span set-lan="html:q-CashonDelivery">货到付款</span>                                       
+				    <elseif condition="$var['status'] eq 1 "/>
+                        <if condition="$ordercode[$var['order_id']]['is_used'] eq 0">
+    				         <span set-lan="html:q-Paidunpaid">已付款未消费</span>
+                        <else/>
+                            <span set-lan="html:q-Alreadyconsumed">已消费</span>
+                        </if>
+				   </if>
+				   </td>
+            </tr>
+        </foreach>
+    </table>
+    <div class="paging">
+        <{$page}>
+    </div>
+</div>
+
+<include  file='public:footer'/>

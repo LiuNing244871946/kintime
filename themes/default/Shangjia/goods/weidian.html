@@ -1,0 +1,424 @@
+<include  file='public:header'/>
+<script type="text/javascript" src="https://maps.google.cn/maps/api/js?v=3.20&region=cn&language=zh-CN&key=AIzaSyAj1gNUTDZJLvPeePsU5ltjfX-hJU1N_8c&libraries=places"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-systemSetup">购物</a> > <a href="" set-lan="html:n-microBusinessManagement">购物资料修改</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-microBusinessInfo">店铺文字资料介绍店铺的基本信息 </div>
+        </div>
+    </div> 
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change on"><a href="<{:U('goods/weidian')}>" set-lan="html:n-microBusinessfiles">店铺资料</a></li>
+        </ul>
+    </div>
+    <div class="tabnr_change  show">
+        <form method="post"  action="<{:U('goods/weidian')}>" target="baocms_frm">
+            <table class="tuanfabu_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-classify">店铺类型：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[cate_id]" id="cate_id" class="tuanfabu_int tuanfabu_intw2">
+                                <option value="">=选择=</option>
+                                <volist name="cates" id="val">
+                                    <option value="<{$val.cate_id}>" <if condition="$val['cate_id'] eq $weidian['cate_id']">selected='selected'</if>><{$val.cate_name}></option>
+                                </volist>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:m-zhShopName">中文店铺名称：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[weidian_name]" value="<{$weidian.weidian_name}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:m-zhShopName">老文店铺名称：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[lao_weidian_name]" value="<{$weidian.lao_weidian_name}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:m-zhShopName">英文店铺名称：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[eng_weidian_name]" value="<{$weidian.eng_weidian_name}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-classify">所在区域：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[city_id]" id="city_id" class="tuanfabu_int tuanfabu_intw2"></select>
+                            <select name="data[area_id]" id="area_id" class="tuanfabu_int tuanfabu_intw2"></select>
+                        </div>
+                    </td>
+                </tr>
+                <script src="<{:U('app/datas/cityarea')}>"></script>
+                <script>
+                    var city_id = <?php echo (int)$weidian['city_id'];?>;
+                    var area_id = <?php echo (int)$weidian['area_id'];?>;
+                    function changeCity(cid){
+                        var area_str = '<option value="0">请选择.....</option>';
+                        for(a in cityareas.area){
+                           if(cityareas.area[a].city_id ==cid){
+                                if(area_id == cityareas.area[a].area_id){
+                                    area_str += '<option selected="selected" value="'+cityareas.area[a].area_id+'">'+cityareas.area[a].area_name+'</option>';
+                                }else{
+                                     area_str += '<option value="'+cityareas.area[a].area_id+'">'+cityareas.area[a].area_name+'</option>';
+                                }  
+                            }
+                        }
+                        $("#area_id").html(area_str);
+                    }
+                    $(document).ready(function(){
+                        var city_str = '<option value="0">请选择.....</option>';
+                        for(a in cityareas.city){
+                           if(city_id == cityareas.city[a].city_id){
+                               city_str += '<option selected="selected" value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+                           }else{
+                                city_str += '<option value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+                           }  
+                        }
+                        $("#city_id").html(city_str);
+                        if(city_id){
+                            changeCity(city_id);
+                        }
+                        $("#city_id").change(function(){
+                            city_id = $(this).val();
+                            changeCity($(this).val());
+                            var url = '<{:U("expresssetting/child",array("city_id"=>"0000"))}>';
+                            if ($(this).val() > 0) {
+                                var url2 = url.replace('0000', $(this).val());
+                                $.get(url2, function (data) {
+                                    $("#express_id").html(data);
+                                }, 'html');
+                            }
+                        });
+                        
+                        $("#area_id").change(function () {
+                            var url = '<{:U("business/child",array("area_id"=>"0000"))}>';
+                            if ($(this).val() > 0) {
+                                var url2 = url.replace('0000', $(this).val());
+                                $.get(url2, function (data) {
+                                    $("#business_id").html(data);
+                                }, 'html');
+                            }
+
+                        });
+                    });
+                </script>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-classify">所在商圈：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[business_id]" id="business_id" class="tuanfabu_int tuanfabu_intw2">
+                                <option value="0">=选择=</option>
+                                <volist name="business" id="val">
+                                    <option value="<{$val.business_id}>" <if condition="$val['business_id'] eq $weidian['business_id']">selected='selected'</if>><{$val.business_name}></option>
+                                </volist>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-classify">选择快递商：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[express_id]" id="express_id" class="tuanfabu_int tuanfabu_intw2">
+                                <option value="">=选择=</option>
+                                <volist name="express" id="val">
+                                    <option value="<{$val.id}>" <if condition="$val['id'] eq $weidian['express_id']">selected='selected'</if>><{$val.name}>--<{$val.fee}>₭/Kg</option>
+                                </volist>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">中文店铺地址：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[addr]" value="<{$weidian.addr}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">老文店铺地址：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[lao_addr]" value="<{$weidian.lao_addr}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">英文店铺地址：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[eng_addr]" value="<{$weidian.eng_addr}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t">店铺电话：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[tel]" value="<{$weidian.tel}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t">中文联系人：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[contact]" value="<{$weidian.contact}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t">老文联系人：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[lao_contact]" value="<{$weidian.lao_contact}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t">英文联系人：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <input type="text" name="data[eng_contact]" value="<{$weidian.eng_contact}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-classify">手机号码：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[areacode]" class="tuanfabu_int tuanfabu_intw2">
+                                <option value="86" <?php echo $weidian['areacode']=='86'?'selected':'' ?> >中国+86</option>
+                                <option value="856" <?php echo $weidian['areacode']=='856'?'selected':'' ?> >老挝+856</option>
+                            </select>
+                            <input type="text" name="data[mobile]" value="<{$weidian.mobile}>" class="tuanfabu_int tuanfabu_intw2" />
+                        </div>
+                    </td>
+                </tr>
+                <js file='__PUBLIC__/js/uploadify/jquery.uploadify.min.js'/>
+                <link rel="stylesheet" href="__PUBLIC__/js/uploadify/uploadify.css">
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-microBusinessPhoto">店铺形象照：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <div style="width: 300px;height: 100px; float: left;">
+                                <input type="hidden" name="data[pic]" value="<{$weidian.pic}>" id="data_img" class="tuanfabu_int tuanfabu_intw" />
+                                <input id="logo_file" name="data[pic]" type="data[pic]" multiple="true" value="" />
+                            </div>
+                            <div style="width: 300px;height: 100px; float: left;">
+                                <img id="image_show" width="80" height="80"  src="__ROOT__/attachs/<{$weidian.pic|default='default.jpg'}>" />
+                                <span set-lan="html:n-recommendedSize">建议尺寸:</span><{$CONFIG.attachs.shopphoto.thumb}>
+                            </div>
+                            <script>
+                                        $("#logo_file").uploadify({
+                                'swf': '__PUBLIC__/js/uploadify/uploadify.swf?t=<{$nowtime}>',
+                                        'uploader': '<{:U("app/upload/uploadify",array("model"=>"weidian"))}>',
+                                        'cancelImg': '__PUBLIC__/js/uploadify/uploadify-cancel.png',
+                                        'buttonText': '上传店铺形象照',
+                                        'fileTypeExts': '*.gif;*.jpg;*.png',
+                                        'queueSizeLimit': 1,
+                                        'onUploadSuccess': function (file, data, response) {
+                                            data = eval(data);
+                                            $("#data_img").val(data);
+                                            $("#image_show").attr('src', '__ROOT__/attachs/' + data).show();
+                                        }
+                                });                            </script>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-microBusinessLogo">商铺LOGO：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <div style="width: 300px;height: 100px; float: left;">
+                                <input type="hidden" name="data[logo]" value="<{$weidian.logo}>" id="data_img2" class="tuanfabu_int tuanfabu_intw" />
+                                <input id="logo_file2" name="logo_file2" type="file" multiple="true" value="" />
+                            </div>
+                            <div style="width: 300px;height: 100px; float: left;">
+                                <img id="image_show2" width="80" height="80"  src="__ROOT__/attachs/<{$weidian.logo|default='default.jpg'}>" />
+                                <span set-lan="html:n-recommendedSize">建议尺寸:</span><{$CONFIG.attachs.shopphoto.thumb}>
+                            </div>
+                            <script>
+                                        $("#logo_file2").uploadify({
+                                'swf': '__PUBLIC__/js/uploadify/uploadify.swf?t=<{$nowtime}>',
+                                        'uploader': '<{:U("app/upload/uploadify",array("model"=>"weidian"))}>',
+                                        'cancelImg': '__PUBLIC__/js/uploadify/uploadify-cancel.png',
+                                        'buttonText': '上传店铺LOGO',
+                                        'fileTypeExts': '*.gif;*.jpg;*.png',
+                                        'queueSizeLimit': 1,
+                                        'onUploadSuccess': function (file, data, response) {
+                                            data = eval(data);
+                                            $("#data_img2").val(data);
+                                            $("#image_show2").attr('src', '__ROOT__/attachs/' + data).show();
+                                        }
+                                });                            </script>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:q-Isitfavorable">是否折扣：</p></td>
+                    <td><div class="tuanfabu_nr">
+                        <foreach name="rebate" item="var">
+                            <label><input style="width: 40px;"  type="radio" name="data[rate]" value="<{$var['id']}>" <eq name="weidian.rate" value="$var.id">checked="checked"</eq> /><span set-lan="html:q-no"><{$var['name']}></span></label>                
+                        </foreach>
+                            <label><input style="width: 40px;"  type="radio" name="data[rate]" value="0" <eq name="weidian.rate" value="0">checked="checked"</eq> /><span set-lan="html:q-no">无折扣</span></label> 
+                    </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-storeCoordinates">店铺坐标：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <input type="text" name="data[lng]" id="lng" value="<{$weidian.lng}>" class="tuanfabu_int tuanfabu_intw2" /> <span set-lan="html:n-longitude">经度</span>
+                            <input type="text" name="data[lat]" id="lat" value="<{$weidian.lat}>" class="tuanfabu_int tuanfabu_intw2" /> <span set-lan="html:n-latitude">纬度</span>
+                        </div></td>
+                </tr>
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-map">地图：</p></td>
+                    <td><div class="tuanfabu_nr">
+                            <div class="top" style="width:700px; margin-bottom: 20px;">
+                                <div id="g-countryBox" style="height: 30px;">请选择国家：
+                                    <select id="g-country" style="height: 30px;line-height: 30px;">
+                                        <option value="CN">中国</option>
+                                        <option value="LA">老挝</option>
+                                    </select>
+                                </div>
+                                <div id="r-result">请输入:<input type="text" id="suggestId" size="20" style="width:150px;" /></div>     
+                            </div>
+                            <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+                            <div id="allmap" style="width: 600px; height:500px;"></div>
+                            <script type="text/javascript">
+                                var lat,lng;
+                                if ("<{$weidian.lat}>"==""||"<{$weidian.lng}>"=="") {
+                                    lat = parseFloat("<{$the_shop.lat}>");
+                                    lng = parseFloat("<{$the_shop.lng}>");
+                                }else{
+                                    lat = parseFloat("<{$weidian.lat}>");
+                                    lng = parseFloat("<{$weidian.lng}>");
+                                }
+                            
+                                var map = new google.maps.Map(document.getElementById('allmap'),{
+                                    zoom:15,
+                                    center:{lat:lat,lng:lng},
+                                    gestureHandling:'greedy'
+                                });
+                                var pos = {lat:lat,lng:lng};
+                                var marker_S = new google.maps.Marker({
+                                    position:pos,
+                                    map:map,
+                                    animation:google.maps.Animation.DROP
+                                });
+                                map.addListener('click',function(e){
+                                    document.getElementById('lat').value = e.latLng.lat();
+                                    document.getElementById('lng').value = e.latLng.lng();
+                                    marker_S.setPosition(e.latLng);
+                                    // console.log(e.latLng.lat(),e.latLng.lng());
+                                });
+                                var ac = new google.maps.places.Autocomplete(
+                                        (document.getElementById('suggestId')),
+                                        {
+                                            // types:['address'],
+                                            componentRestrictions:{country:'CN'}
+                                        }
+                                    );
+                                ac.addListener('place_changed',function(){
+                                    var place = ac.getPlace();
+                                    map.panTo(place.geometry.location);
+                                    marker_S.setPosition(place.geometry.location);
+                                });
+                                document.getElementById('g-country').addEventListener('change',function(){
+                                    var countryText = document.getElementById('g-country').value;
+                                    ac.setComponentRestrictions({'country':countryText});
+                                    if (countryText==='LA') {
+                                        marker_S.setPosition({lat:17.97571240175261,lng:102.63320446014404});
+                                        map.setCenter({lat:17.97571240175261,lng:102.63320446014404});
+                                    }else if (countryText==='CN') {
+                                        marker_S.setPosition({lat:30.268760105204333,lng:120.2266301214695});
+                                        map.setCenter({lat:30.268760105204333,lng:120.2266301214695});
+                                    }
+                                    
+                                })
+
+                                </script>
+                        </div></td>
+                </tr>
+
+
+                
+                
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:n-details">中文详情：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <script type="text/plain" id="data_details" name="data[details]" style="width:800px;height:360px;"><{$weidian.details}></script>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:m-lao-details">老文详情：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <script type="text/plain" id="lao_data_details" name="data[lao_details]" style="width:800px;height:360px;"><{$weidian.lao_details}></script>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p class="tuanfabu_t" set-lan="html:m-eng-details">英文详情：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <script type="text/plain" id="eng_data_details" name="data[eng_details]" style="width:800px;height:360px;"><{$weidian.eng_details}></script>
+                        </div>
+                    </td>
+                </tr>
+                
+                <link rel="stylesheet" href="__PUBLIC__/umeditor/themes/default/css/umeditor.min.css" type="text/css">
+                <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.config.js"></script>
+                <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.min.js"></script>
+                <script type="text/javascript" src="__PUBLIC__/umeditor/lang/zh-cn/zh-cn.js"></script>
+                <script>
+                    um = UM.getEditor('data_details', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    });     
+                    um = UM.getEditor('lao_data_details', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    }); 
+                    um = UM.getEditor('eng_data_details', {
+                        imageUrl: "<{:U('app/upload/editor')}>",
+                        imagePath: '__ROOT__/attachs/editor/',
+                        lang: 'zh-cn',
+                        langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                        focus: false
+                    });            
+                </script>
+                
+
+
+
+            </table>
+            <div class="tuanfabu_an">
+                <input type="submit" class="radius3 sjgl_an tuan_topbt" value="确认保存" set-lan="value:n-sureConserve"/>
+            </div>
+        </form>
+    </div> 
+</div>
+<include  file='public:footer'/>

@@ -1,0 +1,41 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">购物</a> > <a href="" set-lan="html:n-classify">产品分类</a> > <a set-lan="html:n-addClassification">编辑分类</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-shopSetSelfClassify">商家设置店内自定义分类</div>
+        </div>
+    </div> 
+    <div class="tabnr_change  show">
+    	<form method="post"  action="<{:U('goodsshopcate/edit',array('cate_id'=>$detail['cate_id']))}>"  target="baocms_frm">
+    	<table class="tuanfabu_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-classifyName">分类名称：</p></td>
+                <td><div class="tuanfabu_nr"><input type="text" name="data[cate_name]" value="<{$detail.cate_name|default=''}>" class="tuanfabu_int tuanfabu_intw2" /></div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-sort">排序：</p></td>
+                <td><div class="tuanfabu_nr"><input type="text" name="data[orderby]" value="<{$detail.orderby|default=''}>" class="tuanfabu_int tuanfabu_intw2" /></div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-setSpecification">设定规格：</p></td>
+                <td>
+                	<div class="tuanfabu_nr">
+                		<foreach name="formats" item="var" key="index">
+                            <label style="margin-right: 10px;"><input type="checkbox" name="format[]" value="<{$var.id}>" <php>if(in_array($var[id],$detail[format])){</php>checked="checked"<php>}</php>/><{$var.name}></label>
+                        </foreach>   
+                	</div>
+                </td>
+            </tr>
+        </table>
+        <div class="tuanfabu_an">
+        <input type="submit" class="radius3 sjgl_an tuan_topbt" value="确认修改" set-lan="value:n-sureAdd"/>
+        </div>
+        </form>
+    </div> 
+</div>
+<include  file='public:footer'/>

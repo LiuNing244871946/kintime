@@ -1,0 +1,53 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">商家管理</a> > <a href="" set-lan="html:n-marketingManagement">营销管理</a> > <a set-lan="html:n-coupon">优惠券</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('coupon/index')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-coupon">
+           优惠券
+            </div>
+            <div class="right tuan_topfb_r"><a class="radius3 sjgl_an tuan_topbt" target="main_frm" href="<{:U('coupon/create')}>" set-lan="html:n-publishCoupon">发布优惠券+</a></div>
+        </div>
+    </div>
+    </form>
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-coupon">优惠券</td>
+            <td set-lan="html:n-title">标题</td>
+			<td set-lan="html:n-qrcodeImg">二维码图片</td>
+			<td set-lan="html:n-qrcodeLink">二维码链接</td>
+            <td set-lan="html:n-discountAmount">优惠金额</td>
+            <td set-lan="html:n-publishTime">发布时间</td>
+            <td set-lan="html:n-endTime">结束时间</td>
+            <td set-lan="html:n-pageView">浏览量</td>
+            <td set-lan="html:n-number">数量</td>
+            <td set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.coupon_id}></td>
+                <td><{$var.title}></td>
+				<td style="height: 140px;"><img src="__ROOT__/attachs/<{$var.file|default='default.jpg'}>"  style="width: 120px; margin: 0px auto;" /></td>
+				<td><{$var.url}></td>
+                <td><{$var.end_tips}></td>
+                <td><{$var.stime}></td>
+                <td><{$var.ltime}></td>
+                <td><{$var.views}></td>
+                <td><{$var.num}></td>
+                <td>
+                    <a class="radius3 sjgl_an tuan_topbt" href="<{:U('coupon/edit',array('coupon_id'=>$var['coupon_id']))}>" set-lan="html:n-edit">编辑</a>
+                    <a class="radius3 sjgl_an tuan_topbt" href="<{:U('coupon/sn',array('coupon_id'=>$var['coupon_id']))}>" set-lan="html:n-member">成员</a>
+                    <a mini='confirm' class="radius3 sjgl_an tuan_topbt" href="<{:U('coupon/delete',array('coupon_id'=>$var['coupon_id']))}>" set-lan="html:n-delete">删除</a>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+
+<include  file='public:footer'/>

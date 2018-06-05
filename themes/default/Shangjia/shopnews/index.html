@@ -1,0 +1,58 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:q-business">商家</a> > <a href="" set-lan="html:q-BusinessNews">商家新闻</a> > <a set-lan="html:q-Businesslist">新闻列表</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t tuanfabu_top">
+            <div class="left tuan_topser_l" set-lan="html:q-show">商家新闻通过审核后才能显示</div>
+        </div>
+    </div>
+    <form method="post" action="<{:U('shopnews/index')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l"><span set-lan="html:q-Keyword">关键字</span>：<input type="text" class="radius3 tuan_topser"  name="keyword" value="<{$keyword}>"/><input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" set-lan="html:q-search" value="搜 索"/></div>
+        </div>
+    <div class="clear"></div>
+    </div>
+    </form>
+
+    <form  class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0"  method="post">
+        <div class="tableBox">
+        <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                <tr>
+                    <td class="w50"><input type="checkbox" class="checkAll" rel="news_id" /></td>
+                    <td class="w50">ID</td>
+                    <td set-lan="html:q-classification">分类</td>
+                    <td set-lan="html:q-title">标题</td>
+                    <td set-lan="html:q-Creationtime">创建时间</td>
+                    <td set-lan="html:q-state">状态</td>
+                    <td set-lan="html:q-operation">操作</td>
+                </tr>
+                <foreach name="list" item="var">
+                    <tr>
+                        <td><input class="child_news_id" type="checkbox" name="news_id[]" value="<{$var.news_id}>" /></td>
+                        <td><{$var.news_id}></td>
+                        <td><{$cates[$var['cate_id']]['cate_name']}></td>
+                        <td><{$var.title}></td>
+                        <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                        <td><eq name="var.audit" value="0"><span set-lan="html:q-Waitforaudit">等待审核</span><else/><span set-lan="html:q-normal">正常</span></eq></td>
+                    <td>
+                        <eq name="var.audit" value="0"> <{:BA('shopnews/edit',array("news_id"=>$var["news_id"]),'编辑','','radius3 sjgl_an tuan_topbt')}> </eq>
+                        <eq name="var.audit" value="1"> <a class="radius3 sjgl_an tuan_topbt"  target="_blank" href="<{:U('pchome/news/detail',array("news_id"=>$var["news_id"]))}>"><em>&nbsp;</em><span set-lan="html:q-see">查看</span></a></eq>
+                        <{:BA('shopnews/delete',array("news_id"=>$var["news_id"]),'删除','act','radius3 sjgl_an tuan_topbt')}>
+
+                    </td>
+                    </tr>
+                </foreach>
+            </table>
+            <{$page}>
+        </div>
+    </form>
+</div>
+</div>
+<include  file='public:footer'/>
+
+

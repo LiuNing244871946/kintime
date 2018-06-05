@@ -1,0 +1,51 @@
+<include  file='public:header'/>  
+
+<body>
+    <?php if(!$is_app){?>
+	<header>
+		<a href="<{:AppLink('mobile/index/index')}>"><i class="icon-goback"></i></a>
+		<div class="title">城市切换</div>
+		<i class="icon-menu"></i>
+	</header>
+    <?php }?>
+	<div class="page-center-box">
+		<div id="scroll">
+        	
+            <div class="city_container">
+                <div class="current_city">当前城市：<a href=""><a href="<{:AppLink('index/index')}>"><{$city_name}></a></a></div>
+                <div class="city_list_hot">
+                    <div class="city_list_T">热门城市</div>
+                    <ul class="hot_city">
+                         
+                          <volist name="citys" id="item" key="k" offset="0" length='6'>
+                          	<if condition="$k%3 eq 0">
+                           	<li class="city_m0"> 
+                            <else/>
+                            <li>
+                            </if>
+                            <a href="/mobile/<{$item.pinyin}>"><{$item.name}></a></li>
+                         </volist>       
+                    </ul>
+                </div>
+                <div class="city_list_all">
+                
+                	<foreach name="citylists" item="item">
+                        <div class="item_list_all">
+                            <div class="city_list_T city_letter"><{$key}></div>
+                            <ul class="city_list_con">
+                                 <volist name="item" id="var" key="i">
+                                    <li class="city_list_first" ><a href="<{:AppLink('city/change',array('city_id'=>$var['city_id']))}>"><{$var.name}></a></li>
+                                </volist>
+                            </ul>
+                        </div>
+                   </foreach>
+                    
+                 </div>
+            </div>
+		</div>
+	</div>
+</body>
+</html>
+
+
+

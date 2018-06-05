@@ -1,0 +1,398 @@
+<include  file='public:header'/>
+<script type="text/javascript" src="https://maps.google.cn/maps/api/js?v=3.20&region=cn&language=zh-CN&key=AIzaSyAj1gNUTDZJLvPeePsU5ltjfX-hJU1N_8c&libraries=places"></script>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-systemSetup">美食优惠</a> > <a href="" set-lan="html:n-shopManagement">店铺管理</a> > <a set-lan="html:n-shopFaceImg">店铺文字资料</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-shopWordFileInfo">店铺文字资料介绍店铺的基本信息 </div>
+        </div>
+    </div> 
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change on"><a href="<{:U('shop/about')}>" set-lan="html:n-shopWordFile">店铺文字资料</a></li>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('shop/image')}>" set-lan="html:n-shopFaceImg">店铺形象图</a></li>
+            <li class="tuanfabu_tabli tabli_change"><a href="<{:U('shop/logo')}>" set-lan="html:n-shopLogo">店铺LOGO</a></li>
+        </ul>
+    </div>
+    <div class="tabnr_change  show">
+    	<form method="post"  action="<{:U('shop/about')}>" target="baocms_frm">
+    	<table class="tuanfabu_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">店铺中文名称：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[shop_name]" value="<{$shop.shop_name|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">店铺老文名称：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[lao_shop_name]" value="<{$shop.lao_shop_name|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">店铺英文名称：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[eng_shop_name]" value="<{$shop.eng_shop_name|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">所在城市区域：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[city_id]" style="float: left;"  id="city_id" class="tuanfabu_int tuanfabu_intw2"></select>
+                            <select name="data[area_id]" style="float: left;"  id="area_id" class="tuanfabu_int tuanfabu_intw2"></select>
+                        </div>
+                    </td>
+                </tr>
+                <script src="<{:U('app/datas/cityarea')}>"></script>
+                    <script>
+                        var city_id = <?php echo (int)$shop['city_id'];?>;
+                        var area_id = <?php echo (int)$shop['area_id'];?>;
+                        var business_id = <?php echo (int)$shop['business_id'];?>;
+                        function changeCity(cid){
+                            var area_str = '<option value="0">请选择.....</option>';
+                            for(a in cityareas.area){
+                               if(cityareas.area[a].city_id ==cid){
+                                    if(area_id == cityareas.area[a].area_id){
+                                        area_str += '<option selected="selected" value="'+cityareas.area[a].area_id+'">'+cityareas.area[a].area_name+'</option>';
+                                    }else{
+                                         area_str += '<option value="'+cityareas.area[a].area_id+'">'+cityareas.area[a].area_name+'</option>';
+                                    }  
+                                }
+                            }
+                            $("#area_id").html(area_str);
+                        }
+                        function changeArea(aid){
+                            var business_str = '<option value="0">请选择.....</option>';
+                            for(a in cityareas.business){
+                               if(cityareas.business[a].area_id ==aid){
+                                    if(business_id == cityareas.business[a].business_id){
+                                        business_str += '<option selected="selected" value="'+cityareas.business[a].business_id+'">'+cityareas.business[a].business_name+'</option>';
+                                    }else{
+                                         business_str += '<option value="'+cityareas.business[a].business_id+'">'+cityareas.business[a].business_name+'</option>';
+                                    }  
+                                }
+                            }
+                            $("#business_id").html(business_str);
+                        }
+                        $(document).ready(function(){
+                            var city_str = '<option value="0">请选择.....</option>';
+                            for(a in cityareas.city){
+                               if(city_id == cityareas.city[a].city_id){
+                                   city_str += '<option selected="selected" value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+                               }else{
+                                    city_str += '<option value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+                               }  
+                            }
+                            $("#city_id").html(city_str);
+                            if(city_id){
+                                changeCity(city_id);
+                            }
+                            if(area_id){
+                                changeArea(area_id);
+                            }
+                            $("#city_id").change(function(){
+                                city_id = $(this).val();
+                                changeCity($(this).val());
+                            });
+                            
+                            $("#area_id").change(function () {
+                                area_id = $(this).val();
+                                changeArea($(this).val());
+
+                            });
+                        });
+                    </script>
+
+                <tr>
+                    <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">所在商圈：</p></td>
+                    <td>
+                        <div class="tuanfabu_nr">
+                            <select name="data[business_id]" id="business_id" class="tuanfabu_int tuanfabu_intw2">  
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">店铺中文地址：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[addr]" value="<{$shop.addr|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">店铺老文地址：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[lao_addr]" value="<{$shop.lao_addr|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">店铺英文地址：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[eng_addr]" value="<{$shop.eng_addr|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessAddress">店铺分类：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <select id="cate_id" name="data[cate_id]" class="tuanfabu_int tuanfabu_intw2">
+                            <foreach name="cates" item="var">
+                                <eq name="var.parent_id" value="0">
+                                <option value="<{$var.cate_id}>"  <eq name="var.cate_id" value="$shop.cate_id">selected="selected"</eq> ><{$var.cate_name}></option>                
+                                <foreach name="cates" item="var2">
+                                    <eq name="var2.parent_id" value="$var.cate_id">
+                                    <option value="<{$var2.cate_id}>"  <eq name="var2.cate_id" value="$shop.cate_id">selected="selected"</eq> > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<{$var2.cate_name}></option>
+                                    </eq>
+                                </foreach>
+                                </eq>
+                            </foreach>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-linkman">中文联系人：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[contact]" value="<{$shop.contact|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-linkman">老文联系人：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[lao_contact]" value="<{$shop.lao_contact|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-linkman">英文联系人：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[eng_contact]" value="<{$shop.eng_contact|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-linkman">店铺电话：</p></td>
+                <td><div class="tuanfabu_nr">
+                <input type="text" name="data[tel]" value="<{$shop.tel|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-linkman">手机号码：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <select name="data[areacode]" class="tuanfabu_int tuanfabu_intw2">
+                            <option value="86" <?php echo $shop['areacode']=='86'?'selected':'' ?> >中国+86</option>
+                            <option value="856" <?php echo $shop['areacode']=='856'?'selected':'' ?> >老挝+856</option>
+                        </select>
+                        <input type="text" name="data[mobile]" value="<{$shop.mobile|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-officeTime">中文标签：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <input type="text" name="data[tags]" value="<{$shop.tags|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                        <span class="tuanfabu_int tuanfabu_intw2" style="border: none;">每个标签用“，”分隔</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-officeTime">老文标签：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <input type="text" name="data[lao_tags]" value="<{$shop.lao_tags|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                        <span class="tuanfabu_int tuanfabu_intw2" style="border: none;">每个标签用“，”分隔</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-officeTime">英文标签：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <input type="text" name="data[eng_tags]" value="<{$shop.eng_tags|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                        <span class="tuanfabu_int tuanfabu_intw2" style="border: none;">每个标签用“，”分隔</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-officeTime">营业时间：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <input type="text" name="data[business_time]" value="<{$ex.business_time|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                        <span class="tuanfabu_int tuanfabu_intw2" style="border: none;">例如8:00-19：00</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-officeTime">是否开通外卖：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <label> <input type="radio" name="data[is_ele]" value="1" <eq name="shop .is_ele" value="1">checked="checked"</eq>  /> 开通</label>
+                        <label> <input type="radio" name="data[is_ele]" value="0"  <eq name="shop .is_ele" value="0">checked="checked"</eq> /> 不开通</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-officeTime">是否开通电子菜单以及订座：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <label> <input type="radio" name="data[is_dianzicaidan]" value="1" <eq name="shop .is_dianzicaidan" value="1">checked="checked"</eq>  /> 开通</label>
+                        <label> <input type="radio" name="data[is_dianzicaidan]" value="0"  <eq name="shop .is_dianzicaidan" value="0">checked="checked"</eq> /> 不开通</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-officeTime">人均消费：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <input type="text" name="data[price]" value="<{$ex.price|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:q-Isitfavorable">是否折扣：</p></td>
+                <td><div class="tuanfabu_nr">
+                    <foreach name="rebate" item="var">
+                        <label><input style="width: 40px;"  type="radio" name="data[rate]" value="<{$var['id']}>" <eq name="shop.rate" value="$var.id">checked="checked"</eq> /><span set-lan="html:q-no"><{$var['name']}></span></label>                
+                    </foreach>
+                        <label><input style="width: 40px;"  type="radio" name="data[rate]" value="0" <eq name="shop.rate" value="0">checked="checked"</eq> /><span set-lan="html:q-no">无折扣</span></label> 
+                </div></td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-hotelCoordinates">店铺坐标：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <input type="text" name="data[lng]" id="lng" value="<{$shop.lng}>" class="tuanfabu_int tuanfabu_intw2" /> <span set-lan="html:n-longitude">经度</span>
+                        <input type="text" name="data[lat]" id="lat" value="<{$shop.lat}>" class="tuanfabu_int tuanfabu_intw2" /> <span set-lan="html:n-latitude">纬度</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-businessManagement">地图：</p></td>
+                <td>
+                    <div class="tuanfabu_nr">
+                        <div class="top" style="width:700px; margin-bottom: 20px;">
+                            <div id="g-countryBox" style="height: 30px;">请选择国家：
+                                <select id="g-country" class="tuanfabu_int tuanfabu_intw2">
+                                    <option value="CN">中国</option>
+                                    <option value="LA">老挝</option>
+                                </select>
+                            </div>
+                            <div id="r-result" style="margin-top: .5rem;">请输入地址: 
+                                <input type="text" id="suggestId" size="20" class="tuanfabu_int tuanfabu_intw2" />
+                            </div>      
+                        </div>
+                        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+                        <div id="allmap" style="width: 600px; height:500px;"></div>
+                <script type="text/javascript">
+                    var lat,lng;
+                    if ("<{$shop.lat}>"==""||"<{$shop.lng}>"=="") {
+                        lat = parseFloat("<{$shop.lat}>");
+                        lng = parseFloat("<{$shop.lng}>");
+                    }else{
+                        lat = parseFloat("<{$shop.lat}>");
+                        lng = parseFloat("<{$shop.lng}>");
+                    }
+                            
+                    var map = new google.maps.Map(document.getElementById('allmap'),{
+                        zoom:15,
+                        center:{lat:lat,lng:lng},
+                        gestureHandling:'greedy'
+                    });
+                    var pos = {lat:lat,lng:lng};
+                    var marker_S = new google.maps.Marker({
+                        position:pos,
+                        map:map,
+                        animation:google.maps.Animation.DROP
+                    });
+                    map.addListener('click',function(e){
+                        document.getElementById('lat').value = e.latLng.lat();
+                        document.getElementById('lng').value = e.latLng.lng();
+                        marker_S.setPosition(e.latLng);
+                        // console.log(e.latLng.lat(),e.latLng.lng());
+                    });
+                    var ac = new google.maps.places.Autocomplete(
+                        (document.getElementById('suggestId')),
+                        {
+                            // types:['address'],
+                            componentRestrictions:{country:'CN'}
+                        }
+                    );
+                    ac.addListener('place_changed',function(){
+                        var place = ac.getPlace();
+                        map.panTo(place.geometry.location);
+                        marker_S.setPosition(place.geometry.location);
+                    });
+                    document.getElementById('g-country').addEventListener('change',function(){
+                        var countryText = document.getElementById('g-country').value;
+                        ac.setComponentRestrictions({'country':countryText});
+                        if (countryText==='LA') {
+                            marker_S.setPosition({lat:17.97571240175261,lng:102.63320446014404});
+                            map.setCenter({lat:17.97571240175261,lng:102.63320446014404});
+                        }else if (countryText==='CN') {
+                            marker_S.setPosition({lat:30.268760105204333,lng:120.2266301214695});
+                            map.setCenter({lat:30.268760105204333,lng:120.2266301214695});
+                        }
+                                
+                    })
+
+                </script>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-details">中文详情：</p></td>
+                <td><div class="tuanfabu_nr">
+                <script type="text/plain" id="data_details" name="details" style="width:800px;height:360px;"><{$ex.details}></script>
+                </div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-details">老文详情：</p></td>
+                <td><div class="tuanfabu_nr">
+                <script type="text/plain" id="lao_data_details" name="lao_details" style="width:800px;height:360px;"><{$ex.lao_details}></script>
+                </div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-details">英文详情：</p></td>
+                <td><div class="tuanfabu_nr">
+                <script type="text/plain" id="eng_data_details" name="eng_details" style="width:800px;height:360px;"><{$ex.eng_details}></script>
+                </div></td>
+            </tr>
+            <link rel="stylesheet" href="__PUBLIC__/umeditor/themes/default/css/umeditor.min.css" type="text/css">
+            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.config.js"></script>
+            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.min.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/umeditor/lang/zh-cn/zh-cn.js"></script>
+            <script>
+                um = UM.getEditor('data_details', {
+                    imageUrl: "<{:U('app/upload/editor')}>",
+                    imagePath: '__ROOT__/attachs/editor/',
+                    lang: 'zh-cn',
+                    langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                    focus: false
+                });
+                um = UM.getEditor('lao_data_details', {
+                    imageUrl: "<{:U('app/upload/editor')}>",
+                    imagePath: '__ROOT__/attachs/editor/',
+                    lang: 'zh-cn',
+                    langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                    focus: false
+                });
+                um = UM.getEditor('eng_data_details', {
+                    imageUrl: "<{:U('app/upload/editor')}>",
+                    imagePath: '__ROOT__/attachs/editor/',
+                    lang: 'zh-cn',
+                    langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                    focus: false
+                });
+            </script>   
+        </table>
+        <div class="tuanfabu_an">
+        <input type="submit" class="radius3 sjgl_an tuan_topbt" value="确认保存" set-lan="value:n-sureConserve" />
+        </div>
+        </form>
+    </div> 
+</div>
+<include  file='public:footer'/>

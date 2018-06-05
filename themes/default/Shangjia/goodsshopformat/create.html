@@ -1,0 +1,46 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-businessManagement">购物</a> > <a href="" set-lan="html:n-specification">规格设置</a> > <a set-lan="html:n-addSpecification">添加规格</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-shopSetSelfSpecification">商家设置自定义规格</div>
+        </div>
+    </div> 
+    <div class="tabnr_change  show">
+    	<form method="post"  action="<{:U('goodsshopformat/create')}>"  target="baocms_frm">
+    	<table class="tuanfabu_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="120"><p class="tuanfabu_t" set-lan="html:n-classifyName">规格名称：</p></td>
+                <td><div class="tuanfabu_nr"><input type="text" name="data[name]" value="<{$detail.cate_name|default=''}>" class="tuanfabu_int tuanfabu_intw2" /></div></td>
+            </tr>
+            <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-content">内容：</p></td>
+                <td>
+                	<div class="tuanfabu_nr">
+                		<input type="text" name="data[contents][0]" value="" class="tuanfabu_int tuanfabu_intw2" />
+                		<input type="button" class="radius3 sjgl_an tuan_topbt" id="content_add" value="新增一行" set-lan="value:n-addLine" />
+                	</div>
+                </td>
+            </tr>
+        </table>
+        <div class="tuanfabu_an">
+        <input type="submit" class="radius3 sjgl_an tuan_topbt" value="确认添加" set-lan="value:n-sureAdd" />
+        </div>
+        </form>
+    </div> 
+</div>
+<script>
+    $(document).ready(function (e) {
+        var content_num = 0;
+        $("#content_add").click(function () {
+            content_num++;
+            var html = '<tr><td></td><td><div class="tuanfabu_nr"><input type="text" name="data[contents]['+content_num+']" value="" class="tuanfabu_int tuanfabu_intw2" /></div></td></tr>';
+            $(".tuanfabu_table").append(html);
+        });
+    });
+</script>
+<include  file='public:footer'/>

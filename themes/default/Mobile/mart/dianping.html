@@ -1,0 +1,69 @@
+<include file="public:header"/>
+<style>
+    .floatBtn_box{ position:fixed; z-index:99; bottom:0.62rem; right:0.02rem; width:0.4rem; overflow:hidden; border-radius:0.03rem; background:#24d0aa; border:0.01rem solid #1a9484; padding:0.01rem; box-shadow:-0.01rem 0.01rem 0.02rem #5eb5a2;}
+    .floatBtn_box .btn{ display:block; width:0.3rem; border-radius:0.03rem; padding:0.04rem 0.05rem; height:0.32rem; text-align:center; font-size:0.12rem; line-height:0.16rem; color:#fff; margin-bottom:0.01rem; background:#18b794; /*background:rgba(47, 189, 170, 0.8); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#BF2fbdaa,endColorstr=#BF2fbdaa);*/}
+</style>
+<!-- <div class="floatBtn_box">
+    <a href="<{:AppLink('mcenter/dianping/index',array('shop_id'=>$detail['shop_id']))}>" class="btn" style="margin-bottom:0;">我要评价</a>
+</div> -->
+<script>
+    $(function () {
+        if ($('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+        {
+            $('#shangjia_tab li').width(100 / $('#shangjia_tab li').length + '%');
+            $('.page-center-box').css('top', '2.4rem');
+        }//头部切换tab结束
+    });
+</script>
+<body>
+    <?php if(!$is_app){?>
+    <header style="background: transparent;">
+        <a href="<{:AppLink('mart/lists',array('id'=>$wshop['id']))}>"><i class="icon-goback"></i></a>
+        <!-- <i id="commentA"><a href="<{:AppLink('mcenter/dianping/index',array('shop_id'=>$detail['shop_id']))}>">点评<em class="commentIco"></em></a></i> -->
+    </header>
+    <div id="f_sshopheader">
+        <img src="__ROOT__/attachs/<{$wshop.pic}>" id="f_sshopbc" >
+        <div id="f_sshopinfo">
+            <span id="f_sshopinfo_l">
+                <img src="__ROOT__/attachs/<{$wshop.logo}>" id="f_sshoplogo">
+                <span id="f_sshopname"><{$detail.weidian_name}></span>
+            </span>
+            <span id="f_sshopinfo_r">
+                <span id="f_sshopfans">
+                    <span>100000</span>
+                    <span>粉丝数</span>
+                </span>
+                <a href="<{:AppLink('shop/favorites/',array('shop_id'=>$detail['shop_id']))}>" id="f_sshopfav">
+                    <em class="ico ico_2"></em>
+                    <span>关注</span>
+                </a>
+            </span>
+        </div>
+    </div>
+    <?php }?>
+    <ul id="shangjia_tab" style="top: 2rem;">
+        <li><a href="<{:AppLink('mart/lists',array('id'=>$wshop['id']))}>">商品</a></li>
+        <li><a href="<{:AppLink('mart/shopdetail',array('id'=>$wshop['id']))}>">详情</a></li>
+        <li><a class="on" href="<{:AppLink('mart/dianping',array('id'=>$wshop['id']))}>">评价</a></li>
+    </ul>
+    <div id="shangjia_detail" class="page-center-box">
+        <div id="scroll">           
+            <div class="sjComment">
+                <ul>
+
+                </ul>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    loaddata('<{:U("mart/dianpingloading",array("id"=>$wshop["id"],"p"=>"0000"))}>', $(".sjComment ul"), true);
+                });
+            </script>
+        </div>
+
+    </div>
+    <div id="loading">
+        <div class="bao_loading">正在加载中....</div>
+    </div>
+<div class="blank">&nbsp;</div>
+</body>
+</html>

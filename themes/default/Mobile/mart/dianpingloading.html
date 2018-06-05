@@ -1,0 +1,30 @@
+<foreach name="list" item="var">
+    <!-- 循环 -->
+    <div class="guest-box" style="box-shadow: 0 .03rem .1rem 0 rgba(0,0,0,.1);border-radius: .1rem;padding: .1rem;">
+        <div class="icon"><img src="__ROOT__/attachs/<{$users[$var['user_id']]['face']|default='default.jpg'}>"></div>
+        <div class="guest-box-content">
+            <p><{$users[$var['user_id']]['nickname']}><span><{$var.show_date}></span></p>
+            <div class="point-star"><span style="width: 0.<php>$stars= intval(($var['score'])*1.8);if($stars>9)$stars=9;echo $stars</php>rem;"></span></div>
+            <p class="c_h"><{$var.contents}></p>
+            <p class="img">
+
+            <volist name="pics" id="pic" key="index">
+                <eq name="pic.dianping_id" value="$var['dianping_id']">
+                <img src="__ROOT__/attachs/<{$pic.pic|default='default.jpg'}>" style="border-radius: .1rem;">
+                </eq>
+            </volist>
+
+            </p>
+        </div>
+    </div>
+    <!-- 循环 -->
+</foreach>
+
+<!-- 
+<li class="list">
+        <div class="img"><img src="__ROOT__/attachs/<{$users[$var['user_id']]['face']|default='default.jpg'}>"></div>
+        <h3><{$users[$var['user_id']]['nickname']}></h3>
+        <p class="line2"><{$var.contents}></p>
+        <div class="clear"></div>
+    </li>
+-->

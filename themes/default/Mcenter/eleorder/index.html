@@ -1,0 +1,63 @@
+<include  file='public:header'/>   
+<?php if(!$is_app){?>
+<header>
+    <a href="/mcenter/member/"><i class="icon-goback"></i></a>
+    <div class="title" set-lan="html:m-my-order">外卖订单</div>
+    <i class=" icon-more"></i>
+</header>
+<?php }?>
+<!-- 筛选TAB -->
+<div class="shop-lie" id="app_nav">
+    <ul>
+        <li class="on" id="v0"><span set-lan="html:m-pending-payment">待付款</span></li>
+        <li id="v1"><span set-lan="html:m-processing">进行中</span></li>
+        <li id="v3"><span set-lan="html:m-completed">已完成</span></li>
+    </ul>
+</div>
+
+
+<script>
+    $(function () {
+        $(".shop-lie li").each(function (e) {
+            $(this).click(function () {
+                $(".shop-lie li").removeClass("on");
+                $(this).addClass("on");
+                $(".send-out").each(function (s) {
+                    if (e == s) {
+                        $(".send-out").hide();
+                        $(this).show();
+                    }
+                });
+            });
+        });
+    });
+
+</script>
+
+
+<div id="life" class="page-center-box">
+    <div id="scroll">
+        <!-- 列表 -->
+
+        <script>
+            $(document).ready(function () {
+           
+                $('#v0').click(function () {
+                    $('#scroll').html('');
+                    loaddata('<{:U("mcenter/eleorder/loading/",array("t"=>$nowtime,"p"=>"0000","s"=>"0"))}>', $("#scroll"), true);
+                })
+                $('#v1').click(function () {
+                    $('#scroll').html('');
+                    loaddata('<{:U("mcenter/eleorder/loading/",array("t"=>$nowtime,"p"=>"0000","s"=>"1"))}>', $("#scroll"), true);
+                })
+                $('#v3').click(function () {
+                    $('#scroll').html('');
+                    loaddata('<{:U("mcenter/eleorder/loading/",array("t"=>$nowtime,"p"=>"0000","s"=>"3"))}>', $("#scroll"), true);
+                })
+                $('#v0').click();
+            });
+        </script>
+
+    </div>
+</div>
+<include  file='public:footer'/>   

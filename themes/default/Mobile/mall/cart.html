@@ -1,0 +1,214 @@
+<include file="public:header"/>
+<body>
+    <?php if(!$is_app){?>
+	<header>
+		<a href="<{:AppLink('mall/index')}>"><i class="icon-goback"></i></a>
+		<div class="title">购物车</div>
+	</header>
+    <?php }?>
+    <form method="post" id="bao_buy_form"  >
+	<div id="life" class="page-center-box">
+		<div id="scroll">
+			<!-- 列表 -->
+			<div class="list-have-pic list-have-pic-btn">
+            	<foreach name="cart_goods" item="item1" key="key1">
+                    <h2 style="background-color: #fff;line-height: 30px;padding: 0 .1rem;">
+                        <a href="<{:AppLink('mart/lists',array('id'=>$key1))}>" style="color: #2FBDAA;display: block;"><{$weidians[$key1]['weidian_name']}></a>
+                    </h2>
+                        <!-- <?php $subtotal =0;$postage =0; ?> -->
+                        <foreach name="item1" item="item" key="key">
+            				<div class="list-box list-box-integral">
+            					<div class="list-img">
+            						<img src="__ROOT__/attachs/<{$item.photo}>" />
+            					</div>
+            					
+            					<div class="list-content">
+            						<p class="h15 overflow_clear">
+                                        <a href="<{:AppLink('mall/detail',array('goods_id'=>$item['goods_id'], 'vid'=>$item['vid']))}>"><{$item.title}></a>
+                                    </p>
+            						<p class="c_h">
+                                        <span class="mr20">单价：₭<{:round($item['mall_price'],2)}></span>
+                                        合计：<span id="jq_total_<{$item.goods_id}>_<{$item.vid}>" class="price">₭ <{:round($item['total_price'],2)}></span>
+                                    </p>
+                                    <p class="c_h">
+                                        <if condition="!empty($item['value'])">
+                                            <span class="mr20">规格：<{$item.value.format_title}></span>
+                                        </if> 
+                                        <span>重量：<{$item.weight}>Kg</span>
+                                    </p>
+                                    <?php var_dump($item['interest']); ?>
+                                    <if condition="$item['interest']['type'] eq 1">
+                                        <p class="c_h">
+                                            <span class="mr20">商家分期：<{$item.interest.money}>/期，共<{$item.interest.periods}>期</span>
+                                        </p>
+                                    <elseif condition="$item['interest']['type'] eq 0">
+                                        <p class="c_h">
+                                            <span class="mr20">kin宝分期：<{$item.interest.money}>/期，共<{$item.interest.periods}>期</span>
+                                        </p>
+                                    </if> 
+                                    
+            						<div class="num-input changeNum2" rel="<{$item.goods_id}>_<{$item.vid}>">
+            							<div class="btn jq_jian" data="<{$item.goods_id}>_<{$item.vid}>">-</div>
+            							<div class="input">
+                                            <input data-role="none" data="<{$item.goods_id}>_<{$item.vid}>"  type="text" value="<{$item.num}>" rel="<{:round($item['mall_price'],2)}>" name="num[<{$item['goods_id']}>_<{$item.vid}>]" class="ordernum" />
+                                        </div>
+            							<div class="btn active jq_jia" data="<{$item.goods_id}>_<{$item.vid}>">+</div>
+            						</div>
+            						<a href="<{:AppLink('mall/cartdel2',array('goods_id'=>$item['goods_id'], 'vid'=>$item['vid']))}>"><div class="icon-del"></div></a>
+            					</div>
+            				</div>
+                            <input type="hidden" value="<{$item.max_buy}>" id='<{$item.goods_id}>_<{$item.vid}>max_buy'>
+                             <!-- <?php
+                                $subtotal += $item['total_price'];
+                                $postage += $item['postage'];
+                             ?> -->
+                        </foreach>
+                        <!-- <?php
+                            if($item1[2] == 0 || $item1[2]>$subtotal){
+                                $subtotal +=  $postage;
+                        ?>
+                            <span>邮费: ₭ <{:round($postage,2)}></span><br/>
+                        <?php 
+                            }else{
+                            echo "<span>包邮</span><br/>";
+                            }
+                        ?> -->
+                        <span>店铺小计: ₭ <{:round($subtotal,2)}></span><br/><br/><br/>
+                </foreach>
+			</div>
+		</div>
+	</div>
+	<footer class="footer-cart">
+		<div class="cart">
+			<div class="cart-num"><{$cartnum}></div>
+		</div>
+		<div class="price" id="jq_total">₭<{:round($total_price,2)}></div>
+        <div class="btn"><a href="javascript:void(0);" onClick="jiesuan();" style="color:#FFFFFF;">结算</a></div>
+	</footer>
+</form>
+    
+    <!-- <script type="text/javascript">
+            var uid = "<{$MEMBER['user_id']}>"; 
+            function jiesuan(){
+                if(uid == "undefined"||uid =="" ||uid==0){
+                    <?php if(!$is_app){
+                         echo  'location.href="'.U("passport/login").'"';
+                     } else if ($is_android){?>
+                    window.jsObj.goLogin();
+                    <?php }else if($is_app){?>
+                     goload();
+                     <?php }else{?>
+                     window.location.href="<{:U('mobile/passport/login')}>";
+                    <?php }?>
+                }else{                    
+                    $.post("<{:U('mall/order',array('t'=>$nowtime))}>",$("#bao_buy_form").serialize(),function(data){
+                        if(data.ret ==0){
+                            <?php if(IS_APP){ ?>
+                                getNewWebView(data.url);
+                            <?php }else{?>                      
+                                location.href=data.url;                            
+                            <?php }?>
+                        }else{
+                            layer.msg(data.msg);
+                        }                        
+                    },'json');                    
+                }
+            }
+            
+            function changetotal(obj){
+                var money = obj.parent().find('.ordernum').attr('rel');
+                var num = obj.parent().find('.ordernum').val();
+                var total =  Math.round(money*num*100)/100;
+                $("#jq_total_"+obj.attr('data')).html('₭'+total);
+                changealltotal();
+            }
+            
+            function changealltotal(){     
+                var total_price = 0;
+				var num = 0;
+                $(".ordernum").each(function(){
+                    total_price += $(this).val() * $(this).attr('rel');
+					num += parseInt($(this).val());
+                });
+                $("#jq_total").html('₭'+Math.round(total_price*100)/100);
+				$(".cart-num").html(num);
+            }
+            $(document).ready(function(e){
+                 $(".jq_jian").click(function(){
+                    var v = $(this).parent().find(".ordernum").val() ;
+                    if(v>1){
+                        v--;                       
+                        $(this).parent().find(".ordernum").val(v);
+                        var pang=$(this).attr('data');
+                        var url = "<{:U('mall/pangmiao')}>";
+                        $.post(url,{pang:pang,v:v},function(data){
+                            if(data.status == 'success'){
+                                layer.msg(data.msg);
+                            }else{
+                                layer.msg('修改购物车失败');
+                            }   
+                        },'json');     
+                    }else{
+						$(this).parent().find(".ordernum").val(1);
+                        layer.msg('不能再少了');
+					}              
+                    changetotal($(this));
+                 });
+                 $(".jq_jia").click(function(){
+					 var goods_id = $(this).attr('data');
+                     var goods = <{$json_cart_goods}>;
+					 var max_buy = parseInt($('#'+goods_id+'max_buy').val());
+                     var v = parseInt($(this).parent().find(".ordernum").val());
+                    if(v<max_buy){
+                        if(v < goods[goods_id] ){
+                            v++;
+                            $(".jq_jian").attr("style","border:1px solid #2fbdaa;");
+                            $(this).parent().find(".ordernum").val(v);
+                            var pang=goods_id;
+                            var url = "<{:U('mall/pangmiao')}>";
+                            $.post(url,{pang:pang,v:v},function(data){
+                                if(data.status == 'success'){
+                                    layer.msg(data.msg);
+                                }else{
+                                    layer.msg('修改购物车失败');
+                                }   
+                            },'json'); 
+                        }else{
+                            layer.msg('库存不足!');
+                        }
+                    }else{
+					   layer.msg("已达到购买上限!");
+					};
+                     changetotal($(this));
+                 });
+                 
+                 $(".ordernum").change(function(){
+					var goods_id = $(this).attr('data');
+					var max_buy = $('#'+goods_id+'max_buy').val();
+                    if($(this).val()<1){
+                        $(this).val('1');
+                    }
+                    if(parseInt($(this).val())>parseInt(max_buy)){
+                        $(this).val(max_buy);
+                    }
+                    var goods = <{$json_cart_goods}>;
+                    if(parseInt($(this).val()) > parseInt(goods[goods_id]) ){
+                        $(this).val(goods[goods_id]);
+                    }
+                    var pang=goods_id;
+                    var v = parseInt($(this).val());
+                    var url = "<{:U('mall/pangmiao')}>";
+                    $.post(url,{pang:pang,v:v},function(data){
+                        if(data.status == 'success'){
+                            layer.msg(data.msg);
+                        }else{
+                            layer.msg('修改购物车失败');
+                        }   
+                    },'json');
+                    changetotal($(this));
+                 });
+                 
+             });
+        </script> -->
+</body>
+</html>

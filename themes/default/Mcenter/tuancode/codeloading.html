@@ -1,0 +1,117 @@
+<style>
+    .qrcode-box{
+        text-align:center;
+    }
+    .qrcode-box img{
+        width:0.25rem;
+        height:0.25rem;
+    }
+    .pwd-box-bar{
+        text-align:left;
+    }
+    .pwd-box-bar span{
+        display:inline;
+        font-size:0.13rem;
+        color:#fff;
+        margin-left:0.02rem;
+    }
+    .money{
+        font-size:0.16rem;
+        color:#8a8a8a;
+    }
+    .status-tab{
+        width:75%!important;
+        height:0.22rem;
+        background:#fff;
+        border-radius:2px;
+        padding:0!important;
+        display:-webkit-flex;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        margin-top:0.02rem!important;
+    }
+    .status{
+        color:#fff;
+        text-align:center;
+    }
+</style>
+
+<div class="send-out">
+    <foreach name="list" item="item">
+        <div class="coupon-list">
+            <div class="coupon-box">
+                <div class="coupon-box-left">
+                    <p class="overflow_clear" style="padding-bottom:0;padding-top:0;">
+                        <a style="color:#8a8a8a;"  href="<{:U('tuan/detail',array('order_id'=>$item['order_id']))}>">
+                    <if condition="$lang eq 1 "><{$tuans[$item['tuan_id']]['title']}>
+                            <elseif condition="$lang eq 2" /><{$tuans[$item['tuan_id']]['lao_title']}>
+                            <elseif condition="$lang eq 3" /><{$tuans[$item['tuan_id']]['eng_title']}>
+                    </if>
+                    </a> &nbsp;&nbsp;&nbsp;<a style="color:#8a8a8a;">x<{$item.nums}></a>
+                    </p>
+                    <p>店铺名称：<if condition="$lang eq 1 "><{$item.shop_name}>
+                                <elseif condition="$lang eq 2" /><{$item.lao_shop_name}>
+                                <elseif condition="$lang eq 3" /><{$item.eng_shop_name}>
+                             </if>
+                    </p>
+                    <p>有效期至：<{$item.fail_date}></p>
+                    <p>
+                        <if condition=" ($item['is_used'] eq 0 ) and ($item['status'] eq 0) "> 提供密码或商家扫描二维码
+                        <else />
+							该抢购券不能被使用！
+                        </if>
+                    </p>
+                </div>
+                <div class="coupon-box-right">
+                    <p class="qrcode-box">
+                        <a href="<{:AppLink('tuancode/weixin',array('code_id'=>$item['code_id']))}>"><img src="/themes/default/Mobile/statics/img/personal_coupon_code.png" ></a>
+                    </p>
+                    <p>
+                        <p class="pwd-box-bar"><img src="/themes/default/Mobile/statics/img/personal_coupon_key.png" ><span><{$item.code}></span></p>
+                    </p>
+                    <p>
+                        <p class="pwd-box-bar"><img src="/themes/default/Mobile/statics/img/personal_coupon_money.png" ><span class="money"><{:round($item['real_money']/100,2)}></span></p>
+                    </p>
+                   
+                    <p class="status-tab">
+                        <eq name="item.is_used" value="1">
+                        已使用
+                        <else/>
+                        <eq name="item.status" value="0">
+                        <neq name="item.price" value="0">
+
+                        <a class="status" style="color:#2FBDAA;" href="<{:U('tuancode/refund',array('code_id'=>$item['code_id']))}>">申请退款</a>
+                        </neq>
+
+                        <else />
+
+                        <eq name="item.status" value="1">
+
+                        <a class="status" style="color:#8a8a8a;" href="<{:U('tuancode/codereturn',array('code_id'=>$item['code_id']))}>">取消退款</a>
+
+                        <else />
+
+                        <span style="color:#8a8a8a;">已退款</span>
+
+                        </eq>
+
+                        </eq>
+
+                        </eq>
+                    </p>
+                </div>
+
+                <eq name="item.is_used" value="1">
+                    <img src="/themes/default/Mobile/statics/img/personal_coupon_bg_c3.png" width="100%" height="">
+                    <else />
+                        <eq name="item.status" value="1">
+                            <img src="/themes/default/Mobile/statics/img/personal_coupon_bg_c3.png" width="100%" height="">
+                        <else />
+                            <img src="/themes/default/Mobile/statics/img/personal_coupon_bg_c1.png" width="100%" height="">
+                        </eq>
+                </eq>
+            </div>
+        </div>
+    </foreach>
+</div>

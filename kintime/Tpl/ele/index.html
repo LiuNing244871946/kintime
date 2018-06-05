@@ -1,0 +1,82 @@
+<include  file='public:header'/>
+<include  file='public:header'/>
+
+<div class="mainBt">
+    <ul>
+        <li class="li1">频道</li>
+        <li class="li2">餐饮频道</li>
+        <li class="li2 li3">商家列表</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <p class="attention"><span>注意：</span>如果未添加商家，那么不能发布菜单</p>
+    <div class="jsglNr">
+        <div class="selectNr" style="border-top: none; margin-top: 0px;">
+            <div class="left">
+                <{:BA('ele/create','','添加商家外卖资料')}>  
+            </div>
+            <div class="right">
+                <form class="search_form" method="post" action="<{:U('ele/index')}>">
+                    <div class="seleHidden" id="seleHidden">
+                        <span>关键字(电话或商户名称)</span>
+                        <input type="text" name="keyword" value="<{$keyword}>" class="inptText" /><input type="submit" value="   搜索"  class="inptButton" />
+                    </div> 
+                </form>
+            </div>
+        </div>
+        <form  target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#dbdbdb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <td class="w50"><input type="checkbox" class="checkAll" rel="shop_id" /></td>
+                        <td class="w50">ID</td>
+                        <td>商家名称</td>
+                        <td>是否打洋</td>
+                        <td>包装费</td>
+                        <td>起送价</td>
+                        <td>平台折扣</td>
+                        <td>排序</td>
+                        <td>操作</td>
+                    </tr>
+                    <foreach name="list" item="var">
+                        <tr>
+                            <td><input class="child_shop_id" type="checkbox" name="shop_id[]" value="<{$var.shop_id}>" /></td>
+                            <td><{$var.shop_id}></td>
+                            <td>
+                                <{$shops[$var['shop_id']]['shop_name']}><br/><{$shops[$var['shop_id']]['lao_shop_name']}><br/><{$shops[$var['shop_id']]['eng_shop_name']}>
+                            </td>
+                            <td>
+                                <eq name="var.is_open" value="1">营业中<else/>打烊了</eq>
+                            </td>
+                            <td><{:round($var['package_money'],2)}></td>
+                            <td><{:round($var['since_money'],2)}></td>
+                            <td>
+                                <if condition="empty($rate[$var['shop_id']['rate']])">无折扣<else /><{$rate[$var['shop_id']['rate']]['name']}></if> 
+                            </td>
+                            <td><{$var.orderby}></td>
+                            <td>
+                                <eq name="var.audit" value="0">
+                                    <{:BA('ele/audit',array("shop_id"=>$var["shop_id"]),'审核','act','remberBtn')}>  </eq>
+                                    <{:BA('ele/edit',array("shop_id"=>$var["shop_id"]),'编辑','','remberBtn')}>
+                                <eq name="var.is_open" value="0">
+                                    <{:BA('ele/opened',array("shop_id"=>$var["shop_id"],'type'=>'open'),'营业','act','remberBtn')}>
+                                <else/>
+                                    <{:BA('ele/opened',array("shop_id"=>$var["shop_id"],'type'=>'closed'),'打烊','act','remberBtn')}>
+                                </eq>
+                                <a target="_blank" class="remberBtn" href="<{:U('merchants/login',array('mer_id'=>$shops[$var['shop_id']]['mer_id']))}>">管理商家</a>
+                            </td>
+                        </tr>
+                    </foreach>
+                </table>
+                <{$page}>
+            </div>
+            <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+                <div class="left">
+                    <{:BA('ele/delete','','批量删除','list','a2')}>
+                    <{:BA('ele/audit','','批量审核','list','list')}>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<include  file='public:footer'/>       

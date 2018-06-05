@@ -1,0 +1,39 @@
+<include  file='public:header'/>   
+
+<body>
+    <?php if(!$is_app){?>
+	<header>
+		<a href="/mcenter/information"><i class="icon-goback"></i></a>
+		<div class="title">我的收货地址</div>
+	</header>
+    <?php }?>
+    
+    <div id="personal" class="page-center-box">
+        <div id="scroll">
+        	<div class="modify">
+           	    <div class="modify-list-box">
+           	        <ul>
+                    	<volist name="addr" id="item">
+                            <li>
+                            <div class="fl left">    
+                                <input style="width: 24px; float: left;" type="radio"  name="addr_id" id="addr_id" value="<{$item['addr_id']}>" <eq name="item.is_default" value="1">checked="checked"</eq> />
+                            <{$item.name}>,<{$item.mobile}>,<{$item.addr}>
+                                
+                                </div>
+                                <div class="fr right"><eq name="item.is_default" value="0"><a href="<{:AppLink('mobile/addr/update_addr',array('addr_id'=>$item['addr_id']))}>" style="color:#f56c08;">设为默认</a></eq>
+                                <a href="<{:U('mcenter/addrs/edit',array('addr_id'=>$item['addr_id']))}>" style="color:#2fbdaa;" class="edit_addr" id="edit_addr">修改地址</a></div>
+                                <div class="clear"></div>
+                            </li>
+                        </volist>
+                        	<li>
+                               <div class="fl left"></div>
+                                <div class="fr right"><a href="<{:AppLink('mcenter/addrs/create')}>" id="add_addr" style="color:#ff0000;">新增收货地址</a></div>
+                                <div class="clear"></div>
+                            </li>
+       	            </ul>
+           	    </div>
+            </div>
+        </div>
+    </div>
+   
+<include  file='public:footer'/>  

@@ -1,0 +1,25 @@
+<ul>
+    <foreach name='list' item='item'>
+        <li>
+            <div class="img"><a href="<{:AppLink('huodong/detail',array('activity_id'=>$item['activity_id']))}>"><img style="max-height: 180px;" src="__ROOT__/attachs/<{$item.photo}>" />
+                    <div class="time"><p class="fl">举办时间：<span class="fontcl1"><{$item.time}></span></p>
+                      </div></a>
+            </div>
+            <div class="infor">
+                <div class="fl">
+                    <p class="overflow_clear"><a href="<{:AppLink('huodong/detail',array('activity_id'=>$item['activity_id']))}>">[<{$cates[$item['cate_id']]['cate_name']}>]<{:bao_msubstr($item['title'],0,16,false)}></a></p>
+                    <p class="black9 num"><{$item.sign_num}>人已报名</p>
+                </div>
+                <div class="fr">
+                    <if condition="$item['sign'] eq 0">
+                    <a href="<{:AppLink('huodong/sign',array('activity_id'=>$item['activity_id']))}>" class="btn">立即参加</a>
+                    <else/>
+                          已报名
+
+                    </if>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </li>
+     </foreach>   
+</ul>

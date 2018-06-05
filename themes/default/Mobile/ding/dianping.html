@@ -1,0 +1,27 @@
+<include file="public:header"/>
+<body>
+    <?php if(!$is_app){?>
+	<header>
+		<a href="<{:AppLink('ding/detail',array('shop_id'=>$detail['shop_id']))}>"><i class="icon-goback"></i></a>
+		<div class="title">商家点评</div>
+	</header>
+    <?php }?>
+	<div id="sell" class="page-center-box">
+		<div id="scroll">
+
+			
+			<!-- 点评 -->
+			<div class="guest">
+				
+				
+			</div>
+            
+            <script>
+				$(document).ready(function () {
+					loaddata('<{:U("ding/dianpingloading",array("shop_id"=>$detail["shop_id"],"p"=>"0000"))}>',  $(".guest"),true);
+				});
+			</script>
+            
+		</div>
+	</div>
+<include  file='public:footer'/>

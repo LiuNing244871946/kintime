@@ -1,0 +1,19 @@
+<foreach name="list" item="item">
+    <li>
+        <div class="fl">
+            <div class="img"><img src="__ROOT__/attachs/<{$item.photo}>"></div>
+            <p class="bt overflow_clear"><{$item.shop_name}></p>
+            <php>$w = $item['score'] * 0.018;</php>
+            <p><div class="point-star" style="margin-left:0.9rem; height: 0.24rem;line-height: 0.24rem; margin-bottom: 0rem;"><div style="width:<{$w}>rem;"></div></div></p>
+        
+            <p><{$item.score_num}>人已评价
+                           
+                            <a href="javascript:void(0);"><span class="tag bg_1"><{$types[$item['shop_id']]}></span></a>
+                    </p>
+        </div>
+        <div class="fr">
+            <a style="top:0.1rem;" href="<{:AppLink('shop/detail',array('shop_id'=>$item['shop_id']))}>" class="btn">去逛逛</a>
+        </div>
+    </li>
+</foreach>
+

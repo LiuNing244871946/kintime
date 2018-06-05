@@ -1,0 +1,95 @@
+<include file='public:header'/>
+
+
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-others">美食外卖</a> > <a href="" set-lan="html:n-takeoutSetting">外卖店铺资料</a> > <a set-lan="html:n-takeoutState">基本资料</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+    	<div class="tuan_top_t">
+            <div class="left tuan_topser_l" set-lan="html:n-admissionApplyTips">注意：商家开通外卖要在后台审核之后才能显示</div>
+        </div>
+    </div>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli tabli_change on"><a href="#" set-lan="html:n-personalInfo">基本资料</a></li>
+            
+        </ul>
+    </div>
+    <div class="tabnr_change show">
+	  <form  target="baocms_frm" action="<{:U('ele/apply')}>" method="post">
+        <table class="tuanfabu_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-classify">分类：</p></td>
+                <td>
+					<div class="tuanfabu_nr">
+					 <foreach name="getEleCate" item="var" key="index">
+                            <label style="margin-right: 10px;"><input type="checkbox" name="cate[]" value="<{$index}>" <?php if(in_array($index,$cate)){?> checked="checked" <?php }?>/><{$var}></label>
+                        </foreach>   
+					</div>
+				</td>
+            </tr>
+				<tr>
+                    <td class="tuanfabu_t" set-lan="html:n-sentFare">包装费：</td>
+                    <td class="tuanfabu_nr"><input type="text" name="data[package_money]" value="<{:round($ele['package_money'],2)}>" class="tuanfabu_int tuanfabu_intw2" />
+
+                    </td>
+                </tr>
+				<tr>
+                    <td class="tuanfabu_t" set-lan="html:n-startSentPrice">起送价：</td>
+                    <td class="tuanfabu_nr"><input type="text" name="data[since_money]" value="<{:round($ele['since_money'],2)}>" class="tuanfabu_int tuanfabu_intw2" />
+                        <code set-lan="html:n-orderLimitCondition">满多少钱才能下单！</code>
+                    </td>
+                </tr>
+			
+              <tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-details">中文详情：</p></td>
+                <td><div class="tuanfabu_nr">
+                <script type="text/plain" id="data_details" name="data[intro]" style="width:800px;height:360px;"><{$ele.intro}></script>
+                </div></td>
+            </tr><tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-details">老文详情：</p></td>
+                <td><div class="tuanfabu_nr">
+                <script type="text/plain" id="lao_data_details" name="data[lao_intro]" style="width:800px;height:360px;"><{$ele.lao_intro}></script>
+                </div></td>
+            </tr><tr>
+                <td><p class="tuanfabu_t" set-lan="html:n-details">英文详情：</p></td>
+                <td><div class="tuanfabu_nr">
+                <script type="text/plain" id="eng_data_details" name="data[eng_intro]" style="width:800px;height:360px;"><{$ele.eng_intro}></script>
+                </div></td>
+            </tr>
+			<link rel="stylesheet" href="__PUBLIC__/umeditor/themes/default/css/umeditor.min.css" type="text/css">
+            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.config.js"></script>
+            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.min.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/umeditor/lang/zh-cn/zh-cn.js"></script>
+            <script>
+                um = UM.getEditor('data_details', {
+                    imageUrl: "<{:U('public/editor')}>",
+                    imagePath: '__ROOT__/attachs/editor/',
+                    lang: 'zh-cn',
+                    langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                    focus: false
+                });
+                um = UM.getEditor('lao_data_details', {
+                    imageUrl: "<{:U('public/editor')}>",
+                    imagePath: '__ROOT__/attachs/editor/',
+                    lang: 'zh-cn',
+                    langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                    focus: false
+                });
+                um = UM.getEditor('eng_data_details', {
+                    imageUrl: "<{:U('public/editor')}>",
+                    imagePath: '__ROOT__/attachs/editor/',
+                    lang: 'zh-cn',
+                    langPath: UMEDITOR_CONFIG.UMEDITOR_HOME_URL + "lang/",
+                    focus: false
+                });
+            </script>
+        </table>
+        <div class="tuanfabu_an"><input  type="submit" class="radius3 sjgl_an tuan_topbt" value="确认申请" set-lan="value:n-sureApply"/></div>
+        </form>
+</div>
+
+<include file='public:footer'/>

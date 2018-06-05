@@ -1,0 +1,93 @@
+<include  file='public:header'/>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="#" set-lan="html:n-others">其他</a> > <a href="" set-lan="html:n-housekeeping">家政服务</a> > <a set-lan="html:n-housekeeping">家政服务</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t tuanfabu_top">
+            <div class="left tuan_topser_l" set-lan="html:n-housekeepingLimitConditions">家政需要用金块查看用户联系方式滴</div>
+        </div>
+    </div>
+    <form method="post" action="<{:U('housework/index')}>">
+    <div class="radius5 tuan_top">
+        <div class="tuan_top_t">
+            <div class="left tuan_topser_l"><span set-lan="html:n-serviceType">服务类型：</span>
+            <select name="svc_id" id="svc_id" class="selecttop" style="margin-top:0px">
+            <foreach name="workTypes" item="item" key="key">
+            <option <eq name="svc_id" value="$key">selected="selected"</eq> value="<{$key}>"><{$item}></option>
+            </foreach>
+            </select>
+            <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索" set-lan="value:n-search"/>
+            </div>
+        </div>
+    </div>
+    </form>
+    <div class="tuanfabu_tab">
+        <ul>
+            <li class="tuanfabu_tabli on"><a href="<{:U('housework/index',array('status'=>1))}>" set-lan="html:n-housekeeping">家政服务</a></li>
+            <li class="tuanfabu_tabli on"><a href="<{:U('housework/index',array('status'=>2))}>" set-lan="html:n-havePaid">已购买</a></li>
+            <li class="tuanfabu_tabli on"><a href="<{:U('housework/index',array('status'=>3))}>" set-lan="html:n-notPaid">未购买</a></li>
+        </ul>
+    </div> 
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td set-lan="html:n-service">服务</td>
+            <td set-lan="html:n-serviceTime">服务时间</td>
+            <td set-lan="html:n-name">姓名</td>
+            <td set-lan="html:n-telphone">电话</td>
+            <td set-lan="html:n-address">地址</td>
+            <td set-lan="html:n-isTrue">是否真实</td>
+            <td set-lan="html:n-checkNeedGold">查看需要金块</td>
+            <td set-lan="html:n-limitShopNum">限制商家数</td>
+            <td set-lan="html:publishTime">发布时间</td>
+            <td set-lan="html:n-operate">操作</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$workTypes[$var['svc_id']]}></td>
+                <td><{$var.svctime}></td>
+                <if condition="!empty($looks[$var['housework_id']])">
+                <td><{$var.name}></td>
+                <td><{$var.tel}></td>
+                <td><{$var.addr}></td>
+                <else/>
+                 <td>**</td>
+                <td>**</td>
+                <td><{:msubstr($var['addr'],0,5)}></td>
+                </if>
+                <!-- <td><{$var.contents}></td> -->
+                <td><eq name="var.is_real" value="1"><span set-lan="html:n-realNeed">真实需求</span><else/><span set-lan="html:n-uncomfirmed">未确认</span></eq></td>
+                <td><{$var.gold}></td>
+                <td><{$var.buy_num}>/<{$var.num}></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+            	<td>
+                    <if condition="!empty($looks[$var['housework_id']])">
+                    	<span set-lan="html:n-havePaid">已购买</span>
+                    	<a id="con_<{$var['housework_id']}>" href="javascript:;" onclick="content(<{$var['housework_id']}>)" set-lan="html:n-checkContent">查看内容</a>
+                    <else/>
+                		<a mini='confirm' href="<{:U('housework/look',array('housework_id'=>$var['housework_id']))}>"><span set-lan="html:n-operate">立刻花</span><{$var.gold}><span set-lan="html:n-operate">金块查看</span></a>
+                    </if>
+                    <div class="content" id="content_<{$var['housework_id']}>" style="display:none; position: fixed; left: 50%; top: 200px; z-index: 2020; height:350px; width:500px;box-shadow:0px 0px 10px #999; margin-left:-250px;background:#f8f8f8;border: 1px solid #e0e0e0;padding:20px">
+						<span style="float:right"><a href="javascript:;" onclick="content_close()">X</a></span>
+						<div style="clear:both; height:20px;"></div>
+						<div><{$var.contents}></div>
+					</div>
+            </td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+
+
+<script>
+function content(id){
+	$('#content_'+id).css('display','block');
+}
+function content_close(){
+	$('.content').css('display','none');
+}
+</script>
+<include  file='public:footer'/>

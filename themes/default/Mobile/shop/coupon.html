@@ -1,0 +1,47 @@
+<include file="public:header"/>
+<script>
+$(function(){
+	if ($('#shangjia_tab').length > 0)/*判断是否存在这个html代码*/
+	{
+		$('#shangjia_tab li').width(100 / $('#shangjia_tab li').length + '%');
+		$('.page-center-box').css('top', '0.9rem');
+	}//头部切换tab结束
+});
+</script>
+<body>
+    <?php if(!$is_app){?>
+	<header>
+        <a href="<{:U('shop/detail',array('shop_id'=>$shop_id))}>"><i class="icon-goback"></i></a>
+		<div class="title"><{$shop.shop_name}></div>
+        <i class="icon-menu"><a href="<{:AppLink('shop/favorites/',array('shop_id'=>$shop_id))}>">关注+</a></i>
+	</header>
+    <?php }?>
+    <ul id="shangjia_tab">
+        <li><a href="<{:U('shop/detail',array('shop_id'=>$shop_id))}>">首页</a></li>
+        <li><a href="<{:U('shop/tuan',array('shop_id'=>$shop_id))}>">美食</a></li>
+        <li><a href="<{:U('ele/shop',array('shop_id'=>$shop_id))}>">外卖</a></li>
+        <li><a class="on"  href="<{:U('shop/coupon',array('shop_id'=>$shop_id))}>">优惠</a></li>
+        <li><a href="<{:U('shop/dianping',array('shop_id'=>$shop_id))}>">评价</a></li>
+    </ul>
+	<div id="shangjia" class="page-center-box app_shangjia">
+		<div id="scroll">
+            <!--商家list开始-->
+            <div class="hotList mb10">
+                <ul class="list">
+                    
+                </ul>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    loaddata('<{$nextpage}>', $(".list"), true);
+                });
+            </script>
+            <!--商家list结束-->
+        </div>
+	</div>
+    <div id="loading">
+    <div class="bao_loading">正在加载中....</div>
+</div>
+<div class="blank">&nbsp;</div>
+</body>
+</html>
